@@ -86,11 +86,11 @@
                         <span class="text-xs text-emerald-400 font-semibold">Zero Fees</span>
                     </div>
                     <p class="text-xs text-slate-300">Open your banking app & send $150 via Zelle to:</p>
-                    <div class="text-white font-mono text-lg font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-                        <span>678-233-3620</span>
-                        <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all">Copy Number</button>
+                    <div class="text-white font-mono text-base font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                        <span class="truncate pr-2">Deriteous741@gmail.com</span>
+                        <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all flex-shrink-0">Copy Email</button>
                     </div>
-                    <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center font-medium">Number copied to clipboard!</p>
+                    <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center font-medium">Email copied to clipboard!</p>
                 </div>
 
                 <div class="text-center pt-1">
@@ -213,7 +213,7 @@
         }
 
         function copyZelle() {
-            navigator.clipboard.writeText("6782333620");
+            navigator.clipboard.writeText("Deriteous741@gmail.com");
             const msg = document.getElementById("copy-msg");
             msg.classList.remove("hidden");
             setTimeout(() => { msg.classList.add("hidden"); }, 3000);
