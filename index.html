@@ -1,586 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Jackson Operational Health Diagnostic</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="google-site-verification" content="7y8BDGp4HTotc8pXpbbEfHWj2YCefNn_n61gACoSIoE" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="7y8BDGp4HTotc8pXpbbEfHWj2YCefNn_n61gACoSIoE" />
+  <title>Dr. Jackson Operational Health Diagnostic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
+    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .gold-accent { color: #f59e0b; }
+    .bg-gold { background-color: #f59e0b; }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between font-sans">
+<body class="gradient-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-950/80 p-6 backdrop-blur print:hidden">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
+  <!-- Header -->
+  <header class="border-b border-slate-700/50 p-6 glass-card sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid font-bold text-3xl fa-chart-line gold-accent"></i>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Dr. Jackson Operational Diagnostic</h1>
+          <p class="text-xs text-slate-400">Enterprise Operations, SOPs & Technical RFP Suite</p>
+        </div>
+      </div>
+      <!-- Membership Status Badge -->
+      <div id="membership-status" class="bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-lg text-xs flex items-center gap-3">
+        <span class="inline-block w-2 h-2 rounded-full bg-slate-500" id="status-indicator"></span>
+        <div>
+          <span class="font-bold block" id="membership-tier-label">Tier: Non-Member</span>
+          <span class="text-slate-400" id="credit-count-label">SOPs: 0 | RFPs: 0</span>
+        </div>
+        <button onclick="openMembershipModal()" class="ml-2 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-2 py-1 rounded transition">
+          Unlock Membership
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6 space-y-10 w-full flex-grow">
+
+    <!-- Pricing Summary Banner -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">A La Carte</span>
+          <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
+          <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
+          <p class="text-xs text-slate-300 mt-2">Pay per generated 10-Point Audit, Custom SOP, or Technical RFP.</p>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Pro Consultant</span>
+          <h3 class="text-xl font-bold mt-1">Standard Plan</h3>
+          <p class="text-3xl font-black mt-2 text-white">$50 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>10 SOPs + 10 RFPs</strong> per month (Save over $2,800/mo).</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
+          Activate $50 Plan
+        </button>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Enterprise</span>
+          <h3 class="text-xl font-bold mt-1">Volume Suite</h3>
+          <p class="text-3xl font-black mt-2 text-white">$100 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>20 SOPs + 20 RFPs</strong> per month for corporate scale.</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
+          Activate $100 Plan
+        </button>
+      </div>
+    </section>
+
+    <!-- Operational Modules Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Module 1: SOP Generator -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-file-contract mr-1"></i> Module A
+            </span>
+            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+          </div>
+          <h2 class="text-2xl font-bold">Standard Operating Procedure (SOP) Builder</h2>
+          <p class="text-sm text-slate-300">Generate visual, step-by-step operational workflows complete with safety standard checkpoints and process timing controls.</p>
+          
+          <div class="space-y-3 pt-2">
             <div>
-                <h1 class="text-xl font-bold text-emerald-400">Dr. Jackson Operational Health Diagnostic</h1>
-                <p class="text-xs text-slate-400">Enterprise Audit System • Doctor of Business Administration Advisory Framework</p>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Process Title</label>
+              <input id="sop-title" type="text" placeholder="e.g., Inbound Inventory Staging & Audit" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
             </div>
-            <div class="flex items-center space-x-2">
-                <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/20">Full Suite</span>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Key Operational Steps (Brief Summary)</label>
+              <textarea id="sop-steps" rows="3" placeholder="1. Unload pallet. 2. Verify packing slip. 3. Scan into inventory..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
-        </div>
-        <!-- Module Navigation Bar -->
-        <div class="max-w-4xl mx-auto flex space-x-3 mt-4 text-xs font-semibold">
-            <button onclick="switchTab('audit')" id="tab-audit" class="px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 transition-all font-bold">10-Point Audit</button>
-            <button onclick="switchTab('rfp')" id="tab-rfp" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">RFP Generator</button>
-            <button onclick="switchTab('sop')" id="tab-sop" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">SOP Modernizer</button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto p-6 w-full flex-grow">
-        
-        <!-- MODULE 1: 10-POINT AUDIT SECTION -->
-        <div id="module-audit" class="space-y-6">
-            <!-- Intro Screen -->
-            <div id="intro-screen" class="space-y-6">
-                <h2 class="text-3xl font-extrabold text-white">Identify Facility Operational Bottlenecks in 3 Minutes</h2>
-                <p class="text-slate-300">Answer 10 operational questions to calculate your labor efficiency score, pinpoint throughput friction, and generate a custom resolution plan.</p>
-                
-                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 space-y-3">
-                    <label class="block text-sm font-medium text-slate-200">Facility / Company Name</label>
-                    <input type="text" id="company-name" placeholder="e.g. Jackson Industrial Operations" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <button onclick="startAudit()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-4 rounded-xl transition-all text-lg shadow-lg shadow-emerald-500/10">Start 10-Point Operational Audit</button>
-            </div>
-
-            <!-- Question Screen (Hidden by default) -->
-            <div id="quiz-screen" class="hidden space-y-6">
-                <div class="flex justify-between items-center text-sm text-slate-400">
-                    <span id="question-number" class="font-bold text-emerald-400">Question 1 of 10</span>
-                    <span id="company-display" class="font-semibold text-slate-200"></span>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full bg-slate-800 rounded-full h-2 border border-slate-700 overflow-hidden">
-                    <div id="progress-bar" class="bg-emerald-400 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
-                </div>
-
-                <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700 space-y-4">
-                    <h3 id="question-title" class="text-xl font-semibold text-white"></h3>
-                    
-                    <div class="space-y-3" id="options-container">
-                        <!-- Buttons injected via JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Result Screen (Hidden by default) -->
-            <div id="result-screen" class="hidden space-y-6">
-                <div class="bg-slate-800/80 p-8 rounded-2xl border border-slate-700 text-center space-y-4">
-                    <h3 class="text-slate-400 text-sm uppercase tracking-wider font-semibold">Diagnostic Operational Score</h3>
-                    <div id="score-display" class="text-6xl font-black">0%</div>
-                    <h4 id="score-status" class="text-2xl font-bold"></h4>
-                    <p id="score-description" class="text-slate-300 text-sm max-w-lg mx-auto"></p>
-                </div>
-
-                <!-- Call to Action Box -->
-                <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 space-y-5">
-                    <h4 class="text-lg font-bold text-white">Unlock Your Instant 1-Page Custom Fix Plan</h4>
-                    <p class="text-slate-300 text-sm">Direct operational layout redesign and labor schedule fix authored by a Doctor of Business Administration framework.</p>
-                    
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-                        <div class="text-emerald-400 font-bold text-2xl">$150.00 <span class="text-xs text-slate-400 font-normal">flat fee</span></div>
-                        <p class="text-xs text-slate-400">Complete payment below to generate your custom report instantly on screen.</p>
-                    </div>
-
-                    <!-- Option 1: Credit / Debit Card / PayPal -->
-                    <div class="space-y-2">
-                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Option 1: Fast Online Checkout</span>
-                        <a href="https://www.paypal.com/ncp/payment/QSB4H4NJZRP7A" target="_blank" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-3.5 px-4 rounded-xl flex justify-between items-center transition-all text-sm shadow-md">
-                            <span>Pay via Credit Card / Debit / PayPal</span>
-                            <span class="bg-slate-950/20 text-xs px-2 py-1 rounded">Instant</span>
-                        </a>
-                    </div>
-
-                    <!-- Option 2: Zelle Direct Bank Transfer -->
-                    <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-xl space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="text-purple-300 font-bold text-xs uppercase tracking-wider">Option 2: Direct Bank Transfer (Zelle)</span>
-                            <span class="text-xs text-emerald-400 font-semibold">Zero Fees</span>
-                        </div>
-                        <p class="text-xs text-slate-300">Open your banking app & send $150 via Zelle to:</p>
-                        <div class="text-white font-mono text-base font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-                            <span class="truncate pr-2">Deriteous741@gmail.com</span>
-                            <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all flex-shrink-0">Copy Email</button>
-                        </div>
-                        <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center font-medium">Email copied to clipboard!</p>
-                    </div>
-
-                    <!-- Unlock Instant Report Button -->
-                    <div class="pt-2 border-t border-slate-800">
-                        <button onclick="generateFixPlan()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-4 rounded-xl transition-all text-base shadow-lg shadow-emerald-500/20">
-                            ⚡ Generate & View Custom Fix Plan Now
-                        </button>
-                        <p class="text-xs text-slate-400 text-center mt-2">Click after completing payment or during on-site live demo.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generated Fix Plan Screen (Hidden by default) -->
-            <div id="plan-screen" class="hidden space-y-6 bg-slate-950 p-8 rounded-2xl border border-emerald-500/40 text-slate-200">
-                <div class="border-b border-slate-800 pb-4 flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-black text-emerald-400">1-Page Comprehensive Operational Fix Plan</h2>
-                        <p class="text-xs text-slate-400">Dr. Jackson Operational Health Diagnostic • Doctor of Business Administration Framework</p>
-                    </div>
-                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-2 rounded-lg border border-slate-700 print:hidden">🖨️ Print / Save PDF</button>
-                </div>
-
-                <div class="space-y-5 text-sm">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-white text-base">Facility: <span id="plan-company" class="text-emerald-400"></span></h3>
-                            <p class="text-xs text-slate-400">10-Point Audit Efficiency Score: <span id="plan-score" class="font-bold text-white"></span></p>
-                        </div>
-                        <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full font-mono border border-emerald-500/20">Verified Advisory Report</span>
-                    </div>
-
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase tracking-wide">1. Executive Diagnostic Summary</h4>
-                        <p id="plan-summary" class="text-slate-300 leading-relaxed bg-slate-900/60 p-4 rounded-lg border border-slate-800/80"></p>
-                    </div>
-
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase tracking-wide">2. Targeted Operational Resolutions</h4>
-                        <div id="plan-resolutions" class="space-y-3">
-                            <!-- Category resolutions inserted dynamically -->
-                        </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase tracking-wide">3. 14-Day Facility Execution Roadmap</h4>
-                        <ul id="plan-steps" class="list-disc list-inside text-slate-300 space-y-2 bg-slate-900/60 p-4 rounded-lg border border-slate-800/80"></ul>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500">
-                    Dr. Jackson Operational Health Diagnostic • Confidential Advisory Document
-                </div>
-            </div>
+          </div>
         </div>
 
+        <div class="mt-6">
+          <button onclick="handleGenerateDeliverable('SOP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock" id="sop-lock-icon"></i>
+            <span>Build Modern SOP ($150 / 1 Credit)</span>
+          </button>
+        </div>
+      </div>
 
-        <!-- MODULE 2: RFP GENERATOR SECTION -->
-        <div id="module-rfp" class="hidden space-y-6">
-            <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700 space-y-4">
-                <h2 class="text-2xl font-bold text-white">Enterprise RFP Builder (Request for Proposal)</h2>
-                <p class="text-slate-300 text-sm">Generate a professional, structured RFP document to send to potential vendors, contractors, or service providers.</p>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Project / Contract Name</label>
-                        <input type="text" id="rfp-title" placeholder="e.g. Facility Floor Resurfacing & Material Handling Maintenance" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Detailed Scope of Work & Key Requirements</label>
-                        <textarea id="rfp-scope" rows="3" placeholder="e.g. Seeking vendor to overhaul 12 conveyor belts, replace worn rollers, and provide 24/7 emergency response SLA within 2 hours." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500"></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Target Budget Range</label>
-                            <input type="text" id="rfp-budget" placeholder="e.g. $25,000 - $50,000" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Proposal Submission Deadline</label>
-                            <input type="text" id="rfp-deadline" placeholder="e.g. August 15, 2026" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                        </div>
-                    </div>
-
-                    <button onclick="buildRFP()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
-                        📄 Generate Professional RFP Document
-                    </button>
-                </div>
+      <!-- Module 2: RFP Generator -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-file-signature mr-1"></i> Module B
+            </span>
+            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+          </div>
+          <h2 class="text-2xl font-bold">Technical RFP Specification Generator</h2>
+          <p class="text-sm text-slate-300">Draft professional Request for Proposals (RFP) specifying equipment, operational SLAs, and service provider bidding rules.</p>
+          
+          <div class="space-y-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Project / Contract Scope</label>
+              <input id="rfp-title" type="text" placeholder="e.g., Facility Security Guard Services Contract" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
             </div>
-
-            <!-- Generated RFP Output Screen -->
-            <div id="rfp-output" class="hidden bg-slate-950 p-8 rounded-2xl border border-emerald-500/40 space-y-5 text-slate-200">
-                <div class="border-b border-slate-800 pb-4 flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-black text-emerald-400" id="output-rfp-title">Request for Proposal (RFP)</h2>
-                        <p class="text-xs text-slate-400">Formal Vendor Bidding & SLA Contract Specification Framework</p>
-                    </div>
-                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-2 rounded-lg border border-slate-700 print:hidden">🖨️ Print / Save PDF</button>
-                </div>
-
-                <div class="space-y-4 text-xs leading-relaxed">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 grid grid-cols-2 gap-2 font-mono">
-                        <div>Budget Allocation: <span id="output-rfp-budget" class="text-emerald-400 font-bold"></span></div>
-                        <div>Submission Deadline: <span id="output-rfp-deadline" class="text-white font-bold"></span></div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">1. Executive Overview & Objective</h4>
-                        <p class="text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">The issuing organization is requesting competitive proposals from qualified vendors to fulfill the deliverables outlined below. The goal of this engagement is to ensure operational reliability, cost efficiency, and strict adherence to safety standards.</p>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">2. Scope of Work & Technical Deliverables</h4>
-                        <p id="output-rfp-scope" class="text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80"></p>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">3. Vendor Qualification & SLA Requirements</h4>
-                        <ul class="list-disc list-inside text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 space-y-1">
-                            <li>Minimum 3 years of verified commercial/industrial service history.</li>
-                            <li>Proof of active commercial liability insurance ($1M minimum coverage) and worker's comp.</li>
-                            <li>Guaranteed Service Level Agreement (SLA) emergency response time under 4 hours.</li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">4. Proposal Evaluation & Selection Criteria</h4>
-                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 space-y-1">
-                            <div>• Technical Competence & Proposed Method: <strong>35%</strong></div>
-                            <div>• Cost Efficiency & Value Alignment: <strong>30%</strong></div>
-                            <div>• Past Client References & Proven SLA Compliance: <strong>20%</strong></div>
-                            <div>• Implementation Timeline & Warranty: <strong>15%</strong></div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Required Deliverables / Vendor Requirements</label>
+              <textarea id="rfp-reqs" rows="3" placeholder="24/7 coverage, licensed supervisors, 99.5% uptime SLA, daily digital reports..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
+          </div>
         </div>
 
-
-        <!-- MODULE 3: SOP MODERNIZER SECTION -->
-        <div id="module-sop" class="hidden space-y-6">
-            <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700 space-y-4">
-                <h2 class="text-2xl font-bold text-white">Standard Operating Procedure (SOP) Modernizer</h2>
-                <p class="text-slate-300 text-sm">Convert outdated, wordy SOPs or informal verbal habits into sleek, visual 1-page operational standards.</p>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Process / Station Title</label>
-                        <input type="text" id="sop-title" placeholder="e.g. Daily Shift Line Clean-Down & Equipment Hand-off" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Target Cycle Time / Frequency</label>
-                        <input type="text" id="sop-time" placeholder="e.g. 15 Minutes at End of Shift" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Key Operational Steps (Brief Summary)</label>
-                        <textarea id="sop-steps" rows="3" placeholder="e.g. Lockout tagout power, clear debris, wipe sensors, inspect seals, sign off on shift logboard." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500"></textarea>
-                    </div>
-
-                    <button onclick="buildSOP()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
-                        📋 Generate Modern Visual SOP Structure
-                    </button>
-                </div>
-            </div>
-
-            <!-- Generated SOP Output Screen -->
-            <div id="sop-output" class="hidden bg-slate-950 p-8 rounded-2xl border border-emerald-500/40 space-y-5 text-slate-200">
-                <div class="border-b border-slate-800 pb-4 flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-black text-emerald-400" id="output-sop-title">Standard Operating Procedure</h2>
-                        <p class="text-xs text-slate-400">Visual Standard Operating Procedure • Visual Factory Operational Standard</p>
-                    </div>
-                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-2 rounded-lg border border-slate-700 print:hidden">🖨️ Print / Save PDF</button>
-                </div>
-
-                <div class="space-y-4 text-xs leading-relaxed">
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono flex justify-between items-center">
-                        <div>Required Cycle Time: <span id="output-sop-time" class="text-emerald-400 font-bold"></span></div>
-                        <div class="text-slate-400">Status: <span class="text-emerald-400">Active Standard</span></div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">1. Safety, PPE & Equipment Checklist</h4>
-                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 flex space-x-6 text-slate-300">
-                            <span>☑️ Safety Glasses & Steel Toe Boots</span>
-                            <span>☑️ Lockout/Tagout Verified</span>
-                            <span>☑️ Approved Cleaning Solvent</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">2. Step-by-Step Action Sequence</h4>
-                        <p id="output-sop-steps" class="text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 leading-relaxed"></p>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-emerald-400 text-sm uppercase">3. Quality Verification Gate & Sign-Off</h4>
-                        <p class="text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">Shift Lead or Operator must inspect workstation cleanliness, verify zero loose tools, and log completion on the primary station visual board prior to shift departure.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-6">
+          <button onclick="handleGenerateDeliverable('RFP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock" id="rfp-lock-icon"></i>
+            <span>Build Technical RFP ($150 / 1 Credit)</span>
+          </button>
         </div>
+      </div>
 
-    </main>
+    </section>
 
-    <!-- Footer -->
-    <footer class="p-6 text-center text-xs text-slate-500 border-t border-slate-800 print:hidden">
-        &copy; 2026 Dr. Jackson Operational Health Diagnostic • Enterprise Solutions
-    </footer>
+    <!-- Output Display Area -->
+    <section id="output-container" class="hidden glass-card p-6 rounded-2xl space-y-4 border border-amber-500/50">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 id="output-title" class="text-lg font-bold text-amber-400">Generated Document Output</h3>
+        <button onclick="window.print()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold rounded">
+          <i class="fa-solid fa-print mr-1"></i> Print / Save PDF
+        </button>
+      </div>
+      <div id="output-body" class="bg-slate-950 p-6 rounded-lg font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap"></div>
+    </section>
 
-    <script>
-        // Tab Switcher Logic
-        function switchTab(tabName) {
-            document.getElementById('module-audit').classList.add('hidden');
-            document.getElementById('module-rfp').classList.add('hidden');
-            document.getElementById('module-sop').classList.add('hidden');
+  </main>
 
-            document.getElementById('tab-audit').className = "px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
-            document.getElementById('tab-rfp').className = "px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
-            document.getElementById('tab-sop').className = "px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
+  <!-- Membership Key Modal -->
+  <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold">Activate Access Key</h3>
+        <button onclick="closeMembershipModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
 
-            if(tabName === 'audit') {
-                document.getElementById('module-audit').classList.remove('hidden');
-                document.getElementById('tab-audit').className = "px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 transition-all font-bold";
-            } else if(tabName === 'rfp') {
-                document.getElementById('module-rfp').classList.remove('hidden');
-                document.getElementById('tab-rfp').className = "px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 transition-all font-bold";
-            } else if(tabName === 'sop') {
-                document.getElementById('module-sop').classList.remove('hidden');
-                document.getElementById('tab-sop').className = "px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 transition-all font-bold";
-            }
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Enter your client Access Key provided upon subscribing to the <strong>$50/mo</strong> or <strong>$100/mo</strong> membership plans.
+      </p>
+
+      <div class="space-y-3">
+        <input id="access-key-input" type="text" placeholder="Enter Access Key (e.g. DJ-MEMBER-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
+        <button onclick="validateAccessKey()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Apply Key & Unlock Credits
+        </button>
+      </div>
+
+      <div class="border-t border-slate-800 pt-4 text-center">
+        <p class="text-xs text-slate-400">Need a key? Contact Dr. Jackson Operations directly or pay per document ($150 flat fee).</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-800 p-6 text-center text-xs text-slate-500">
+    &copy; Dr. Jackson Operational Diagnostic Suite. All Rights Reserved.
+  </footer>
+
+  <!-- Core Logic Engine -->
+  <script>
+    // System State
+    let userCredits = {
+      isMember: false,
+      tierName: "Non-Member",
+      sopRemaining: 0,
+      rfpRemaining: 0
+    };
+
+    // Preset Access Keys
+    const ACCESS_KEYS = {
+      "DJ-MEMBER-50": { tier: "Standard ($50/mo)", sop: 10, rfp: 10 },
+      "DJ-MEMBER-100": { tier: "Enterprise ($100/mo)", sop: 20, rfp: 20 }
+    };
+
+    function initSystem() {
+      const saved = localStorage.getItem('dj_user_credits');
+      if (saved) {
+        userCredits = JSON.parse(saved);
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      const statusInd = document.getElementById('status-indicator');
+      const tierLbl = document.getElementById('membership-tier-label');
+      const creditLbl = document.getElementById('credit-count-label');
+
+      if (userCredits.isMember && (userCredits.sopRemaining > 0 || userCredits.rfpRemaining > 0)) {
+        statusInd.className = "inline-block w-2 h-2 rounded-full bg-emerald-500";
+        tierLbl.textContent = `Tier: ${userCredits.tierName}`;
+        creditLbl.textContent = `SOPs: ${userCredits.sopRemaining} | RFPs: ${userCredits.rfpRemaining}`;
+      } else {
+        statusInd.className = "inline-block w-2 h-2 rounded-full bg-slate-500";
+        tierLbl.textContent = "Tier: Non-Member";
+        creditLbl.textContent = "SOPs: 0 | RFPs: 0";
+      }
+    }
+
+    function openMembershipModal() {
+      document.getElementById('membership-modal').classList.remove('hidden');
+      document.getElementById('membership-modal').classList.add('flex');
+    }
+
+    function closeMembershipModal() {
+      document.getElementById('membership-modal').classList.add('hidden');
+      document.getElementById('membership-modal').classList.remove('flex');
+    }
+
+    function validateAccessKey() {
+      const input = document.getElementById('access-key-input').value.trim().toUpperCase();
+      if (ACCESS_KEYS[input]) {
+        const config = ACCESS_KEYS[input];
+        userCredits = {
+          isMember: true,
+          tierName: config.tier,
+          sopRemaining: config.sop,
+          rfpRemaining: config.rfp
+        };
+        localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+        updateUI();
+        closeMembershipModal();
+        alert(`Access Key Accepted! You have activated the ${config.tier} plan (${config.sop} SOPs and ${config.rfp} RFPs).`);
+      } else {
+        alert('Invalid Access Key. Please double check your code or complete $150 single-document checkout.');
+      }
+    }
+
+    function handleGenerateDeliverable(type) {
+      if (type === 'SOP') {
+        const title = document.getElementById('sop-title').value.trim();
+        const steps = document.getElementById('sop-steps').value.trim();
+
+        if (!title || !steps) {
+          alert('Please fill out the SOP title and steps before building.');
+          return;
         }
 
-        // RFP Generator Logic
-        function buildRFP() {
-            const title = document.getElementById('rfp-title').value || "Industrial Operations RFP";
-            const scope = document.getElementById('rfp-scope').value || "Standard maintenance and facility service deliverables.";
-            const budget = document.getElementById('rfp-budget').value || "Competitive Bidding";
-            const deadline = document.getElementById('rfp-deadline').value || "30 Days from Issue";
+        if (userCredits.sopRemaining > 0) {
+          userCredits.sopRemaining -= 1;
+          localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+          updateUI();
+          renderSOP(title, steps);
+        } else {
+          promptSinglePurchase('Standard Operating Procedure (SOP)', 150, () => renderSOP(title, steps));
+        }
+      } else if (type === 'RFP') {
+        const title = document.getElementById('rfp-title').value.trim();
+        const reqs = document.getElementById('rfp-reqs').value.trim();
 
-            document.getElementById('output-rfp-title').innerText = title;
-            document.getElementById('output-rfp-scope').innerText = scope;
-            document.getElementById('output-rfp-budget').innerText = budget;
-            document.getElementById('output-rfp-deadline').innerText = deadline;
-
-            document.getElementById('rfp-output').classList.remove('hidden');
-            window.scrollTo({ top: document.getElementById("rfp-output").offsetTop, behavior: 'smooth' });
+        if (!title || !reqs) {
+          alert('Please fill out the RFP scope and vendor requirements before building.');
+          return;
         }
 
-        // SOP Builder Logic
-        function buildSOP() {
-            const title = document.getElementById('sop-title').value || "Standard Operating Procedure";
-            const time = document.getElementById('sop-time').value || "15 Minutes";
-            const steps = document.getElementById('sop-steps').value || "Perform standard station tasks in sequential order.";
-
-            document.getElementById('output-sop-title').innerText = title;
-            document.getElementById('output-sop-time').innerText = time;
-            document.getElementById('output-sop-steps').innerText = steps;
-
-            document.getElementById('sop-output').classList.remove('hidden');
-            window.scrollTo({ top: document.getElementById("sop-output").offsetTop, behavior: 'smooth' });
+        if (userCredits.rfpRemaining > 0) {
+          userCredits.rfpRemaining -= 1;
+          localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+          updateUI();
+          renderRFP(title, reqs);
+        } else {
+          promptSinglePurchase('Technical RFP Specification', 150, () => renderRFP(title, reqs));
         }
+      }
+    }
 
-        // 10-Point Audit Engine Data
-        const questions = [
-            {
-                q: "1. Shift Handoffs: How are daily shift turnover notes and pending tasks communicated?",
-                options: [
-                    { text: "Verbal memory / word-of-mouth only", points: 0, cat: "Handoffs", fix: "Deploy a standardized 5-point shift change logboard at main break stations." },
-                    { text: "Handwritten notes or individual text chats", points: 5, cat: "Handoffs", fix: "Digitize shift handoff logs into a single centralized digital checklist." },
-                    { text: "Digital shift dashboard updated live", points: 10, cat: "Handoffs", fix: "Maintain current digital handoff standards; audit for shift compliance bi-weekly." }
-                ]
-            },
-            {
-                q: "2. Tool & Workstation Staging: How often do operators travel across the floor to retrieve tools/supplies?",
-                options: [
-                    { text: "Constantly throughout shift (>30 mins wasted daily)", points: 0, cat: "Staging", fix: "Execute 5S staging: reposition high-frequency tools within 15 feet of active work zones." },
-                    { text: "Occasional delays waiting on specialized tools", points: 5, cat: "Staging", fix: "Establish designated tool carts with shadow boards for specialized equipment." },
-                    { text: "Minimal travel waste; point-of-use staging active", points: 10, cat: "Staging", fix: "Perform monthly 5S audits to keep workstations optimized." }
-                ]
-            },
-            {
-                q: "3. Safety & Compliance: How are daily safety and facility compliance checks recorded?",
-                options: [
-                    { text: "No formal daily safety logs kept", points: 0, cat: "Safety", fix: "Implement mandatory 60-second pre-shift safety checklists for all shift leaders." },
-                    { text: "Inconsistently logged on paper sheets", points: 5, cat: "Safety", fix: "Shift paper logs to QR-code digital daily safety verification at entry points." },
-                    { text: "Formally logged and audited every day", points: 10, cat: "Safety", fix: "Maintain active safety audit cadence; reward high-compliance teams." }
-                ]
-            },
-            {
-                q: "4. Labor Budget & Overtime: How is overtime managed across facility shifts?",
-                options: [
-                    { text: "Reactively after overtime budget is already breached", points: 0, cat: "Labor", fix: "Institute mandatory 12:00 PM mid-shift labor checks to rebalance workload before OT occurs." },
-                    { text: "Reviewed weekly during management meetings", points: 5, cat: "Labor", fix: "Shift labor tracking from weekly reviews to daily volume-matched scheduling." },
-                    { text: "Tracked daily against work volume targets", points: 10, cat: "Labor", fix: "Continue daily labor volume tracking to maximize margin retention." }
-                ]
-            },
-            {
-                q: "5. Quality Control & Defects: How are quality defects or rework items identified and tracked?",
-                options: [
-                    { text: "Defects noted only when customers/downstream complain", points: 0, cat: "Quality", fix: "Establish inline quality gate checks before items exit primary assembly." },
-                    { text: "Logged on paper at end of day", points: 5, cat: "Quality", fix: "Implement real-time defect logging to catch recurring equipment errors immediately." },
-                    { text: "Tracked digitally with real-time root-cause analysis", points: 10, cat: "Quality", fix: "Standardize root-cause Pareto charts to target top 2 defect drivers." }
-                ]
-            },
-            {
-                q: "6. SOPs & Training: How are new hires trained on operational procedures?",
-                options: [
-                    { text: "Shadowing existing staff with no written guidelines", points: 0, cat: "SOPs", fix: "Draft 1-page visual standard operating procedures (SOPs) for key job stations." },
-                    { text: "Outdated binders or basic training checklists", points: 5, cat: "SOPs", fix: "Update operational binders into visual single-point lessons posted at workstations." },
-                    { text: "Standardized visual SOPs and formal skills matrix", points: 10, cat: "SOPs", fix: "Cross-train top operators using the active skills matrix to boost flexibility." }
-                ]
-            },
-            {
-                q: "7. Equipment Downtime: How are machine maintenance issues and breakdowns handled?",
-                options: [
-                    { text: "Fix equipment only after it breaks down completely", points: 0, cat: "Maintenance", fix: "Implement basic Preventive Maintenance (PM) schedules for primary high-wear machines." },
-                    { text: "Basic calendar checks, but frequent unscheduled stops", points: 5, cat: "Maintenance", fix: "Transition to meter-based or usage-based maintenance tracking to curb downtime." },
-                    { text: "Proactive preventive maintenance schedule in place", points: 10, cat: "Maintenance", fix: "Audit PM adherence monthly to ensure zero unplanned shift stoppages." }
-                ]
-            },
-            {
-                q: "8. Inventory Visibility: How accurate is your current floor inventory and material tracking?",
-                options: [
-                    { text: "Frequent stockouts and work pauses due to missing parts", points: 0, cat: "Inventory", fix: "Establish minimum reorder points (Kanban signals) for high-turnover inventory." },
-                    { text: "Manual weekly counts with occasional discrepancies", points: 5, cat: "Inventory", fix: "Implement daily cycle counting for top 20% high-value inventory items." },
-                    { text: "Real-time inventory management system", points: 10, cat: "Inventory", fix: "Maintain strict cycle counts and optimize safety stock levels." }
-                ]
-            },
-            {
-                q: "9. Work-in-Progress (WIP): Where do jobs or orders slow down the most?",
-                options: [
-                    { text: "Orders pile up at bottleneck stations without clear priority", points: 0, cat: "Throughput", fix: "Establish WIP caps between stations to prevent floor congestion and speed flow." },
-                    { text: "Moderate slowdowns during peak shift hours", points: 5, cat: "Throughput", fix: "Flex labor to bottleneck stations during peak volume hours." },
-                    { text: "Smooth flow with monitored takt time targets", points: 10, cat: "Throughput", fix: "Fine-tune station line balancing to maximize daily throughput." }
-                ]
-            },
-            {
-                q: "10. Executive Management Review: How often does leadership review floor KPIs with shift leaders?",
-                options: [
-                    { text: "Monthly or only during quarterly reviews", points: 0, cat: "KPIs", fix: "Establish daily 5-minute standup meetings around key performance metrics." },
-                    { text: "Weekly operational review meeting", points: 5, cat: "KPIs", fix: "Add quick daily visual board checks to supplement weekly reviews." },
-                    { text: "Daily visual management standup around key metrics", points: 10, cat: "KPIs", fix: "Sustain daily standup discipline and recognize top-performing shifts." }
-                ]
-            }
-        ];
+    function promptSinglePurchase(docType, price, onSuccess) {
+      const confirmPay = confirm(`This single ${docType} deliverable requires payment of $${price}.\n\nClick "OK" to simulate single-document payment approval and generate your file.`);
+      if (confirmPay) {
+        onSuccess();
+      }
+    }
 
-        let currentQuestion = 0;
-        let totalPoints = 0;
-        let companyName = "";
-        let selectedFixes = [];
+    function renderSOP(title, steps) {
+      const outputBox = document.getElementById('output-container');
+      const outputTitle = document.getElementById('output-title');
+      const outputBody = document.getElementById('output-body');
 
-        function startAudit() {
-            const input = document.getElementById("company-name").value;
-            if(!input) {
-                alert("Please enter a facility or company name to continue.");
-                return;
-            }
-            companyName = input;
-            document.getElementById("company-display").innerText = companyName;
-            document.getElementById("intro-screen").classList.add("hidden");
-            document.getElementById("quiz-screen").classList.remove("hidden");
-            loadQuestion();
-        }
+      outputTitle.textContent = `Generated Standard Operating Procedure: ${title}`;
+      outputBody.textContent = `================================================================================
+DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
+STANDARD OPERATING PROCEDURE (SOP) SPECIFICATION
+================================================================================
+DOCUMENT TITLE: ${title.toUpperCase()}
+DATE CREATED:   ${new Date().toLocaleDateString()}
+AUTHOR:         Dr. Jackson Operational Health Engine
+--------------------------------------------------------------------------------
 
-        function loadQuestion() {
-            const qData = questions[currentQuestion];
-            document.getElementById("question-number").innerText = `Question ${currentQuestion + 1} of 10`;
-            document.getElementById("question-title").innerText = qData.q;
-            
-            const pct = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById("progress-bar").style.width = pct + "%";
+1. PURPOSE & SCOPE
+   This Standard Operating Procedure defines the mandatory operational protocol
+   and quality metrics for "${title}".
 
-            const container = document.getElementById("options-container");
-            container.innerHTML = "";
+2. OPERATIONAL STEPS & STAGING
+${steps.split('\n').map((step, idx) => `   [Step ${idx + 1}] ${step}`).join('\n')}
 
-            qData.options.forEach(opt => {
-                const btn = document.createElement("button");
-                btn.className = "w-full text-left p-4 bg-slate-900 hover:bg-slate-700/50 rounded-xl border border-slate-700/60 text-slate-200 transition-all font-medium text-sm leading-relaxed";
-                btn.innerText = opt.text;
-                btn.onclick = () => selectOption(opt.points, opt.cat, opt.fix);
-                container.appendChild(btn);
-            });
-        }
+3. SAFETY & QUALITY CONTROL AUDIT
+   - Compliance Threshold: 100% adherence to staging parameters.
+   - Escalation Protocol: Notify Shift Area Manager immediately upon deviation.
 
-        function selectOption(pts, category, fixText) {
-            totalPoints += pts;
-            if(pts < 10) {
-                selectedFixes.push({ cat: category, fix: fixText });
-            }
-            currentQuestion++;
+================================================================================
+END OF SOP SPECIFICATION
+================================================================================`;
 
-            if(currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
+      outputBox.classList.remove('hidden');
+      outputBox.scrollIntoView({ behavior: 'smooth' });
+    }
 
-        function showResults() {
-            document.getElementById("quiz-screen").classList.add("hidden");
-            document.getElementById("result-screen").classList.remove("hidden");
+    function renderRFP(title, reqs) {
+      const outputBox = document.getElementById('output-container');
+      const outputTitle = document.getElementById('output-title');
+      const outputBody = document.getElementById('output-body');
 
-            const finalPct = Math.round((totalPoints / 100) * 100);
-            const scoreDisplay = document.getElementById("score-display");
-            scoreDisplay.innerText = finalPct + "%";
+      outputTitle.textContent = `Generated Technical RFP: ${title}`;
+      outputBody.textContent = `================================================================================
+DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
+TECHNICAL REQUEST FOR PROPOSAL (RFP) SPECIFICATION
+================================================================================
+PROJECT SCOPE: ${title.toUpperCase()}
+DATE ISSUED:   ${new Date().toLocaleDateString()}
+AUTHOR:        Dr. Jackson Operations & Logistics Management
+--------------------------------------------------------------------------------
 
-            if(finalPct < 50) {
-                scoreDisplay.className = "text-6xl font-black text-rose-500";
-                document.getElementById("score-status").innerText = "Critical Facility Bottlenecks";
-                document.getElementById("score-status").className = "text-2xl font-bold text-rose-400";
-                document.getElementById("score-description").innerText = `${companyName} exhibits significant operational friction across handoffs, staging, and labor management, leading to severe profit leakage.`;
-            } else if(finalPct < 80) {
-                scoreDisplay.className = "text-6xl font-black text-amber-500";
-                document.getElementById("score-status").innerText = "Moderate Efficiency Gaps";
-                document.getElementById("score-status").className = "text-2xl font-bold text-amber-400";
-                document.getElementById("score-description").innerText = `${companyName} maintains core operational structures, but suffers from key gaps in standard operating procedures, inventory, and overtime management.`;
-            } else {
-                scoreDisplay.className = "text-6xl font-black text-emerald-400";
-                document.getElementById("score-status").innerText = "High Operational Health";
-                document.getElementById("score-status").className = "text-2xl font-bold text-emerald-400";
-                document.getElementById("score-description").innerText = `${companyName} runs a highly structured facility. Targeted optimizations will further maximize throughput and labor ROI.`;
-            }
-        }
+1. EXECUTIVE OVERVIEW
+   Dr. Jackson Operational Health Diagnostic invites qualified vendors to submit
+   proposals for providing high-efficiency execution under "${title}".
 
-        function generateFixPlan() {
-            document.getElementById("result-screen").classList.add("hidden");
-            document.getElementById("plan-screen").classList.remove("hidden");
+2. VENDOR REQUIREMENTS & CONTRACT SLAS
+${reqs.split('\n').map((req, idx) => `   [SLA ${idx + 1}] ${req}`).join('\n')}
 
-            const finalPct = Math.round((totalPoints / 100) * 100);
-            document.getElementById("plan-company").innerText = companyName;
-            document.getElementById("plan-score").innerText = finalPct + "%";
+3. PROPOSAL SUBMISSION RULES
+   - Bids must include transparent unit pricing and escalation schedules.
+   - Submissions must demonstrate compliance with enterprise operational standards.
 
-            if(finalPct < 50) {
-                document.getElementById("plan-summary").innerText = `${companyName} currently operates with major facility friction. The audit revealed systematic inefficiencies in shift communication, tool travel waste, and reactive labor scheduling—resulting in an estimated 18% to 25% overall labor waste.`;
-            } else if(finalPct < 80) {
-                document.getElementById("plan-summary").innerText = `${companyName} demonstrates solid baseline productivity, but experiences secondary operational bottlenecks in inventory visibility, training standards, and downtime management that restrict total output.`;
-            } else {
-                document.getElementById("plan-summary").innerText = `${companyName} operates at high efficiency. Minor adjustments in line balancing, cycle counting, and preventive maintenance will solidify peak facility performance.`;
-            }
+================================================================================
+END OF TECHNICAL RFP SPECIFICATION
+================================================================================`;
 
-            const resContainer = document.getElementById("plan-resolutions");
-            resContainer.innerHTML = "";
+      outputBox.classList.remove('hidden');
+      outputBox.scrollIntoView({ behavior: 'smooth' });
+    }
 
-            if(selectedFixes.length === 0) {
-                resContainer.innerHTML = `<div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800 text-slate-300 text-xs">Facility scored 100% across all diagnostic categories. Focus on sustaining current visual standards and KPI reviews.</div>`;
-            } else {
-                selectedFixes.forEach(item => {
-                    const div = document.createElement("div");
-                    div.className = "bg-slate-900/60 p-3.5 rounded-lg border border-slate-800/80";
-                    div.innerHTML = `<span class="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">[Pillar: ${item.cat}]</span><p class="text-slate-300 text-xs leading-relaxed">${item.fix}</p>`;
-                    resContainer.appendChild(div);
-                });
-            }
-
-            const stepsList = document.getElementById("plan-steps");
-            stepsList.innerHTML = `
-                <li><strong>Days 1–3:</strong> Establish daily 5-minute pre-shift standup meetings and post standard shift handoff logs.</li>
-                <li><strong>Days 4–7:</strong> Complete a 5S audit: re-stage high-frequency tools and inventory within 15 feet of active work zones.</li>
-                <li><strong>Days 8–11:</strong> Implement mid-shift 12:00 PM labor volume checks to eliminate unplanned overtime.</li>
-                <li><strong>Days 12–14:</strong> Roll out 1-page visual SOPs for primary bottleneck stations and review weekly KPI trends.</li>
-            `;
-
-            window.scrollTo({ top: document.getElementById("plan-screen").offsetTop, behavior: 'smooth' });
-        }
-
-        function copyZelle() {
-            navigator.clipboard.writeText("Deriteous741@gmail.com");
-            const msg = document.getElementById("copy-msg");
-            msg.classList.remove("hidden");
-            setTimeout(() => { msg.classList.add("hidden"); }, 3000);
-        }
-    </script>
+    // Initialize on load
+    window.onload = initSystem;
+  </script>
 </body>
 </html>
