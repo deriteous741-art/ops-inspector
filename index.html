@@ -171,7 +171,6 @@
             justify-content: space-between;
         }
 
-        /* VIP UNLOCKED ROUTINE BUILDER STYLES */
         .vip-locked-notice {
             background: rgba(217, 119, 6, 0.1);
             border: 1px dashed var(--primary);
@@ -208,40 +207,10 @@
             border-color: var(--primary);
         }
 
-        .routine-input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .routine-input-field {
-            width: 100%;
-            padding: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-main);
-            font-size: 0.85rem;
-        }
-
-        .btn-add-routine {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 12px;
-        }
-
         .routine-list-box {
             border-top: 1px solid var(--border);
             padding-top: 10px;
-            max-height: 200px;
+            max-height: 220px;
             overflow-y: auto;
         }
 
@@ -535,6 +504,20 @@
             font-weight: bold;
         }
 
+        .btn-add-to-routine-direct {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blue-accent);
+            border: 1px solid var(--blue-accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+
         .visual-btn {
             display: inline-block;
             font-size: 0.8rem;
@@ -548,17 +531,12 @@
             text-decoration: none;
         }
 
-        .visual-btn-locked {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: var(--primary);
-            background: rgba(217, 119, 6, 0.1);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 6px 12px;
-            margin-top: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        .locked-container {
+            display: block;
+        }
+
+        .unlocked-container {
+            display: none;
         }
 
         .membership-section {
@@ -682,7 +660,7 @@
 
             <div id="routineLockedContent" class="vip-locked-notice">
                 🔒 Custom Workout Routine Builder is locked for Free users.<br>
-                <strong>Unlock VIP Access or login with Owner Passcode to build, save, and log daily workout routines!</strong>
+                <strong>Unlock VIP Access or login with Owner Passcode to build and save custom daily routines!</strong>
             </div>
 
             <div id="routineUnlockedContent" style="display: none;">
@@ -696,15 +674,7 @@
                     <button class="day-tab-btn" onclick="selectDay('Sunday', this)">Sun</button>
                 </div>
 
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">Add exercises to build your custom workout plan for <strong id="selectedDayTitle" style="color:var(--primary);">Monday</strong>:</p>
-
-                <div class="routine-input-grid">
-                    <input type="text" id="routineExerciseInput" class="routine-input-field" placeholder="Exercise Name (e.g., Bench Press)">
-                    <input type="number" id="routineSetsInput" class="routine-input-field" placeholder="Sets (e.g. 4)">
-                    <input type="number" id="routineRepsInput" class="routine-input-field" placeholder="Reps (e.g. 10)">
-                    <input type="number" id="routineLbsInput" class="routine-input-field" placeholder="Lbs (e.g. 185)">
-                </div>
-                <button class="btn-add-routine" onclick="addExerciseToRoutine()">➕ Add Exercise to Routine</button>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">Saved exercises for <strong id="selectedDayTitle" style="color:var(--primary);">Monday</strong> (Click ➕ on any exercise below to add it here):</p>
 
                 <div class="routine-list-box" id="routineDisplayBox">
                     <div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for this day yet.</div>
@@ -780,7 +750,7 @@
         <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search any exercise, muscle, or movement..." onkeyup="filterExercises()">
     </div>
 
-    <!-- CHEST -->
+    <!-- CHEST VAULT -->
     <div class="category-folder">
         <button class="folder-header" onclick="toggleFolder(this)">
             <span>🏋️ Chest Vault (Presses, Flyes & Pullovers)</span>
@@ -800,50 +770,57 @@
                     </div>
                     <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Flat+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
+                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Flat Barbell Bench Press', this)">➕ Add to Daily Routine</button>
+                <a href="https://www.google.com/search?tbm=isch&q=Flat+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
             </div>
 
-            <div class="exercise-item" data-search="incline barbell bench press chest barbell gym">
-                <div class="exercise-title-row"><span class="exercise-name">Incline Barbell Bench Press (30°)</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Clavicular Head (Upper Chest).</p>
-                <p class="form-cue">✓ Cue: Lower bar to upper chest / collarbone level.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
+            <!-- PREMIUM EXERCISES WITH LOCKED/UNLOCKED DUAL CONTAINERS -->
+            <div class="exercise-item" data-search="flat dumbbell chest press gym">
+                <div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
+                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Pectoralis Major & Triceps Isolation.</p>
+                
+                <div class="locked-container">
+                    <button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Chest Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Incline+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-
-            <div class="exercise-item" data-search="decline barbell bench press chest barbell gym">
-                <div class="exercise-title-row"><span class="exercise-name">Decline Barbell Bench Press</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Lower Sternum (Lower Chest).</p>
-                <p class="form-cue">✓ Cue: Keep shoulders tucked back throughout movement.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
+                <div class="unlocked-container">
+                    <div class="volume-tracker-card">
+                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
+                        <div class="tracker-row">
+                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
+                        </div>
+                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
                     </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
+                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Flat Dumbbell Chest Press', this)">➕ Add to Daily Routine</button>
+                    <a href="https://www.google.com/search?tbm=isch&q=Flat+Dumbbell+Chest+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Decline+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
 
-            <div class="exercise-item" data-search="flat dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Chest Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="incline dumbbell press upper chest gym"><div class="exercise-title-row"><span class="exercise-name">Incline Dumbbell Press (45°)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Incline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="decline dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Decline Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="flat dumbbell chest flyes stretch pecs gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Flyes</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="standing cable chest flyes crossover middle pecs gym"><div class="exercise-title-row"><span class="exercise-name">Standing Cable Chest Flyes (Mid-Pulley)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Cable Chest Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="incline dumbbell press upper chest gym">
+                <div class="exercise-title-row"><span class="exercise-name">Incline Dumbbell Press (45°)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
+                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Upper Pectoralis Clavicular Head.</p>
+                <div class="locked-container">
+                    <button class="visual-btn-locked" onclick="promptUnlock('Incline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
+                </div>
+                <div class="unlocked-container">
+                    <div class="volume-tracker-card">
+                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
+                        <div class="tracker-row">
+                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
+                        </div>
+                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
+                    </div>
+                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Incline Dumbbell Press', this)">➕ Add to Daily Routine</button>
+                    <a href="https://www.google.com/search?tbm=isch&q=Incline+Dumbbell+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ARMS -->
+    <!-- ARMS VAULT -->
     <div class="category-folder">
         <button class="folder-header" onclick="toggleFolder(this)">
             <span>💪 Arms Vault (Biceps, Triceps & Forearms)</span>
@@ -853,7 +830,6 @@
             <div class="exercise-item" data-search="barbell biceps curl arms gym">
                 <div class="exercise-title-row"><span class="exercise-name">Standing Barbell Biceps Curl</span><span class="tag-free">Free Sample</span></div>
                 <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Biceps Brachii Mass.</p>
-                <p class="form-cue">✓ Cue: Keep elbows pinned to ribs; strict tension.</p>
                 <div class="volume-tracker-card">
                     <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
                     <div class="tracker-row">
@@ -863,138 +839,30 @@
                     </div>
                     <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Standing+Barbell+Biceps+Curl+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
+                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Standing Barbell Biceps Curl', this)">➕ Add to Daily Routine</button>
+                <a href="https://www.google.com/search?tbm=isch&q=Standing+Barbell+Biceps+Curl+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="triceps cable rope pushdown arms gym">
-                <div class="exercise-title-row"><span class="exercise-name">Triceps Cable Rope Pushdown</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Cable / Gym • <strong>Target:</strong> Lateral & Medial Triceps Heads.</p>
-                <p class="form-cue">✓ Cue: Spread rope handles apart at bottom lockout.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
+
+            <div class="exercise-item" data-search="dumbbell hammer curl brachialis forearms arms gym">
+                <div class="exercise-title-row"><span class="exercise-name">Alternating Dumbbell Hammer Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
+                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Brachialis & Forearm Brachioradialis.</p>
+                <div class="locked-container">
+                    <button class="visual-btn-locked" onclick="promptUnlock('Hammer Curls')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Triceps+Cable+Rope+Pushdown+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-            <div class="exercise-item" data-search="dumbbell hammer curl brachialis forearms arms gym"><div class="exercise-title-row"><span class="exercise-name">Alternating Dumbbell Hammer Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Hammer Curls')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="ez bar preacher curl peak isolation gym"><div class="exercise-title-row"><span class="exercise-name">EZ-Bar Preacher Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Preacher Curl')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-        </div>
-    </div>
-
-    <!-- LEGS -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🦵 Leg Day Vault (Quads, Hamstrings, Glutes & Calves)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="barbell back squat quads glutes legs gym">
-                <div class="exercise-title-row"><span class="exercise-name">Barbell High-Bar Back Squat</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Quadriceps & Glute Mass.</p>
-                <p class="form-cue">✓ Cue: Drive knees outward inline with toes; drop parallel.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
+                <div class="unlocked-container">
+                    <div class="volume-tracker-card">
+                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
+                        <div class="tracker-row">
+                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
+                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
+                        </div>
+                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
                     </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
+                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Alternating Dumbbell Hammer Curl', this)">➕ Add to Daily Routine</button>
+                    <a href="https://www.google.com/search?tbm=isch&q=Dumbbell+Hammer+Curl+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
                 </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Barbell+Back+Squat+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="romanian deadlift rdl hamstrings glutes legs gym"><div class="exercise-title-row"><span class="exercise-name">Barbell Romanian Deadlift (RDL)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Romanian Deadlift')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="leg press machine quads legs gym"><div class="exercise-title-row"><span class="exercise-name">45-Degree Machine Leg Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Leg Press Machine')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-        </div>
-    </div>
-
-    <!-- BACK & SHOULDERS -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🎯 Back & Shoulders Vault (Lats, Traps & Delts)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="wide grip lat pulldown back lats gym">
-                <div class="exercise-title-row"><span class="exercise-name">Wide-Grip Lat Pulldown</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Cable / Gym • <strong>Target:</strong> Latissimus Dorsi (V-Taper).</p>
-                <p class="form-cue">✓ Cue: Pull bar to upper chest, driving elbows down.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Wide+Grip+Lat+Pulldown+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-            <div class="exercise-item" data-search="bent over barbell row back lats gym"><div class="exercise-title-row"><span class="exercise-name">Bent-Over Barbell Row</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Barbell Row')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-        </div>
-    </div>
-
-    <!-- HOME & BODYWEIGHT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🏠 Home & Bodyweight Vault</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="tempo pushups chest home bodyweight">
-                <div class="exercise-title-row"><span class="exercise-name">3-Second Eccentric Push-Up</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Calisthenics • <strong>Target:</strong> Chest & Core Stability.</p>
-                <p class="form-cue">✓ Cue: Lower over 3 seconds, explode upward.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <a href="https://www.google.com/search?tbm=isch&q=Eccentric+Push+Up+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-            <div class="exercise-item" data-search="decline pushups feet elevated upper chest home floor"><div class="exercise-title-row"><span class="exercise-name">Decline Push-Up (Feet Elevated)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Push-Up')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-        </div>
-    </div>
-
-    <!-- YOGA -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🧘 Yoga & Mobility Vault (30+ Poses)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="downward facing dog adho mukha yoga stretch mobility flexibility">
-                <div class="exercise-title-row"><span class="exercise-name">Downward-Facing Dog (Adho Mukha)</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Inversion • <strong>Target:</strong> Hamstrings, Spine & Shoulders.</p>
-                <p class="form-cue">✓ Cue: Press floor away; drive tailbone upward.</p>
-                <a href="https://www.google.com/search?tbm=isch&q=Downward+Facing+Dog+yoga+pose+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-            <div class="exercise-item" data-search="childs pose balasana recovery yoga"><div class="exercise-title-row"><span class="exercise-name">Child’s Pose (Balasana)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Child’s Pose')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-        </div>
-    </div>
-
-    <!-- PILATES -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🤸 Pilates & Core Vault (30+ Mat Movements)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="pilates hundred core stamina mat">
-                <div class="exercise-title-row"><span class="exercise-name">The Classical Pilates Hundred</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Core Endurance • <strong>Target:</strong> Transverse Abdominis.</p>
-                <p class="form-cue">✓ Cue: Inhale for 5 pumps, exhale for 5 pumps.</p>
-                <a href="https://www.google.com/search?tbm=isch&q=The+Pilates+Hundred+exercise+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
-            </div>
-            <div class="exercise-item" data-search="criss cross obliques core pilates"><div class="exercise-title-row"><span class="exercise-name">Pilates Criss-Cross (Oblique Rotations)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Pilates Criss-Cross')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -1076,13 +944,12 @@
                 document.getElementById('routineLockedContent').style.display = 'none';
                 document.getElementById('routineUnlockedContent').style.display = 'block';
                 
-                const lockedBtns = document.querySelectorAll('.visual-btn-locked');
-                lockedBtns.forEach(btn => {
-                    btn.innerText = "✅ Unlocked — View Movement & Log Volume";
-                    btn.style.color = "var(--accent)";
-                    btn.style.background = "rgba(34, 197, 94, 0.1)";
-                    btn.onclick = null;
-                });
+                // Show unlocked exercise cards & volume input tools
+                const lockedBoxes = document.querySelectorAll('.locked-container');
+                lockedBoxes.forEach(box => box.style.display = 'none');
+
+                const unlockedBoxes = document.querySelectorAll('.unlocked-container');
+                unlockedBoxes.forEach(box => box.style.display = 'block');
 
                 const lockBadges = document.querySelectorAll('.lock-badge');
                 lockBadges.forEach(badge => {
@@ -1106,28 +973,34 @@
             renderRoutineList();
         }
 
-        function addExerciseToRoutine() {
-            const name = document.getElementById('routineExerciseInput').value.trim();
-            const sets = parseFloat(document.getElementById('routineSetsInput').value) || 0;
-            const reps = parseFloat(document.getElementById('routineRepsInput').value) || 0;
-            const lbs = parseFloat(document.getElementById('routineLbsInput').value) || 0;
-
-            if (!name) {
-                alert("Please enter an exercise name.");
+        function quickAddExercise(exName, btnElem) {
+            const isVIP = localStorage.getItem('dr_jackson_vip_unlocked') === 'true';
+            if (!isVIP) {
+                promptUnlock(exName);
                 return;
             }
 
-            if (!userProfile.routines) userProfile.routines = {};
-            if (!userProfile.routines[activeDay]) userProfile.routines[activeDay] = [];
+            const targetDay = prompt(`Which day do you want to add "${exName}" to?\n(Type: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday)`, activeDay);
+            if (!targetDay) return;
 
-            userProfile.routines[activeDay].push({ name, sets, reps, lbs });
+            const formattedDay = targetDay.trim().charAt(0).toUpperCase() + targetDay.trim().slice(1).toLowerCase();
+            
+            if (!userProfile.routines) userProfile.routines = { Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: [] };
+            if (!userProfile.routines[formattedDay]) {
+                alert("Please enter a valid day of the week (e.g., Monday).");
+                return;
+            }
 
-            document.getElementById('routineExerciseInput').value = "";
-            document.getElementById('routineSetsInput').value = "";
-            document.getElementById('routineRepsInput').value = "";
-            document.getElementById('routineLbsInput').value = "";
+            // Extract set/rep/lbs values from card if filled
+            const card = btnElem.closest('.exercise-item');
+            const sets = card ? (parseFloat(card.querySelector('.set-in')?.value) || 3) : 3;
+            const reps = card ? (parseFloat(card.querySelector('.rep-in')?.value) || 10) : 10;
+            const lbs = card ? (parseFloat(card.querySelector('.lbs-in')?.value) || 100) : 100;
 
+            userProfile.routines[formattedDay].push({ name: exName, sets, reps, lbs });
             saveProfileData();
+            
+            alert(`✅ Added "${exName}" (${sets} sets × ${reps} reps @ ${lbs} lbs) to your ${formattedDay} routine!`);
             renderRoutineList();
         }
 
@@ -1147,7 +1020,7 @@
             const dayItems = userProfile.routines && userProfile.routines[activeDay] ? userProfile.routines[activeDay] : [];
 
             if (dayItems.length === 0) {
-                displayBox.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for ' + activeDay + ' yet.</div>';
+                displayBox.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for ' + activeDay + ' yet. Click ➕ on any exercise below to add it!</div>';
                 return;
             }
 
