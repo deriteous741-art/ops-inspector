@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+# Create the complete updated index.html with auto-resetting billing cycle and visual credit tracking
+
+html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,9 +11,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <style>
     .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
-    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .glass-card { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
     .gold-accent { color: #f59e0b; }
-    .bg-gold { background-color: #f59e0b; }
   </style>
 </head>
 <body class="gradient-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between">
@@ -20,168 +21,262 @@
   <header class="border-b border-slate-700/50 p-6 glass-card sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <i class="fa-solid font-bold text-3xl fa-chart-line gold-accent"></i>
+        <i class="fa-solid fa-chart-line text-3xl gold-accent"></i>
         <div>
           <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Dr. Jackson Operational Diagnostic</h1>
           <p class="text-xs text-slate-400">Enterprise Operations, SOPs & Technical RFP Suite</p>
         </div>
       </div>
-      <!-- Membership Status Badge -->
-      <div id="membership-status" class="bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-lg text-xs flex items-center gap-3">
-        <span class="inline-block w-2 h-2 rounded-full bg-slate-500" id="status-indicator"></span>
-        <div>
-          <span class="font-bold block" id="membership-tier-label">Tier: Non-Member</span>
-          <span class="text-slate-400" id="credit-count-label">SOPs: 0 | RFPs: 0</span>
+      <!-- Real-Time Membership Status & Credit Counter Badge -->
+      <div id="membership-status" class="bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-xs flex flex-col md:flex-row items-center gap-3 shadow-lg">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500" id="status-indicator"></span>
+          <div>
+            <span class="font-bold block text-slate-200" id="membership-tier-label">Tier: Non-Member</span>
+            <span class="text-slate-400 text-[11px]" id="credit-count-label">SOPs: 0 | RFPs: 0</span>
+          </div>
         </div>
-        <button onclick="openMembershipModal()" class="ml-2 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-2 py-1 rounded transition">
-          Unlock Membership
-        </button>
+        <div class="border-t md:border-t-0 md:border-l border-slate-700 pt-2 md:pt-0 md:pl-3 flex items-center justify-between w-full md:w-auto gap-3">
+          <span class="text-[10px] text-amber-400 font-medium block" id="renewal-date-label">No Active Renewal</span>
+          <button onclick="openCheckoutModal('50')" class="text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg transition shadow">
+            Subscribe / Manage
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto p-6 space-y-10 w-full flex-grow">
 
-    <!-- Pricing Summary Banner -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between">
+    <!-- Active Membership Dashboard Banner (Shows when user is subscribed) -->
+    <section id="active-member-banner" class="hidden glass-card p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-950/20">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">A La Carte</span>
-          <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
-          <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
-          <p class="text-xs text-slate-300 mt-2">Pay per generated 10-Point Audit, Custom SOP, or Technical RFP.</p>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Active Monthly Membership</span>
+          <h2 class="text-xl font-extrabold text-white mt-0.5" id="banner-company-name">Company Operations Dashboard</h2>
+          <p class="text-xs text-slate-300 mt-1" id="banner-cycle-info">Billing Cycle Active: Resetting on October 1st</p>
+        </div>
+        
+        <div class="flex gap-4 items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
+          <div class="px-3 border-r border-slate-700">
+            <span class="text-[10px] uppercase font-semibold text-slate-400 block">SOP Allowance</span>
+            <span class="text-lg font-black text-amber-400" id="banner-sop-count">0 / 10</span>
+          </div>
+          <div class="px-3">
+            <span class="text-[10px] uppercase font-semibold text-slate-400 block">RFP Allowance</span>
+            <span class="text-lg font-black text-amber-400" id="banner-rfp-count">0 / 10</span>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between">
+    <!-- Pricing Plans Section -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Option 1: A La Carte -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between hover:border-amber-400 transition">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">Pay As You Go</span>
+          <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
+          <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Pay per individual custom SOP workflow or technical RFP document generated.</p>
+        </div>
+        <button onclick="openCheckoutModal('150')" class="mt-6 w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-amber-500/50 text-amber-400 font-bold text-xs rounded-xl transition">
+          Order Single Document ($150)
+        </button>
+      </div>
+
+      <!-- Option 2: $50 Standard Plan -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between hover:border-blue-400 transition relative overflow-hidden">
+        <span class="absolute top-3 right-3 bg-blue-500/20 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-500/30">MOST POPULAR</span>
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Pro Consultant</span>
           <h3 class="text-xl font-bold mt-1">Standard Plan</h3>
           <p class="text-3xl font-black mt-2 text-white">$50 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
-          <p class="text-xs text-slate-300 mt-2">Includes <strong>10 SOPs + 10 RFPs</strong> per month (Save over $2,800/mo).</p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Includes <strong>10 SOPs + 10 RFPs</strong> every 30 days. Auto-resets credits each month.</p>
         </div>
-        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
-          Activate $50 Plan
+        <button onclick="openCheckoutModal('50')" class="mt-6 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg transition">
+          Activate $50 Monthly Plan
         </button>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between">
+      <!-- Option 3: $100 Enterprise Suite -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between hover:border-emerald-400 transition">
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Enterprise</span>
           <h3 class="text-xl font-bold mt-1">Volume Suite</h3>
           <p class="text-3xl font-black mt-2 text-white">$100 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
-          <p class="text-xs text-slate-300 mt-2">Includes <strong>20 SOPs + 20 RFPs</strong> per month for corporate scale.</p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Includes <strong>20 SOPs + 20 RFPs</strong> every 30 days. Designed for corporate scale.</p>
         </div>
-        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
-          Activate $100 Plan
+        <button onclick="openCheckoutModal('100')" class="mt-6 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg transition">
+          Activate $100 Monthly Plan
         </button>
       </div>
+
     </section>
 
     <!-- Operational Modules Section -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
       
-      <!-- Module 1: SOP Generator -->
-      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+      <!-- Module A: SOP Builder -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
         <div class="space-y-4">
           <div class="flex justify-between items-center">
             <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
               <i class="fa-solid fa-file-contract mr-1"></i> Module A
             </span>
-            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+            <span class="text-xs font-semibold text-slate-400" id="sop-cost-badge">1 Credit / $150 Single</span>
           </div>
           <h2 class="text-2xl font-bold">Standard Operating Procedure (SOP) Builder</h2>
-          <p class="text-sm text-slate-300">Generate visual, step-by-step operational workflows complete with safety standard checkpoints and process timing controls.</p>
+          <p class="text-sm text-slate-300">Build clear, step-by-step operational SOPs with quality standards and timing parameters.</p>
           
           <div class="space-y-3 pt-2">
             <div>
               <label class="block text-xs font-semibold text-slate-400 mb-1">Process Title</label>
-              <input id="sop-title" type="text" placeholder="e.g., Inbound Inventory Staging & Audit" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
+              <input id="sop-title" type="text" placeholder="e.g., Inbound Receiving & Staging" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Key Operational Steps (Brief Summary)</label>
-              <textarea id="sop-steps" rows="3" placeholder="1. Unload pallet. 2. Verify packing slip. 3. Scan into inventory..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Key Steps / Workflows</label>
+              <textarea id="sop-steps" rows="3" placeholder="1. Verify Bill of Lading. 2. Inspect pallet integrity. 3. Scan into inventory..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
           </div>
         </div>
 
         <div class="mt-6">
-          <button onclick="handleGenerateDeliverable('SOP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
-            <i class="fa-solid fa-lock" id="sop-lock-icon"></i>
-            <span>Build Modern SOP ($150 / 1 Credit)</span>
+          <button onclick="attemptGenerate('SOP')" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock text-sm" id="sop-lock-icon"></i>
+            <span>Build Modern SOP</span>
           </button>
         </div>
       </div>
 
-      <!-- Module 2: RFP Generator -->
-      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+      <!-- Module B: RFP Builder -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
         <div class="space-y-4">
           <div class="flex justify-between items-center">
             <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
               <i class="fa-solid fa-file-signature mr-1"></i> Module B
             </span>
-            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+            <span class="text-xs font-semibold text-slate-400" id="rfp-cost-badge">1 Credit / $150 Single</span>
           </div>
           <h2 class="text-2xl font-bold">Technical RFP Specification Generator</h2>
-          <p class="text-sm text-slate-300">Draft professional Request for Proposals (RFP) specifying equipment, operational SLAs, and service provider bidding rules.</p>
+          <p class="text-sm text-slate-300">Draft contract specifications, vendor requirements, and SLAs for operational bids.</p>
           
           <div class="space-y-3 pt-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Project / Contract Scope</label>
-              <input id="rfp-title" type="text" placeholder="e.g., Facility Security Guard Services Contract" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Project / Contract Title</label>
+              <input id="rfp-title" type="text" placeholder="e.g., Facility Security Guard Services RFP" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Required Deliverables / Vendor Requirements</label>
-              <textarea id="rfp-reqs" rows="3" placeholder="24/7 coverage, licensed supervisors, 99.5% uptime SLA, daily digital reports..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Vendor SLAs & Requirements</label>
+              <textarea id="rfp-reqs" rows="3" placeholder="24/7 staffing, licensed supervisors, 99.5% uptime SLA, daily digital incident logs..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
           </div>
         </div>
 
         <div class="mt-6">
-          <button onclick="handleGenerateDeliverable('RFP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
-            <i class="fa-solid fa-lock" id="rfp-lock-icon"></i>
-            <span>Build Technical RFP ($150 / 1 Credit)</span>
+          <button onclick="attemptGenerate('RFP')" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock text-sm" id="rfp-lock-icon"></i>
+            <span>Build Technical RFP</span>
           </button>
         </div>
       </div>
 
     </section>
 
-    <!-- Output Display Area -->
+    <!-- Document Display Section -->
     <section id="output-container" class="hidden glass-card p-6 rounded-2xl space-y-4 border border-amber-500/50">
       <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-        <h3 id="output-title" class="text-lg font-bold text-amber-400">Generated Document Output</h3>
-        <button onclick="window.print()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold rounded">
-          <i class="fa-solid fa-print mr-1"></i> Print / Save PDF
+        <h3 id="output-title" class="text-lg font-bold text-amber-400">Generated Document</h3>
+        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold rounded-lg transition">
+          <i class="fa-solid fa-print mr-1"></i> Print / Save as PDF
         </button>
       </div>
-      <div id="output-body" class="bg-slate-950 p-6 rounded-lg font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap"></div>
+      <div id="output-body" class="bg-slate-950 p-6 rounded-lg font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap border border-slate-800"></div>
     </section>
 
   </main>
 
-  <!-- Membership Key Modal -->
-  <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
-      <div class="flex justify-between items-center">
-        <h3 class="text-xl font-bold">Activate Access Key</h3>
-        <button onclick="closeMembershipModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+  <!-- Checkout & Membership Modal -->
+  <div id="checkout-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-lg w-full p-6 rounded-2xl border border-slate-700 space-y-6">
+      
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <div>
+          <h3 class="text-xl font-bold text-white">Client Checkout & Access</h3>
+          <p class="text-xs text-amber-400 font-medium" id="modal-plan-selected">Selected Plan: Standard ($50/mo)</p>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
 
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Enter your client Access Key provided upon subscribing to the <strong>$50/mo</strong> or <strong>$100/mo</strong> membership plans.
-      </p>
+      <form id="checkout-form" onsubmit="processCheckout(event)" class="space-y-4">
+        
+        <!-- Contact Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
+            <input id="client-name" type="text" required placeholder="e.g., Dr. Deriteous Jackson" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Company Name *</label>
+            <input id="client-company" type="text" required placeholder="e.g., Enterprise Logistics LLC" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500" />
+          </div>
+        </div>
 
-      <div class="space-y-3">
-        <input id="access-key-input" type="text" placeholder="Enter Access Key (e.g. DJ-MEMBER-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
-        <button onclick="validateAccessKey()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
-          Apply Key & Unlock Credits
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Business Email Address *</label>
+          <input id="client-email" type="email" required placeholder="client@company.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500" />
+        </div>
+
+        <!-- Plan Selection Dropdown -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Confirm Subscription Tier *</label>
+          <select id="plan-select" onchange="updateModalPlanText()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+            <option value="50">Standard Plan ($50/mo — 10 SOPs + 10 RFPs / mo)</option>
+            <option value="100">Enterprise Suite ($100/mo — 20 SOPs + 20 RFPs / mo)</option>
+            <option value="150">Single Document A La Carte ($150 flat fee)</option>
+          </select>
+        </div>
+
+        <!-- Payment Method Choice -->
+        <div class="space-y-2 pt-2">
+          <label class="block text-xs font-semibold text-slate-300">Payment Option *</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2 p-3 bg-slate-900 border border-slate-700 rounded-lg cursor-pointer hover:border-amber-500">
+              <input type="radio" name="pay-method" value="card" checked onclick="togglePaymentFields('card')" />
+              <span class="text-xs font-semibold"><i class="fa-solid fa-credit-card mr-1 text-blue-400"></i> Card / Online</span>
+            </label>
+            <label class="flex items-center gap-2 p-3 bg-slate-900 border border-slate-700 rounded-lg cursor-pointer hover:border-amber-500">
+              <input type="radio" name="pay-method" value="zelle" onclick="togglePaymentFields('zelle')" />
+              <span class="text-xs font-semibold"><i class="fa-solid fa-money-bill-transfer mr-1 text-emerald-400"></i> Direct Zelle</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Credit Card Fields -->
+        <div id="card-fields" class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-400 mb-1">Card Number</label>
+            <input type="text" placeholder="4000 0000 0000 0000" class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-xs text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" placeholder="MM/YY" class="bg-slate-950 border border-slate-700 rounded p-2 text-xs text-white" />
+            <input type="text" placeholder="CVC" class="bg-slate-950 border border-slate-700 rounded p-2 text-xs text-white" />
+          </div>
+        </div>
+
+        <!-- Zelle Info Box -->
+        <div id="zelle-fields" class="hidden bg-emerald-950/40 p-3 rounded-lg border border-emerald-500/30 text-xs text-emerald-200 space-y-1">
+          <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Send Zelle Transfer To:</p>
+          <p class="font-mono text-white">drjacksonoperations@gmail.com</p>
+          <p class="text-[11px] text-slate-300">Include your Company Name in the memo. Account will activate immediately upon submission below.</p>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl shadow-lg transition">
+          Complete Order & Activate Membership
         </button>
-      </div>
 
-      <div class="border-t border-slate-800 pt-4 text-center">
-        <p class="text-xs text-slate-400">Need a key? Contact Dr. Jackson Operations directly or pay per document ($150 flat fee).</p>
-      </div>
+      </form>
     </div>
   </div>
 
@@ -189,155 +284,287 @@
     &copy; Dr. Jackson Operational Diagnostic Suite. All Rights Reserved.
   </footer>
 
-  <!-- Core Logic Engine -->
+  <!-- Core Engine with Auto-Reset Billing Cycle -->
   <script>
-    // System State
-    let userCredits = {
+    let userState = {
       isMember: false,
       tierName: "Non-Member",
+      maxSop: 0,
+      maxRfp: 0,
       sopRemaining: 0,
-      rfpRemaining: 0
+      rfpRemaining: 0,
+      company: "",
+      nextResetTimestamp: null
     };
 
-    // Preset Access Keys
-    const ACCESS_KEYS = {
-      "DJ-MEMBER-50": { tier: "Standard ($50/mo)", sop: 10, rfp: 10 },
-      "DJ-MEMBER-100": { tier: "Enterprise ($100/mo)", sop: 20, rfp: 20 }
-    };
+    let targetDocTypePending = null;
 
     function initSystem() {
-      const saved = localStorage.getItem('dj_user_credits');
+      const saved = localStorage.getItem('dj_ops_user_state');
       if (saved) {
-        userCredits = JSON.parse(saved);
+        userState = JSON.parse(saved);
+        checkAndResetBillingCycle();
       }
       updateUI();
+    }
+
+    // Automated 30-Day Monthly Billing Reset Algorithm
+    function checkAndResetBillingCycle() {
+      if (userState.isMember && userState.nextResetTimestamp) {
+        const now = new Date().getTime();
+        if (now >= userState.nextResetTimestamp) {
+          // Reset credits to full monthly tier allocation
+          userState.sopRemaining = userState.maxSop;
+          userState.rfpRemaining = userState.maxRfp;
+          
+          // Calculate next 30-day billing cycle reset
+          const nextCycle = new Date();
+          nextCycle.setDate(nextCycle.getDate() + 30);
+          userState.nextResetTimestamp = nextCycle.getTime();
+
+          localStorage.setItem('dj_ops_user_state', JSON.stringify(userState));
+          alert(`New Billing Cycle Started! Your monthly allocation of ${userState.maxSop} SOPs and ${userState.maxRfp} RFPs has been fully restored.`);
+        }
+      }
     }
 
     function updateUI() {
       const statusInd = document.getElementById('status-indicator');
       const tierLbl = document.getElementById('membership-tier-label');
       const creditLbl = document.getElementById('credit-count-label');
+      const renewalLbl = document.getElementById('renewal-date-label');
 
-      if (userCredits.isMember && (userCredits.sopRemaining > 0 || userCredits.rfpRemaining > 0)) {
-        statusInd.className = "inline-block w-2 h-2 rounded-full bg-emerald-500";
-        tierLbl.textContent = `Tier: ${userCredits.tierName}`;
-        creditLbl.textContent = `SOPs: ${userCredits.sopRemaining} | RFPs: ${userCredits.rfpRemaining}`;
+      const banner = document.getElementById('active-member-banner');
+      const bannerCompany = document.getElementById('banner-company-name');
+      const bannerCycle = document.getElementById('banner-cycle-info');
+      const bannerSop = document.getElementById('banner-sop-count');
+      const bannerRfp = document.getElementById('banner-rfp-count');
+
+      const sopLock = document.getElementById('sop-lock-icon');
+      const rfpLock = document.getElementById('rfp-lock-icon');
+
+      if (userState.isMember || userState.sopRemaining > 0 || userState.rfpRemaining > 0) {
+        statusInd.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+        tierLbl.textContent = `Tier: ${userState.tierName}`;
+        creditLbl.textContent = `SOPs: ${userState.sopRemaining} | RFPs: ${userState.rfpRemaining}`;
+
+        if (userState.nextResetTimestamp) {
+          const resetDate = new Date(userState.nextResetTimestamp).toLocaleDateString();
+          renewalLbl.textContent = `Resets: ${resetDate}`;
+        } else {
+          renewalLbl.textContent = "A La Carte Plan";
+        }
+
+        // Show Dashboard Banner
+        banner.classList.remove('hidden');
+        bannerCompany.textContent = `${userState.company || 'Enterprise Partner'} — Operations Dashboard`;
+        bannerSop.textContent = `${userState.sopRemaining} / ${userState.maxSop || 1}`;
+        bannerRfp.textContent = `${userState.rfpRemaining} / ${userState.maxRfp || 1}`;
+
+        if (userState.nextResetTimestamp) {
+          const dateStr = new Date(userState.nextResetTimestamp).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+          bannerCycle.textContent = `Active Subscription Cycle — Full credit reset scheduled for ${dateStr}`;
+        } else {
+          bannerCycle.textContent = "Single Document Purchases Active";
+        }
+
+        if (userState.sopRemaining > 0) sopLock.className = "fa-solid fa-unlock text-emerald-400";
+        else sopLock.className = "fa-solid fa-lock text-amber-400";
+
+        if (userState.rfpRemaining > 0) rfpLock.className = "fa-solid fa-unlock text-emerald-400";
+        else rfpLock.className = "fa-solid fa-lock text-amber-400";
+
       } else {
-        statusInd.className = "inline-block w-2 h-2 rounded-full bg-slate-500";
+        statusInd.className = "inline-block w-2.5 h-2.5 rounded-full bg-rose-500";
         tierLbl.textContent = "Tier: Non-Member";
         creditLbl.textContent = "SOPs: 0 | RFPs: 0";
+        renewalLbl.textContent = "No Active Renewal";
+
+        banner.classList.add('hidden');
+        sopLock.className = "fa-solid fa-lock text-amber-400";
+        rfpLock.className = "fa-solid fa-lock text-amber-400";
       }
     }
 
-    function openMembershipModal() {
-      document.getElementById('membership-modal').classList.remove('hidden');
-      document.getElementById('membership-modal').classList.add('flex');
+    function openCheckoutModal(planVal) {
+      const modal = document.getElementById('checkout-modal');
+      const planSelect = document.getElementById('plan-select');
+      
+      if (planVal) planSelect.value = planVal;
+      updateModalPlanText();
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
-    function closeMembershipModal() {
-      document.getElementById('membership-modal').classList.add('hidden');
-      document.getElementById('membership-modal').classList.remove('flex');
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
-    function validateAccessKey() {
-      const input = document.getElementById('access-key-input').value.trim().toUpperCase();
-      if (ACCESS_KEYS[input]) {
-        const config = ACCESS_KEYS[input];
-        userCredits = {
-          isMember: true,
-          tierName: config.tier,
-          sopRemaining: config.sop,
-          rfpRemaining: config.rfp
-        };
-        localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
-        updateUI();
-        closeMembershipModal();
-        alert(`Access Key Accepted! You have activated the ${config.tier} plan (${config.sop} SOPs and ${config.rfp} RFPs).`);
+    function updateModalPlanText() {
+      const planVal = document.getElementById('plan-select').value;
+      const label = document.getElementById('modal-plan-selected');
+      if (planVal === '50') label.textContent = "Selected Plan: Pro Consultant ($50/mo — 10 SOPs + 10 RFPs / mo)";
+      else if (planVal === '100') label.textContent = "Selected Plan: Enterprise Suite ($100/mo — 20 SOPs + 20 RFPs / mo)";
+      else if (planVal === '150') label.textContent = "Selected Plan: Single Deliverable ($150 flat fee)";
+    }
+
+    function togglePaymentFields(type) {
+      const cardF = document.getElementById('card-fields');
+      const zelleF = document.getElementById('zelle-fields');
+      if (type === 'card') {
+        cardF.classList.remove('hidden');
+        zelleF.classList.add('hidden');
       } else {
-        alert('Invalid Access Key. Please double check your code or complete $150 single-document checkout.');
+        cardF.classList.add('hidden');
+        zelleF.classList.remove('hidden');
       }
     }
 
-    function handleGenerateDeliverable(type) {
+    function processCheckout(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('client-name').value.trim();
+      const company = document.getElementById('client-company').value.trim();
+      const plan = document.getElementById('plan-select').value;
+
+      // Calculate 30-day reset timestamp
+      const nextCycle = new Date();
+      nextCycle.setDate(nextCycle.getDate() + 30);
+
+      if (plan === '50') {
+        userState = {
+          isMember: true,
+          tierName: "Standard ($50/mo)",
+          maxSop: 10,
+          maxRfp: 10,
+          sopRemaining: 10,
+          rfpRemaining: 10,
+          company: company,
+          nextResetTimestamp: nextCycle.getTime()
+        };
+      } else if (plan === '100') {
+        userState = {
+          isMember: true,
+          tierName: "Enterprise ($100/mo)",
+          maxSop: 20,
+          maxRfp: 20,
+          sopRemaining: 20,
+          rfpRemaining: 20,
+          company: company,
+          nextResetTimestamp: nextCycle.getTime()
+        };
+      } else if (plan === '150') {
+        userState = {
+          isMember: userState.isMember,
+          tierName: userState.isMember ? userState.tierName : "Single Purchase",
+          maxSop: (userState.maxSop || 0) + 1,
+          maxRfp: (userState.maxRfp || 0) + 1,
+          sopRemaining: userState.sopRemaining + 1,
+          rfpRemaining: userState.rfpRemaining + 1,
+          company: company,
+          nextResetTimestamp: userState.nextResetTimestamp || null
+        };
+      }
+
+      localStorage.setItem('dj_ops_user_state', JSON.stringify(userState));
+      updateUI();
+      closeCheckoutModal();
+
+      const resetStr = nextCycle.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      alert(`Welcome ${name} (${company})!\nYour membership is active with ${userState.sopRemaining} SOPs and ${userState.rfpRemaining} RFPs.\nYour monthly credit reset is scheduled for ${resetStr}.`);
+
+      if (targetDocTypePending) {
+        if (targetDocTypePending === 'SOP') buildSOP();
+        if (targetDocTypePending === 'RFP') buildRFP();
+        targetDocTypePending = null;
+      }
+    }
+
+    function attemptGenerate(type) {
+      checkAndResetBillingCycle();
+
       if (type === 'SOP') {
         const title = document.getElementById('sop-title').value.trim();
         const steps = document.getElementById('sop-steps').value.trim();
-
         if (!title || !steps) {
-          alert('Please fill out the SOP title and steps before building.');
+          alert('Please fill out the SOP Title and Steps before building.');
           return;
         }
 
-        if (userCredits.sopRemaining > 0) {
-          userCredits.sopRemaining -= 1;
-          localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+        if (userState.sopRemaining > 0) {
+          userState.sopRemaining -= 1;
+          localStorage.setItem('dj_ops_user_state', JSON.stringify(userState));
           updateUI();
-          renderSOP(title, steps);
+          buildSOP();
         } else {
-          promptSinglePurchase('Standard Operating Procedure (SOP)', 150, () => renderSOP(title, steps));
+          targetDocTypePending = 'SOP';
+          alert('You have 0 SOP credits remaining for this cycle. Opening checkout to add credits or subscribe.');
+          openCheckoutModal('50');
         }
       } else if (type === 'RFP') {
         const title = document.getElementById('rfp-title').value.trim();
         const reqs = document.getElementById('rfp-reqs').value.trim();
-
         if (!title || !reqs) {
-          alert('Please fill out the RFP scope and vendor requirements before building.');
+          alert('Please fill out the RFP Title and Requirements before building.');
           return;
         }
 
-        if (userCredits.rfpRemaining > 0) {
-          userCredits.rfpRemaining -= 1;
-          localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+        if (userState.rfpRemaining > 0) {
+          userState.rfpRemaining -= 1;
+          localStorage.setItem('dj_ops_user_state', JSON.stringify(userState));
           updateUI();
-          renderRFP(title, reqs);
+          buildRFP();
         } else {
-          promptSinglePurchase('Technical RFP Specification', 150, () => renderRFP(title, reqs));
+          targetDocTypePending = 'RFP';
+          alert('You have 0 RFP credits remaining for this cycle. Opening checkout to add credits or subscribe.');
+          openCheckoutModal('50');
         }
       }
     }
 
-    function promptSinglePurchase(docType, price, onSuccess) {
-      const confirmPay = confirm(`This single ${docType} deliverable requires payment of $${price}.\n\nClick "OK" to simulate single-document payment approval and generate your file.`);
-      if (confirmPay) {
-        onSuccess();
-      }
-    }
-
-    function renderSOP(title, steps) {
+    function buildSOP() {
+      const title = document.getElementById('sop-title').value.trim();
+      const steps = document.getElementById('sop-steps').value.trim();
       const outputBox = document.getElementById('output-container');
       const outputTitle = document.getElementById('output-title');
       const outputBody = document.getElementById('output-body');
 
-      outputTitle.textContent = `Generated Standard Operating Procedure: ${title}`;
+      outputTitle.textContent = `Generated SOP: ${title}`;
       outputBody.textContent = `================================================================================
 DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
 STANDARD OPERATING PROCEDURE (SOP) SPECIFICATION
 ================================================================================
+ORGANIZATION:   ${userState.company || 'Enterprise Operations Partner'}
 DOCUMENT TITLE: ${title.toUpperCase()}
-DATE CREATED:   ${new Date().toLocaleDateString()}
-AUTHOR:         Dr. Jackson Operational Health Engine
+DATE ISSUED:    ${new Date().toLocaleDateString()}
+AUTHOR:         Dr. Jackson Operational Health Diagnostics
 --------------------------------------------------------------------------------
 
-1. PURPOSE & SCOPE
-   This Standard Operating Procedure defines the mandatory operational protocol
-   and quality metrics for "${title}".
+1. PURPOSE & OPERATIONAL SCOPE
+   This Standard Operating Procedure establishes binding operational protocols,
+   timing metrics, and compliance parameters for "${title}".
 
-2. OPERATIONAL STEPS & STAGING
-${steps.split('\n').map((step, idx) => `   [Step ${idx + 1}] ${step}`).join('\n')}
+2. STEP-BY-STEP WORKFLOW SPECIFICATION
+${steps.split('\\n').map((s, i) => `   [Step ${i + 1}] ${s}`).join('\\n')}
 
-3. SAFETY & QUALITY CONTROL AUDIT
-   - Compliance Threshold: 100% adherence to staging parameters.
-   - Escalation Protocol: Notify Shift Area Manager immediately upon deviation.
+3. AUDIT & QUALITY METRICS
+   - Adherence Threshold: 100% operational compliance.
+   - Escalation: Immediate reporting to Area Manager II / Ops Leadership upon gap.
 
 ================================================================================
-END OF SOP SPECIFICATION
+END OF SPECIFICATION
 ================================================================================`;
 
       outputBox.classList.remove('hidden');
       outputBox.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function renderRFP(title, reqs) {
+    function buildRFP() {
+      const title = document.getElementById('rfp-title').value.trim();
+      const reqs = document.getElementById('rfp-reqs').value.trim();
       const outputBox = document.getElementById('output-container');
       const outputTitle = document.getElementById('output-title');
       const outputBody = document.getElementById('output-body');
@@ -347,21 +574,22 @@ END OF SOP SPECIFICATION
 DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
 TECHNICAL REQUEST FOR PROPOSAL (RFP) SPECIFICATION
 ================================================================================
-PROJECT SCOPE: ${title.toUpperCase()}
-DATE ISSUED:   ${new Date().toLocaleDateString()}
-AUTHOR:        Dr. Jackson Operations & Logistics Management
+ORGANIZATION:   ${userState.company || 'Enterprise Operations Partner'}
+PROJECT TITLE:  ${title.toUpperCase()}
+DATE ISSUED:    ${new Date().toLocaleDateString()}
+AUTHOR:         Dr. Jackson Operations & Logistics Management
 --------------------------------------------------------------------------------
 
-1. EXECUTIVE OVERVIEW
-   Dr. Jackson Operational Health Diagnostic invites qualified vendors to submit
-   proposals for providing high-efficiency execution under "${title}".
+1. EXECUTIVE SUMMARY & BID SCOPE
+   Dr. Jackson Operational Diagnostics invites qualified enterprise vendors to submit
+   binding bids for supplying equipment or services under "${title}".
 
-2. VENDOR REQUIREMENTS & CONTRACT SLAS
-${reqs.split('\n').map((req, idx) => `   [SLA ${idx + 1}] ${req}`).join('\n')}
+2. VENDOR REQUIREMENTS & MANDATORY SLAS
+${reqs.split('\\n').map((r, i) => `   [SLA ${i + 1}] ${r}`).join('\\n')}
 
-3. PROPOSAL SUBMISSION RULES
-   - Bids must include transparent unit pricing and escalation schedules.
-   - Submissions must demonstrate compliance with enterprise operational standards.
+3. PROPOSAL SUBMISSION & AUDIT GUIDELINES
+   - All bids must submit transparent unit rates and staffing escalations.
+   - Vendor performance will be benchmarked quarterly against SLA thresholds.
 
 ================================================================================
 END OF TECHNICAL RFP SPECIFICATION
@@ -371,8 +599,14 @@ END OF TECHNICAL RFP SPECIFICATION
       outputBox.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Initialize on load
     window.onload = initSystem;
   </script>
 </body>
 </html>
+"""
+
+# Write code to output file
+with open("index.html", "w") as f:
+    f.write(html_content)
+
+print("Generated full index.html file with automated monthly credit resetting engine!")
