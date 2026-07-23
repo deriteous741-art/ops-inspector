@@ -152,7 +152,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* WEIGHT TRACKER SECTION */
+        /* DASHBOARD SECTIONS */
         .dashboard-section {
             background: #0f172a;
             border: 1px solid var(--border);
@@ -171,6 +171,107 @@
             justify-content: space-between;
         }
 
+        /* VIP UNLOCKED ROUTINE BUILDER STYLES */
+        .vip-locked-notice {
+            background: rgba(217, 119, 6, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        .day-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .day-tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .day-tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        .routine-input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .routine-input-field {
+            width: 100%;
+            padding: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-size: 0.85rem;
+        }
+
+        .btn-add-routine {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .routine-list-box {
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .routine-item-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .routine-item-info {
+            font-size: 0.85rem;
+        }
+
+        .btn-complete-workout {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* WEIGHT TRACKER SECTION */
         .weight-inputs-row {
             display: flex;
             gap: 10px;
@@ -303,40 +404,6 @@
 
         .search-bar:focus {
             border-color: var(--primary);
-        }
-
-        .routine-builder-box {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px dashed var(--primary);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .routine-builder-box h3 {
-            color: var(--primary);
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-        }
-
-        .routine-builder-box p {
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            margin-bottom: 12px;
-        }
-
-        .btn-routine-lock {
-            background: rgba(217, 119, 6, 0.2);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
         }
 
         .category-folder {
@@ -582,7 +649,7 @@
             <div class="profile-avatar" id="avatarInitial">J</div>
             <div class="profile-info">
                 <input type="text" id="profileName" class="profile-name-input" value="Member Profile" onchange="saveProfileData()" placeholder="Click to Enter Name">
-                <p class="profile-subtitle">🔥 Monthly Fitness & Nutrition Tracker</p>
+                <p class="profile-subtitle">🔥 Monthly Fitness & Nutrition Dashboard</p>
             </div>
         </div>
 
@@ -603,6 +670,45 @@
             <div class="stat-box">
                 <div class="stat-lbl">Current Weight</div>
                 <div class="stat-val" id="statCurrentWeight">-- lbs</div>
+            </div>
+        </div>
+
+        <!-- INTERACTIVE WORKOUT ROUTINE BUILDER (VIP UNLOCKED) -->
+        <div class="dashboard-section">
+            <div class="section-title">
+                <span>📋 Custom Workout Routine Builder & Daily Planner</span>
+                <span style="font-size: 0.75rem; color: var(--accent);" id="routineVipStatus">🔒 VIP Feature</span>
+            </div>
+
+            <div id="routineLockedContent" class="vip-locked-notice">
+                🔒 Custom Workout Routine Builder is locked for Free users.<br>
+                <strong>Unlock VIP Access or login with Owner Passcode to build, save, and log daily workout routines!</strong>
+            </div>
+
+            <div id="routineUnlockedContent" style="display: none;">
+                <div class="day-tabs">
+                    <button class="day-tab-btn active" onclick="selectDay('Monday', this)">Mon</button>
+                    <button class="day-tab-btn" onclick="selectDay('Tuesday', this)">Tue</button>
+                    <button class="day-tab-btn" onclick="selectDay('Wednesday', this)">Wed</button>
+                    <button class="day-tab-btn" onclick="selectDay('Thursday', this)">Thu</button>
+                    <button class="day-tab-btn" onclick="selectDay('Friday', this)">Fri</button>
+                    <button class="day-tab-btn" onclick="selectDay('Saturday', this)">Sat</button>
+                    <button class="day-tab-btn" onclick="selectDay('Sunday', this)">Sun</button>
+                </div>
+
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">Add exercises to build your custom workout plan for <strong id="selectedDayTitle" style="color:var(--primary);">Monday</strong>:</p>
+
+                <div class="routine-input-grid">
+                    <input type="text" id="routineExerciseInput" class="routine-input-field" placeholder="Exercise Name (e.g., Bench Press)">
+                    <input type="number" id="routineSetsInput" class="routine-input-field" placeholder="Sets (e.g. 4)">
+                    <input type="number" id="routineRepsInput" class="routine-input-field" placeholder="Reps (e.g. 10)">
+                    <input type="number" id="routineLbsInput" class="routine-input-field" placeholder="Lbs (e.g. 185)">
+                </div>
+                <button class="btn-add-routine" onclick="addExerciseToRoutine()">➕ Add Exercise to Routine</button>
+
+                <div class="routine-list-box" id="routineDisplayBox">
+                    <div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for this day yet.</div>
+                </div>
             </div>
         </div>
 
@@ -672,13 +778,6 @@
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search any exercise, muscle, or movement..." onkeyup="filterExercises()">
-    </div>
-
-    <!-- ROUTINE BUILDER PAYWALL TEASER -->
-    <div class="routine-builder-box">
-        <h3>📋 Custom Routine Builder (Vault VIP Feature)</h3>
-        <p>Build, save, and share personalized workout routines for you and your gym partners.</p>
-        <a href="#pricing" class="btn-routine-lock" id="routineLockBtn">🔒 Unlock Routine Builder with VIP Access</a>
     </div>
 
     <!-- CHEST -->
@@ -938,15 +1037,18 @@
     </footer>
 
     <script>
-        // MASTER ADMIN PASSCODE
         const SECRET_ADMIN_CODE = "DOCTOR2026";
+        let activeDay = "Monday";
 
         let userProfile = {
             name: "Member Profile",
             startWeight: "",
             weightHistory: [],
             totalLoggedVolume: 0,
-            workoutCount: 0
+            workoutCount: 0,
+            routines: {
+                Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []
+            }
         };
 
         window.onload = function() {
@@ -970,11 +1072,10 @@
             const isVIP = localStorage.getItem('dr_jackson_vip_unlocked') === 'true';
             if (isVIP) {
                 document.getElementById('adminBanner').style.display = 'block';
-                document.getElementById('routineLockBtn').innerText = '✅ Custom Routine Builder Unlocked';
-                document.getElementById('routineLockBtn').style.borderColor = 'var(--accent)';
-                document.getElementById('routineLockBtn').style.color = 'var(--accent)';
+                document.getElementById('routineVipStatus').innerText = '✅ VIP Unlocked';
+                document.getElementById('routineLockedContent').style.display = 'none';
+                document.getElementById('routineUnlockedContent').style.display = 'block';
                 
-                // Unlock locked exercise buttons
                 const lockedBtns = document.querySelectorAll('.visual-btn-locked');
                 lockedBtns.forEach(btn => {
                     btn.innerText = "✅ Unlocked — View Movement & Log Volume";
@@ -989,7 +1090,81 @@
                     badge.style.background = "rgba(34, 197, 94, 0.2)";
                     badge.style.color = "var(--accent)";
                 });
+
+                renderRoutineList();
             }
+        }
+
+        function selectDay(dayName, btnElem) {
+            activeDay = dayName;
+            document.getElementById('selectedDayTitle').innerText = dayName;
+            
+            const tabs = document.querySelectorAll('.day-tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            btnElem.classList.add('active');
+
+            renderRoutineList();
+        }
+
+        function addExerciseToRoutine() {
+            const name = document.getElementById('routineExerciseInput').value.trim();
+            const sets = parseFloat(document.getElementById('routineSetsInput').value) || 0;
+            const reps = parseFloat(document.getElementById('routineRepsInput').value) || 0;
+            const lbs = parseFloat(document.getElementById('routineLbsInput').value) || 0;
+
+            if (!name) {
+                alert("Please enter an exercise name.");
+                return;
+            }
+
+            if (!userProfile.routines) userProfile.routines = {};
+            if (!userProfile.routines[activeDay]) userProfile.routines[activeDay] = [];
+
+            userProfile.routines[activeDay].push({ name, sets, reps, lbs });
+
+            document.getElementById('routineExerciseInput').value = "";
+            document.getElementById('routineSetsInput').value = "";
+            document.getElementById('routineRepsInput').value = "";
+            document.getElementById('routineLbsInput').value = "";
+
+            saveProfileData();
+            renderRoutineList();
+        }
+
+        function completeWorkoutItem(index) {
+            const item = userProfile.routines[activeDay][index];
+            const vol = item.sets * item.reps * item.lbs;
+
+            userProfile.totalLoggedVolume = (userProfile.totalLoggedVolume || 0) + vol;
+            userProfile.workoutCount = (userProfile.workoutCount || 0) + 1;
+            
+            saveProfileData();
+            alert(`🎉 Workout Completed! +${vol.toLocaleString()} lbs added to your monthly volume stats!`);
+        }
+
+        function renderRoutineList() {
+            const displayBox = document.getElementById('routineDisplayBox');
+            const dayItems = userProfile.routines && userProfile.routines[activeDay] ? userProfile.routines[activeDay] : [];
+
+            if (dayItems.length === 0) {
+                displayBox.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for ' + activeDay + ' yet.</div>';
+                return;
+            }
+
+            let html = "";
+            dayItems.forEach((item, idx) => {
+                const vol = item.sets * item.reps * item.lbs;
+                html += `
+                    <div class="routine-item-card">
+                        <div class="routine-item-info">
+                            <strong>${item.name}</strong><br>
+                            <span style="color:var(--text-muted); font-size:0.78rem;">${item.sets} Sets × ${item.reps} Reps @ ${item.lbs} lbs (${vol.toLocaleString()} lbs Vol)</span>
+                        </div>
+                        <button class="btn-complete-workout" onclick="completeWorkoutItem(${idx})">✓ Log Workout</button>
+                    </div>
+                `;
+            });
+            displayBox.innerHTML = html;
         }
 
         function loadProfileData() {
@@ -1020,6 +1195,7 @@
             }
 
             const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            if (!userProfile.weightHistory) userProfile.weightHistory = [];
             userProfile.weightHistory.unshift({ date: today, weight: val });
             weightInput.value = "";
             saveProfileData();
@@ -1027,7 +1203,7 @@
 
         function updateProfileDashboard() {
             const historyContainer = document.getElementById('weightHistoryContainer');
-            if (userProfile.weightHistory.length === 0) {
+            if (!userProfile.weightHistory || userProfile.weightHistory.length === 0) {
                 historyContainer.innerHTML = '<div class="weight-entry"><span>No weekly weight entries recorded yet.</span></div>';
             } else {
                 let html = "";
@@ -1037,7 +1213,7 @@
                 historyContainer.innerHTML = html;
             }
 
-            const currentWeight = userProfile.weightHistory.length > 0 ? userProfile.weightHistory[0].weight : (userProfile.startWeight || "--");
+            const currentWeight = (userProfile.weightHistory && userProfile.weightHistory.length > 0) ? userProfile.weightHistory[0].weight : (userProfile.startWeight || "--");
             document.getElementById('statCurrentWeight').innerText = currentWeight !== "--" ? currentWeight + " lbs" : "--";
 
             const startW = parseFloat(userProfile.startWeight) || 0;
