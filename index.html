@@ -183,6 +183,219 @@
             document.getElementById("result-screen").classList.remove("hidden");
 
             const scoreDisplay = document.getElementById("score-display");
+            scoreDisplay.innerText = totalScore + "%";
+
+            if(totalScore < 50) {
+                scoreDisplay.className = "text-6xl font-black text-rose-500";
+                document.getElementById("score-status").innerText = "Critical Operational Bottlenecks";
+                document.getElementById("score-status").className = "text-2xl font-bold text-rose-400";
+                document.getElementById("score-description").innerText = `${companyName} is suffering significant profit leakage and labor inefficiencies due to manual handoffs and unmonitored workflows.`;
+            } else if(totalScore < 75) {
+                scoreDisplay.className = "text-6xl font-black text-amber-500";
+                document.getElementById("score-status").innerText = "Moderate Efficiency Gaps";
+                document.getElementById("score-status").className = "text-2xl font-bold text-amber-400";
+                document.getElementById("score-description").innerText = `${companyName} has basic systems in place, but lacks real-time labor optimization and standardized daily routines.`;
+            } else {
+                scoreDisplay.className = "text-6xl font-black text-emerald-400";
+                document.getElementById("score-status").innerText = "High Operational Health";
+                document.getElementById("score-status").className = "text-2xl font-bold text-emerald-400";
+                document.getElementById("score-description").innerText = `${companyName} operates with good structure. Fine-tuning labor tracking can push profitability higher.`;
+            }
+        }
+
+        function copyZelle() {
+            navigator.clipboard.writeText("6782333620");
+            const msg = document.getElementById("copy-msg");
+            msg.classList.remove("hidden");
+            setTimeout(() => { msg.classList.add("hidden"); }, 3000);
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Business Operations Health Diagnostic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-950/80 p-6 backdrop-blur">
+        <div class="max-w-3xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-emerald-400">OpsInspector Pro</h1>
+                <p class="text-xs text-slate-400">Dr. Business Administration Diagnostic System</p>
+            </div>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/20">Free Diagnostic</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-3xl mx-auto p-6 w-full flex-grow">
+        
+        <!-- Intro Screen -->
+        <div id="intro-screen" class="space-y-6">
+            <h2 class="text-3xl font-extrabold text-white">Identify Your Business Operations Bottlenecks in 2 Minutes</h2>
+            <p class="text-slate-300">Answer 4 quick operational questions to calculate your labor waste score and reveal hidden profit drainers.</p>
+            
+            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 space-y-3">
+                <label class="block text-sm font-medium text-slate-200">Company Name</label>
+                <input type="text" id="company-name" placeholder="e.g. Jackson Auto Repair" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <button onclick="startAudit()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-4 rounded-xl transition-all text-lg shadow-lg shadow-emerald-500/10">Start Free Operational Check</button>
+        </div>
+
+        <!-- Question Screen (Hidden by default) -->
+        <div id="quiz-screen" class="hidden space-y-6">
+            <div class="flex justify-between items-center text-sm text-slate-400">
+                <span id="question-number">Question 1 of 4</span>
+                <span id="company-display" class="font-semibold text-slate-200"></span>
+            </div>
+
+            <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700 space-y-4">
+                <h3 id="question-title" class="text-xl font-semibold text-white"></h3>
+                
+                <div class="space-y-3" id="options-container">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen (Hidden by default) -->
+        <div id="result-screen" class="hidden space-y-6">
+            <div class="bg-slate-800/80 p-8 rounded-2xl border border-slate-700 text-center space-y-4">
+                <h3 class="text-slate-400 text-sm uppercase tracking-wider font-semibold">Diagnostic Score</h3>
+                <div id="score-display" class="text-6xl font-black">0%</div>
+                <h4 id="score-status" class="text-2xl font-bold"></h4>
+                <p id="score-description" class="text-slate-300 text-sm max-w-md mx-auto"></p>
+            </div>
+
+            <!-- Call to Action Box -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 space-y-4">
+                <h4 class="text-lg font-bold text-white">Want the 1-Page Custom Fix Plan?</h4>
+                <p class="text-slate-300 text-sm">Unlock a direct operational layout redesign and labor schedule fix authored by a Doctor of Business Administration.</p>
+                
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <div class="text-emerald-400 font-bold text-2xl">$150.00 <span class="text-xs text-slate-400 font-normal">flat fee</span></div>
+                    <p class="text-xs text-slate-400">Delivered within 24 hours directly to your phone/email.</p>
+                </div>
+
+                <!-- Zelle Payment Option -->
+                <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-purple-300 font-bold text-sm">Pay via Zelle:</span>
+                        <span class="text-xs text-slate-400">Fast & Zero Fees</span>
+                    </div>
+                    <div class="text-white font-mono text-lg font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                        <span>678-233-3620</span>
+                        <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all">Copy</button>
+                    </div>
+                    <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center">Number copied to clipboard!</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-1">
+                    <a href="https://cash.app" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 text-center rounded-xl transition-all text-sm">Pay via Cash App</a>
+                    <a href="https://venmo.com" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold py-3 text-center rounded-xl transition-all text-sm">Pay via Venmo</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-6 text-center text-xs text-slate-500 border-t border-slate-800">
+        &copy; 2026 OpsInspector Pro • Enterprise Operational Solutions
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                q: "How are shift handoffs and daily tasks tracked in your shop?",
+                options: [
+                    { text: "Verbal communication or memory only", points: 0 },
+                    { text: "Whiteboard or handwritten paper notes", points: 10 },
+                    { text: "Digital checklist or dedicated software", points: 25 }
+                ]
+            },
+            {
+                q: "How frequently do employees experience delays waiting on tools, inventory, or approvals?",
+                options: [
+                    { text: "Multiple times per day (High Waste)", points: 0 },
+                    { text: "A few times a week (Moderate Waste)", points: 10 },
+                    { text: "Rarely / Well Organized (Low Waste)", points: 25 }
+                ]
+            },
+            {
+                q: "Are daily safety and operational compliance checks formally logged?",
+                options: [
+                    { text: "No formal tracking in place", points: 0 },
+                    { text: "Inconsistently logged", points: 10 },
+                    { text: "Logged and audited daily", points: 25 }
+                ]
+            },
+            {
+                q: "How are monthly labor budget overruns managed?",
+                options: [
+                    { text: "We react after overtime gets too high", points: 0 },
+                    { text: "Reviewed weekly during management meetings", points: 10 },
+                    { text: "Tracked daily against workload volume", points: 25 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+        let companyName = "";
+
+        function startAudit() {
+            const input = document.getElementById("company-name").value;
+            if(!input) {
+                alert("Please enter a business name to continue.");
+                return;
+            }
+            companyName = input;
+            document.getElementById("company-display").innerText = companyName;
+            document.getElementById("intro-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const qData = questions[currentQuestion];
+            document.getElementById("question-number").innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById("question-title").innerText = qData.q;
+            
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+
+            qData.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "w-full text-left p-4 bg-slate-900 hover:bg-slate-700/50 rounded-xl border border-slate-700/60 text-slate-200 transition-all font-medium";
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(opt.points);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(pts) {
+            totalScore += pts;
+            currentQuestion++;
+
+            if(currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("result-screen").classList.remove("hidden");
+
+            const scoreDisplay = document.getElementById("score-display");
             const scoreStatus = document.getElementById("score-status");
             const scoreDesc = document.getElementById("score-description");
 
