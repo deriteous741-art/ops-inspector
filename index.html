@@ -52,6 +52,19 @@
             font-size: 0.95rem;
         }
 
+        .admin-banner {
+            display: none;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
         /* PROFILE DASHBOARD STYLES */
         .profile-card {
             background: linear-gradient(135deg, #1e293b, #0f172a);
@@ -534,6 +547,22 @@
             text-decoration: none;
             margin-top: 10px;
         }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .admin-link {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -542,6 +571,10 @@
         <h1>Dr. Jackson Fitness Vault</h1>
         <p class="subtitle">Complete Master Exercise Library, VIP Profile & Macro Dashboard</p>
     </header>
+
+    <div class="admin-banner" id="adminBanner">
+        👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED ACCESS UNLOCKED
+    </div>
 
     <!-- VIP USER PROFILE & MONTHLY ANALYTICS DASHBOARD -->
     <div class="profile-card">
@@ -645,7 +678,7 @@
     <div class="routine-builder-box">
         <h3>📋 Custom Routine Builder (Vault VIP Feature)</h3>
         <p>Build, save, and share personalized workout routines for you and your gym partners.</p>
-        <a href="#pricing" class="btn-routine-lock">🔒 Unlock Routine Builder with VIP Access</a>
+        <a href="#pricing" class="btn-routine-lock" id="routineLockBtn">🔒 Unlock Routine Builder with VIP Access</a>
     </div>
 
     <!-- CHEST -->
@@ -703,11 +736,11 @@
                 <a href="https://www.google.com/search?tbm=isch&q=Decline+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
 
-            <div class="exercise-item" data-search="flat dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Press</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Chest Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="incline dumbbell press upper chest gym"><div class="exercise-title-row"><span class="exercise-name">Incline Dumbbell Press (45°)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Incline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="decline dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Decline Dumbbell Chest Press</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="flat dumbbell chest flyes stretch pecs gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Flyes</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="standing cable chest flyes crossover middle pecs gym"><div class="exercise-title-row"><span class="exercise-name">Standing Cable Chest Flyes (Mid-Pulley)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Cable Chest Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="flat dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Chest Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="incline dumbbell press upper chest gym"><div class="exercise-title-row"><span class="exercise-name">Incline Dumbbell Press (45°)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Incline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="decline dumbbell chest press gym"><div class="exercise-title-row"><span class="exercise-name">Decline Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="flat dumbbell chest flyes stretch pecs gym"><div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Flyes</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="standing cable chest flyes crossover middle pecs gym"><div class="exercise-title-row"><span class="exercise-name">Standing Cable Chest Flyes (Mid-Pulley)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Cable Chest Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -748,8 +781,8 @@
                 </div>
                 <a href="https://www.google.com/search?tbm=isch&q=Triceps+Cable+Rope+Pushdown+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="dumbbell hammer curl brachialis forearms arms gym"><div class="exercise-title-row"><span class="exercise-name">Alternating Dumbbell Hammer Curl</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Hammer Curls')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="ez bar preacher curl peak isolation gym"><div class="exercise-title-row"><span class="exercise-name">EZ-Bar Preacher Curl</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Preacher Curl')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="dumbbell hammer curl brachialis forearms arms gym"><div class="exercise-title-row"><span class="exercise-name">Alternating Dumbbell Hammer Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Hammer Curls')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="ez bar preacher curl peak isolation gym"><div class="exercise-title-row"><span class="exercise-name">EZ-Bar Preacher Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Preacher Curl')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -775,8 +808,8 @@
                 </div>
                 <a href="https://www.google.com/search?tbm=isch&q=Barbell+Back+Squat+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="romanian deadlift rdl hamstrings glutes legs gym"><div class="exercise-title-row"><span class="exercise-name">Barbell Romanian Deadlift (RDL)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Romanian Deadlift')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
-            <div class="exercise-item" data-search="leg press machine quads legs gym"><div class="exercise-title-row"><span class="exercise-name">45-Degree Machine Leg Press</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Leg Press Machine')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="romanian deadlift rdl hamstrings glutes legs gym"><div class="exercise-title-row"><span class="exercise-name">Barbell Romanian Deadlift (RDL)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Romanian Deadlift')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="leg press machine quads legs gym"><div class="exercise-title-row"><span class="exercise-name">45-Degree Machine Leg Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Leg Press Machine')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -802,7 +835,7 @@
                 </div>
                 <a href="https://www.google.com/search?tbm=isch&q=Wide+Grip+Lat+Pulldown+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="bent over barbell row back lats gym"><div class="exercise-title-row"><span class="exercise-name">Bent-Over Barbell Row</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Barbell Row')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="bent over barbell row back lats gym"><div class="exercise-title-row"><span class="exercise-name">Bent-Over Barbell Row</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Barbell Row')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -828,7 +861,7 @@
                 </div>
                 <a href="https://www.google.com/search?tbm=isch&q=Eccentric+Push+Up+form+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="decline pushups feet elevated upper chest home floor"><div class="exercise-title-row"><span class="exercise-name">Decline Push-Up (Feet Elevated)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Push-Up')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="decline pushups feet elevated upper chest home floor"><div class="exercise-title-row"><span class="exercise-name">Decline Push-Up (Feet Elevated)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Decline Push-Up')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -845,7 +878,7 @@
                 <p class="form-cue">✓ Cue: Press floor away; drive tailbone upward.</p>
                 <a href="https://www.google.com/search?tbm=isch&q=Downward+Facing+Dog+yoga+pose+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="childs pose balasana recovery yoga"><div class="exercise-title-row"><span class="exercise-name">Child’s Pose (Balasana)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Child’s Pose')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="childs pose balasana recovery yoga"><div class="exercise-title-row"><span class="exercise-name">Child’s Pose (Balasana)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Child’s Pose')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -862,7 +895,7 @@
                 <p class="form-cue">✓ Cue: Inhale for 5 pumps, exhale for 5 pumps.</p>
                 <a href="https://www.google.com/search?tbm=isch&q=The+Pilates+Hundred+exercise+diagram" target="_blank" class="visual-btn">🔍 View Google Image & Form Guide ↗</a>
             </div>
-            <div class="exercise-item" data-search="criss cross obliques core pilates"><div class="exercise-title-row"><span class="exercise-name">Pilates Criss-Cross (Oblique Rotations)</span><span class="tag-lock">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Pilates Criss-Cross')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
+            <div class="exercise-item" data-search="criss cross obliques core pilates"><div class="exercise-title-row"><span class="exercise-name">Pilates Criss-Cross (Oblique Rotations)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div><button class="visual-btn-locked" onclick="promptUnlock('Pilates Criss-Cross')">🔒 Unlock Log Tracker & Form Guide with Membership</button></div>
         </div>
     </div>
 
@@ -899,8 +932,15 @@
         </div>
     </div>
 
+    <footer>
+        <p>© 2026 Dr. Jackson Fitness Vault. All rights reserved.</p>
+        <p style="margin-top: 6px;"><span class="admin-link" onclick="enterAdminPasscode()">⚙️ Owner / VIP Passcode Login</span></p>
+    </footer>
+
     <script>
-        // GLOBAL DATA STORED IN LOCAL STORAGE
+        // MASTER ADMIN PASSCODE
+        const SECRET_ADMIN_CODE = "DOCTOR2026";
+
         let userProfile = {
             name: "Member Profile",
             startWeight: "",
@@ -912,7 +952,45 @@
         window.onload = function() {
             loadProfileData();
             calculateMacros();
+            checkVIPStatus();
         };
+
+        function enterAdminPasscode() {
+            const code = prompt("Enter Owner / VIP Admin Passcode:");
+            if (code === SECRET_ADMIN_CODE) {
+                localStorage.setItem('dr_jackson_vip_unlocked', 'true');
+                alert("🎉 Success! Owner VIP Access Unlocked.");
+                checkVIPStatus();
+            } else if (code !== null) {
+                alert("❌ Invalid Passcode.");
+            }
+        }
+
+        function checkVIPStatus() {
+            const isVIP = localStorage.getItem('dr_jackson_vip_unlocked') === 'true';
+            if (isVIP) {
+                document.getElementById('adminBanner').style.display = 'block';
+                document.getElementById('routineLockBtn').innerText = '✅ Custom Routine Builder Unlocked';
+                document.getElementById('routineLockBtn').style.borderColor = 'var(--accent)';
+                document.getElementById('routineLockBtn').style.color = 'var(--accent)';
+                
+                // Unlock locked exercise buttons
+                const lockedBtns = document.querySelectorAll('.visual-btn-locked');
+                lockedBtns.forEach(btn => {
+                    btn.innerText = "✅ Unlocked — View Movement & Log Volume";
+                    btn.style.color = "var(--accent)";
+                    btn.style.background = "rgba(34, 197, 94, 0.1)";
+                    btn.onclick = null;
+                });
+
+                const lockBadges = document.querySelectorAll('.lock-badge');
+                lockBadges.forEach(badge => {
+                    badge.innerText = "VIP Unlocked ✅";
+                    badge.style.background = "rgba(34, 197, 94, 0.2)";
+                    badge.style.color = "var(--accent)";
+                });
+            }
+        }
 
         function loadProfileData() {
             const saved = localStorage.getItem('dr_jackson_vault_profile');
@@ -948,7 +1026,6 @@
         }
 
         function updateProfileDashboard() {
-            // Render Weight History
             const historyContainer = document.getElementById('weightHistoryContainer');
             if (userProfile.weightHistory.length === 0) {
                 historyContainer.innerHTML = '<div class="weight-entry"><span>No weekly weight entries recorded yet.</span></div>';
@@ -960,7 +1037,6 @@
                 historyContainer.innerHTML = html;
             }
 
-            // Stat Summaries
             const currentWeight = userProfile.weightHistory.length > 0 ? userProfile.weightHistory[0].weight : (userProfile.startWeight || "--");
             document.getElementById('statCurrentWeight').innerText = currentWeight !== "--" ? currentWeight + " lbs" : "--";
 
@@ -1025,7 +1101,6 @@
             const total = sets * reps * lbs;
             card.querySelector('.vol-out').innerText = "Total Volume: " + total.toLocaleString() + " lbs";
 
-            // Update user global profile stats
             if (total > 0) {
                 userProfile.totalLoggedVolume = (userProfile.totalLoggedVolume || 0) + total;
                 userProfile.workoutCount = (userProfile.workoutCount || 0) + 1;
@@ -1044,6 +1119,7 @@
         }
 
         function promptUnlock(name) {
+            if (localStorage.getItem('dr_jackson_vip_unlocked') === 'true') return;
             alert("🔒 " + name + " is locked! Scroll down to unlock full Vault access.");
             document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
         }
