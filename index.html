@@ -11,13 +11,6 @@
     .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
     .glass-card { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
     .gold-accent { color: #f59e0b; }
-    
-    /* Blurred Preview Style */
-    .preview-locked {
-      filter: blur(4px);
-      user-select: none;
-      pointer-events: none;
-    }
   </style>
 </head>
 <body class="gradient-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between">
@@ -35,14 +28,59 @@
       <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl text-xs flex items-center gap-3">
         <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
         <div>
-          <span class="font-bold block text-slate-200">Interactive Document Builder</span>
-          <span class="text-slate-400 text-[11px]">Build & Preview Free — $150 to Unlock & Print</span>
+          <span class="font-bold block text-slate-200">Interactive Operational Suite</span>
+          <span class="text-slate-400 text-[11px]">Build & View Free • Pay to Print or Subscribe</span>
         </div>
       </div>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto p-6 space-y-10 w-full flex-grow">
+
+    <!-- Pricing Plans Section ($150, $50/mo, $100/mo) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Option 1: A La Carte -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between hover:border-amber-400 transition">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">Pay As You Go</span>
+          <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
+          <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Build & view full text free below. Pay $150 in cart when you're ready to print or export as PDF.</p>
+        </div>
+        <button onclick="openCartModal('150')" class="mt-6 w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-amber-500/50 text-amber-400 font-bold text-xs rounded-xl transition">
+          Checkout Single Doc ($150)
+        </button>
+      </div>
+
+      <!-- Option 2: $50 Standard Plan -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between hover:border-blue-400 transition relative overflow-hidden">
+        <span class="absolute top-3 right-3 bg-blue-500/20 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-500/30">MOST POPULAR</span>
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Pro Consultant</span>
+          <h3 class="text-xl font-bold mt-1">Standard Plan</h3>
+          <p class="text-3xl font-black mt-2 text-white">$50 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Includes <strong>10 SOPs + 10 RFPs</strong> per month with unlimited printing and PDF downloads.</p>
+        </div>
+        <button onclick="openCartModal('50')" class="mt-6 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg transition">
+          Subscribe $50 / Month
+        </button>
+      </div>
+
+      <!-- Option 3: $100 Enterprise Suite -->
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between hover:border-emerald-400 transition">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Enterprise</span>
+          <h3 class="text-xl font-bold mt-1">Volume Suite</h3>
+          <p class="text-3xl font-black mt-2 text-white">$100 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-3 leading-relaxed">Includes <strong>20 SOPs + 20 RFPs</strong> per month for high-volume corporate facilities.</p>
+        </div>
+        <button onclick="openCartModal('100')" class="mt-6 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg transition">
+          Subscribe $100 / Month
+        </button>
+      </div>
+
+    </section>
 
     <!-- Operational Modules Section -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -54,7 +92,7 @@
             <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
               <i class="fa-solid fa-file-contract mr-1"></i> Module A
             </span>
-            <span class="text-xs font-bold text-amber-400">$150 per Document</span>
+            <span class="text-xs font-bold text-amber-400">View Free • $150 or Plan to Print</span>
           </div>
           <h2 class="text-2xl font-bold">Standard Operating Procedure (SOP) Builder</h2>
           <p class="text-sm text-slate-300">Build clear, step-by-step operational SOPs with quality standards and timing parameters.</p>
@@ -74,7 +112,7 @@
         <div class="mt-6">
           <button onclick="buildDocument('SOP')" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2">
             <i class="fa-solid fa-eye text-sm"></i>
-            <span>Build & Preview Modern SOP</span>
+            <span>Build & View Modern SOP</span>
           </button>
         </div>
       </div>
@@ -86,7 +124,7 @@
             <span class="bg-slate-800 text-blue-400 text-xs px-3 py-1 rounded-full font-bold border border-blue-500/30">
               <i class="fa-solid fa-file-signature mr-1"></i> Module B
             </span>
-            <span class="text-xs font-bold text-blue-400">$150 per Document</span>
+            <span class="text-xs font-bold text-blue-400">View Free • $150 or Plan to Print</span>
           </div>
           <h2 class="text-2xl font-bold">Technical RFP Specification Generator</h2>
           <p class="text-sm text-slate-300">Draft contract specifications, vendor requirements, and SLAs for operational bids.</p>
@@ -106,52 +144,52 @@
         <div class="mt-6">
           <button onclick="buildDocument('RFP')" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2">
             <i class="fa-solid fa-eye text-sm"></i>
-            <span>Build & Preview Technical RFP</span>
+            <span>Build & View Technical RFP</span>
           </button>
         </div>
       </div>
 
     </section>
 
-    <!-- Document Preview Section -->
+    <!-- Document Display Area -->
     <section id="output-container" class="hidden glass-card p-6 rounded-2xl space-y-4 border border-amber-500/50 relative overflow-hidden">
       
       <!-- Top Action Bar -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-700 pb-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-400" id="output-status-tag">Document Generated & Ready</span>
-          <h3 id="output-title" class="text-xl font-bold text-white">Document Preview</h3>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400" id="output-status-tag">Document Generated & Ready</span>
+          <h3 id="output-title" class="text-xl font-bold text-white">Document Output</h3>
         </div>
         
-        <button id="unlock-btn" onclick="openCartModal()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
-          <i class="fa-solid fa-lock text-sm"></i>
-          <span>Unlock Full Document & Print ($150)</span>
+        <!-- Print Button (Triggers Cart if not paid) -->
+        <button id="print-btn" onclick="handlePrintClick()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-print text-sm"></i>
+          <span>Print / Save as PDF ($150)</span>
         </button>
       </div>
 
-      <!-- Watermark / Lock Banner Overlay -->
-      <div id="preview-lock-banner" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex items-center justify-between text-xs text-amber-300">
-        <span><i class="fa-solid fa-eye mr-2"></i> <strong>PREVIEW MODE:</strong> Review your text below. Click unlock to remove watermark & print PDF.</span>
-        <span class="font-bold font-mono">$150 FLAT FEE</span>
+      <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex items-center justify-between text-xs text-amber-300">
+        <span><i class="fa-solid fa-circle-info mr-2"></i> Review your document below. Click <strong>Print / Save as PDF</strong> to complete checkout and print.</span>
+        <span class="font-bold font-mono">$150 FLAT FEE / MEMBERSHIP</span>
       </div>
 
-      <!-- Preview Body Window -->
+      <!-- Clear Document Text Body -->
       <div class="relative bg-slate-950 rounded-xl p-2 border border-slate-800">
-        <div id="output-body" class="preview-locked p-6 font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap"></div>
+        <div id="output-body" class="p-6 font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap"></div>
       </div>
 
     </section>
 
   </main>
 
-  <!-- Direct $150 Cart Checkout Modal -->
+  <!-- Cart Checkout Modal -->
   <div id="cart-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-50">
     <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
       
       <div class="flex justify-between items-center border-b border-slate-800 pb-4">
         <div>
-          <h3 class="text-xl font-bold text-white">Cart Checkout ($150)</h3>
-          <p class="text-xs text-amber-400 font-medium">Unlock Unlimited Printing & Clean PDF Export</p>
+          <h3 class="text-xl font-bold text-white">Cart Checkout</h3>
+          <p class="text-xs text-amber-400 font-medium" id="modal-plan-label">Selected: Single Deliverable ($150)</p>
         </div>
         <button onclick="closeCartModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
@@ -173,17 +211,27 @@
           <input id="cart-email" type="email" required placeholder="client@company.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500" />
         </div>
 
+        <!-- Plan Selection Dropdown inside Cart -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Select Order Option *</label>
+          <select id="cart-plan-select" onchange="updateCartPlanText()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+            <option value="150">Single Deliverable ($150 flat fee)</option>
+            <option value="50">Standard Membership ($50/mo — 10 SOPs + 10 RFPs)</option>
+            <option value="100">Enterprise Membership ($100/mo — 20 SOPs + 20 RFPs)</option>
+          </select>
+        </div>
+
         <!-- Payment Choice -->
         <div class="space-y-2 pt-1">
           <label class="block text-xs font-semibold text-slate-300">Payment Method *</label>
           <div class="grid grid-cols-2 gap-3">
             <label class="flex items-center gap-2 p-3 bg-slate-900 border border-slate-700 rounded-lg cursor-pointer hover:border-amber-500">
               <input type="radio" name="pay-option" value="card" checked onclick="toggleCartPay('card')" />
-              <span class="text-xs font-semibold"><i class="fa-solid fa-credit-card mr-1 text-blue-400"></i> Card Payment</span>
+              <span class="text-xs font-semibold"><i class="fa-solid fa-credit-card mr-1 text-blue-400"></i> Credit Card</span>
             </label>
             <label class="flex items-center gap-2 p-3 bg-slate-900 border border-slate-700 rounded-lg cursor-pointer hover:border-amber-500">
               <input type="radio" name="pay-option" value="zelle" onclick="toggleCartPay('zelle')" />
-              <span class="text-xs font-semibold"><i class="fa-solid fa-money-bill-transfer mr-1 text-emerald-400"></i> Zelle Direct</span>
+              <span class="text-xs font-semibold"><i class="fa-solid fa-money-bill-transfer mr-1 text-emerald-400"></i> Direct Zelle</span>
             </label>
           </div>
         </div>
@@ -199,12 +247,12 @@
 
         <!-- Zelle Info Box -->
         <div id="cart-zelle-fields" class="hidden bg-emerald-950/40 p-3 rounded-lg border border-emerald-500/30 text-xs text-emerald-200 space-y-1">
-          <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Send $150 Zelle Payment To:</p>
+          <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Send Direct Zelle Transfer To:</p>
           <p class="font-mono text-white">drjacksonoperations@gmail.com</p>
         </div>
 
         <button type="submit" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-xl shadow-lg transition text-sm">
-          Pay $150 & Unlock Document Now
+          Complete Order & Print Now
         </button>
 
       </form>
@@ -217,12 +265,9 @@
 
   <!-- Code Logic Engine -->
   <script>
-    let activeDocType = '';
-    let isUnlocked = false;
+    let isPaid = false;
 
     function buildDocument(type) {
-      activeDocType = type;
-
       if (type === 'SOP') {
         const title = document.getElementById('sop-title').value.trim();
         const steps = document.getElementById('sop-steps').value.trim();
@@ -241,7 +286,6 @@
         renderRFP(title, reqs);
       }
 
-      // Display Preview Section
       const container = document.getElementById('output-container');
       container.classList.remove('hidden');
       container.scrollIntoView({ behavior: 'smooth' });
@@ -301,8 +345,21 @@ END OF TECHNICAL RFP SPECIFICATION
 ================================================================================`;
     }
 
-    function openCartModal() {
+    function handlePrintClick() {
+      if (isPaid) {
+        window.print();
+      } else {
+        openCartModal('150');
+      }
+    }
+
+    function openCartModal(planVal) {
       const modal = document.getElementById('cart-modal');
+      const planSelect = document.getElementById('cart-plan-select');
+      
+      if (planVal) planSelect.value = planVal;
+      updateCartPlanText();
+
       modal.classList.remove('hidden');
       modal.classList.add('flex');
     }
@@ -311,6 +368,14 @@ END OF TECHNICAL RFP SPECIFICATION
       const modal = document.getElementById('cart-modal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+    }
+
+    function updateCartPlanText() {
+      const val = document.getElementById('cart-plan-select').value;
+      const label = document.getElementById('modal-plan-label');
+      if (val === '150') label.textContent = "Selected: Single Deliverable ($150)";
+      else if (val === '50') label.textContent = "Selected: Standard Subscription ($50/mo)";
+      else if (val === '100') label.textContent = "Selected: Enterprise Subscription ($100/mo)";
     }
 
     function toggleCartPay(type) {
@@ -328,23 +393,18 @@ END OF TECHNICAL RFP SPECIFICATION
     function processPayment(e) {
       e.preventDefault();
 
-      // Unlock Document
-      isUnlocked = true;
+      const name = document.getElementById('cart-name').value.trim();
+      const company = document.getElementById('cart-company').value.trim();
+
+      isPaid = true;
       closeCartModal();
 
-      // Update UI to clean unlocked state
-      document.getElementById('output-body').classList.remove('preview-locked');
-      document.getElementById('preview-lock-banner').classList.add('hidden');
-      document.getElementById('output-status-tag').textContent = "UNLOCKED & PAID";
-      document.getElementById('output-status-tag').className = "text-xs font-bold uppercase tracking-wider text-emerald-400";
-
-      // Replace Unlock Button with Print Button
-      const actionBtn = document.getElementById('unlock-btn');
-      actionBtn.onclick = () => window.print();
-      actionBtn.className = "px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-lg transition flex items-center gap-2";
-      actionBtn.innerHTML = `<i class="fa-solid fa-print text-sm"></i><span>Print / Save Clean PDF</span>`;
-
-      alert('Payment successful ($150)! Watermark removed—you can now print or save your document as a clean PDF.');
+      // Update button label to clean print state
+      const printBtn = document.getElementById('print-btn');
+      printBtn.innerHTML = `<i class="fa-solid fa-print text-sm"></i><span>Print Clean Document / Save PDF</span>`;
+      
+      alert(`Thank you ${name} (${company})!\nYour payment was successful. Opening print dialog now.`);
+      window.print();
     }
   </script>
 </body>
