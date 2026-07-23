@@ -61,7 +61,7 @@
             </div>
 
             <!-- Call to Action Box -->
-            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 space-y-4">
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 space-y-5">
                 <h4 class="text-lg font-bold text-white">Want the 1-Page Custom Fix Plan?</h4>
                 <p class="text-slate-300 text-sm">Unlock a direct operational layout redesign and labor schedule fix authored by a Doctor of Business Administration.</p>
                 
@@ -70,22 +70,31 @@
                     <p class="text-xs text-slate-400">Delivered within 24 hours directly to your phone/email.</p>
                 </div>
 
-                <!-- Zelle Payment Option -->
-                <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-xl space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="text-purple-300 font-bold text-sm">Pay via Zelle:</span>
-                        <span class="text-xs text-slate-400">Fast & Zero Fees</span>
-                    </div>
-                    <div class="text-white font-mono text-lg font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-                        <span>678-233-3620</span>
-                        <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all">Copy</button>
-                    </div>
-                    <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center">Number copied to clipboard!</p>
+                <!-- Option 1: Credit / Debit Card / PayPal -->
+                <div class="space-y-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Option 1: Fast Online Checkout</span>
+                    <a href="https://www.paypal.com/ncp/payment/QSB4H4NJZRP7A" target="_blank" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-3.5 px-4 rounded-xl flex justify-between items-center transition-all text-sm shadow-md">
+                        <span>Pay via Credit Card / Debit / PayPal</span>
+                        <span class="bg-slate-950/20 text-xs px-2 py-1 rounded">Instant</span>
+                    </a>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 pt-1">
-                    <a href="https://cash.app" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 text-center rounded-xl transition-all text-sm">Pay via Cash App</a>
-                    <a href="https://venmo.com" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold py-3 text-center rounded-xl transition-all text-sm">Pay via Venmo</a>
+                <!-- Option 2: Zelle Direct Bank Transfer -->
+                <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-purple-300 font-bold text-xs uppercase tracking-wider">Option 2: Direct Bank Transfer (Zelle)</span>
+                        <span class="text-xs text-emerald-400 font-semibold">Zero Fees</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Open your banking app & send $150 via Zelle to:</p>
+                    <div class="text-white font-mono text-lg font-bold bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                        <span>678-233-3620</span>
+                        <button onclick="copyZelle()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded font-sans transition-all">Copy Number</button>
+                    </div>
+                    <p id="copy-msg" class="text-xs text-emerald-400 hidden text-center font-medium">Number copied to clipboard!</p>
+                </div>
+
+                <div class="text-center pt-1">
+                    <p class="text-xs text-slate-400">Need a corporate invoice or direct business check layout? Ask Dr. Jackson on site.</p>
                 </div>
             </div>
         </div>
