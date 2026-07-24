@@ -67,8 +67,11 @@
           <span class="text-xs font-bold uppercase tracking-wider text-amber-500">A La Carte</span>
           <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
           <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
-          <p class="text-xs text-slate-300 mt-2">Pay per generated 10-Point Audit, Custom SOP, or Technical RFP.</p>
+          <p class="text-xs text-slate-300 mt-2">Pay per generated 10-Point Audit, Custom SOP, or Technical RFP without subscription.</p>
         </div>
+        <button onclick="document.getElementById('sop-title').focus()" class="mt-4 w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/50 font-bold text-xs rounded transition">
+          Build $150 Document
+        </button>
       </div>
 
       <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between">
@@ -79,7 +82,7 @@
           <p class="text-xs text-slate-300 mt-2">Includes <strong>10 SOPs + 10 RFPs</strong> per month (Save over $2,800/mo).</p>
         </div>
         <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
-          Enter Email Activation Code
+          Enter $50 Email Code
         </button>
       </div>
 
@@ -91,7 +94,7 @@
           <p class="text-xs text-slate-300 mt-2">Includes <strong>20 SOPs + 20 RFPs</strong> per month for corporate scale.</p>
         </div>
         <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
-          Enter Email Activation Code
+          Enter $100 Email Code
         </button>
       </div>
     </section>
@@ -126,7 +129,7 @@
         <div class="mt-6">
           <button onclick="handleGenerateDeliverable('SOP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
             <i class="fa-solid fa-bolt" id="sop-lock-icon"></i>
-            <span>Build Modern SOP ($150 / 1 Credit)</span>
+            <span id="sop-btn-text">Build Modern SOP ($150 / 1 Credit)</span>
           </button>
         </div>
       </div>
@@ -158,7 +161,7 @@
         <div class="mt-6">
           <button onclick="handleGenerateDeliverable('RFP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
             <i class="fa-solid fa-bolt" id="rfp-lock-icon"></i>
-            <span>Build Technical RFP ($150 / 1 Credit)</span>
+            <span id="rfp-btn-text">Build Technical RFP ($150 / 1 Credit)</span>
           </button>
         </div>
       </div>
@@ -178,7 +181,7 @@
 
   </main>
 
-  <!-- Simplified Activation Code Modal -->
+  <!-- Simplified Email Activation Code Modal -->
   <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
     <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
       <div class="flex justify-between items-center">
@@ -198,7 +201,7 @@
       </div>
 
       <div class="border-t border-slate-800 pt-4 text-center">
-        <p class="text-xs text-slate-400">Need a code? Contact Dr. Jackson Operations or order single document ($150 fee).</p>
+        <p class="text-xs text-slate-400">Need a code? Contact Dr. Jackson Operations or generate single documents for $150 each.</p>
       </div>
     </div>
   </div>
@@ -364,7 +367,7 @@
       const btnModal = document.getElementById('auth-btn-modal');
       const btnLogout = document.getElementById('auth-btn-logout');
 
-      // Check persistent VIP status first
+      // Check persistent Owner VIP status first
       const isVIP = localStorage.getItem('dj_diag_vip_unlocked') === 'true';
       if (isVIP) {
         userCredits = {
@@ -520,9 +523,16 @@
       }
     }
 
+    // A LA CARTE $150 SINGLE PURCHASES
     function promptSinglePurchase(docType, price, onSuccess) {
-      const confirmPay = confirm(`This single ${docType} deliverable requires payment of $${price}.\n\nClick "OK" to simulate single-document payment approval and generate your file.`);
+      const confirmPay = confirm(
+        `💳 SINGLE DELIVERABLE A LA CARTE CHECKOUT\n\n` +
+        `Deliverable: 1x ${docType}\n` +
+        `One-Time Cost: $${price}\n\n` +
+        `Click "OK" to approve $${price} single-document checkout and build your file immediately.`
+      );
       if (confirmPay) {
+        alert(`🎉 Payment of $${price} Approved! Building your single ${docType}...`);
         onSuccess();
       }
     }
