@@ -1,1945 +1,586 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="7y8BDGp4HTotc8pXpbbEfHWj2YCefNn_n61gACoSIoE" />
-    <title>Dr. Jackson Fitness Vault</title>
-    <style>
-        :root {
-            --primary: #d97706;
-            --primary-dark: #b45309;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --accent: #22c55e;
-            --paypal-yellow: #ffd140;
-            --paypal-hover: #e6bb35;
-            --blue-accent: #3b82f6;
-            --purple-accent: #a855f7;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            padding: 16px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* HEADER & AUTH BAR */
-        .auth-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 10px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .auth-status-info {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .auth-status-info strong {
-            color: var(--accent);
-        }
-
-        .btn-auth-action {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-        .btn-auth-logout {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 4px;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .admin-banner {
-            display: none;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 16px;
-        }
-
-        /* AUTH MODAL STYLES */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
-
-        .modal-card {
-            background: var(--card-bg);
-            border: 1px solid var(--primary);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 12px;
-            right: 14px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .modal-title {
-            color: var(--primary);
-            font-size: 1.3rem;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-
-        .modal-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        .modal-tab-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-weight: bold;
-            padding: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .modal-tab-btn.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
-
-        .btn-submit-auth {
-            width: 100%;
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        /* PROFILE DASHBOARD STYLES */
-        .profile-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid var(--primary);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .profile-header-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 16px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .profile-avatar {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            color: #000;
-            font-size: 1.8rem;
-            font-weight: bold;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4);
-        }
-
-        .profile-info {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .profile-name-input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px dashed var(--primary);
-            color: var(--text-main);
-            font-size: 1.3rem;
-            font-weight: bold;
-            width: 100%;
-            outline: none;
-            padding: 2px 0;
-        }
-
-        .profile-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        /* MONTHLY STATS SUMMARY GRID */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .stat-val {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--accent);
-            margin-top: 4px;
-        }
-
-        .stat-lbl {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* DASHBOARD SECTIONS */
-        .dashboard-section {
-            background: #0f172a;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px;
-            margin-top: 14px;
-        }
-
-        .section-title {
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .vip-locked-notice {
-            background: rgba(217, 119, 6, 0.1);
-            border: 1px dashed var(--primary);
-            padding: 14px;
-            border-radius: 8px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-        }
-
-        .day-tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-        }
-
-        .day-tab-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .day-tab-btn.active {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-        }
-
-        .routine-list-box {
-            border-top: 1px solid var(--border);
-            padding-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .routine-item-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 10px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .routine-item-info {
-            font-size: 0.85rem;
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .routine-actions {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-action-routine {
-            border: 1px solid var(--border);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            cursor: pointer;
-            background: #0f172a;
-            color: var(--text-main);
-        }
-
-        .btn-action-routine.complete {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .btn-action-routine.edit {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--blue-accent);
-            border-color: var(--blue-accent);
-        }
-
-        .btn-action-routine.delete {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        /* WEIGHT TRACKER SECTION */
-        .weight-inputs-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .weight-field {
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .weight-field label {
-            display: block;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .weight-field input {
-            width: 100%;
-            padding: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
-
-        .btn-log-weight {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-top: 18px;
-        }
-
-        .weight-history-list {
-            max-height: 120px;
-            overflow-y: auto;
-            border-top: 1px solid var(--border);
-            padding-top: 8px;
-        }
-
-        .weight-entry {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.82rem;
-            padding: 4px 0;
-            border-bottom: 1px dotted var(--border);
-            color: var(--text-muted);
-        }
-
-        /* NUTRITION & MACROS */
-        .macro-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .macro-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .macro-card label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .macro-input {
-            width: 100%;
-            padding: 6px;
-            background: #0f172a;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            border-radius: 6px;
-            text-align: center;
-            font-size: 0.88rem;
-        }
-
-        .macro-bar-container {
-            width: 100%;
-            height: 10px;
-            background: var(--border);
-            border-radius: 5px;
-            overflow: hidden;
-            display: flex;
-            margin-top: 12px;
-        }
-
-        .macro-bar-p { background: #ef4444; height: 100%; width: 0%; transition: width 0.3s; }
-        .macro-bar-c { background: #3b82f6; height: 100%; width: 0%; transition: width 0.3s; }
-        .macro-bar-f { background: #f59e0b; height: 100%; width: 0%; transition: width 0.3s; }
-
-        .macro-ratio-legend {
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.75rem;
-            margin-top: 6px;
-            color: var(--text-muted);
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .search-bar:focus {
-            border-color: var(--primary);
-        }
-
-        .category-folder {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-
-        .folder-header {
-            width: 100%;
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: none;
-            padding: 16px 20px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s;
-        }
-
-        .folder-header:hover {
-            background: rgba(217, 119, 6, 0.1);
-        }
-
-        .folder-header .icon {
-            color: var(--primary);
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .folder-header.active .icon {
-            transform: rotate(180deg);
-        }
-
-        .folder-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: rgba(15, 23, 42, 0.5);
-            padding: 0 16px;
-        }
-
-        .exercise-item {
-            border-bottom: 1px solid var(--border);
-            padding: 14px 0;
-        }
-
-        .exercise-item:last-child {
-            border-bottom: none;
-        }
-
-        .exercise-title-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .exercise-name {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .tag-free {
-            font-size: 0.75rem;
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--accent);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .tag-lock {
-            font-size: 0.75rem;
-            background: rgba(217, 119, 6, 0.2);
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .exercise-desc {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-            line-height: 1.4;
-        }
-
-        .form-cue {
-            font-size: 0.82rem;
-            color: var(--primary);
-            margin-top: 4px;
-            font-weight: 500;
-        }
-
-        .volume-tracker-card {
-            background: #0f172a;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .tracker-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
-        }
-
-        .tracker-input {
-            flex: 1;
-            padding: 6px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .volume-badge {
-            font-size: 0.78rem;
-            color: var(--accent);
-            margin-top: 6px;
-            font-weight: bold;
-        }
-
-        .btn-add-to-routine-direct {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--blue-accent);
-            border: 1px solid var(--blue-accent);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 8px;
-            margin-right: 8px;
-        }
-
-        .visual-btn {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: var(--accent);
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin-top: 8px;
-            font-weight: 600;
-            padding: 0;
-            text-decoration: none;
-        }
-
-        .visual-btn-locked {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: var(--primary);
-            background: rgba(217, 119, 6, 0.1);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 6px 12px;
-            margin-top: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .locked-container {
-            display: block;
-        }
-
-        .unlocked-container {
-            display: none;
-        }
-
-        .membership-section {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid var(--primary);
-            border-radius: 12px;
-            padding: 24px 16px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .membership-section h2 {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 6px;
-        }
-
-        .price-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .price-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 16px;
-            border-radius: 10px;
-        }
-
-        .price-card.featured {
-            border-color: var(--primary);
-        }
-
-        .price-amount {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 6px 0;
-        }
-
-        .paypal-btn {
-            display: block;
-            width: 100%;
-            background: var(--paypal-yellow);
-            color: #000000;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 16px;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .admin-link {
-            color: var(--primary);
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="7y8BDGp4HTotc8pXpbbEfHWj2YCefNn_n61gACoSIoE" />
+  <title>Dr. Jackson Operational Health Diagnostic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
+    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .gold-accent { color: #f59e0b; }
+    .bg-gold { background-color: #f59e0b; }
+  </style>
 </head>
-<body>
+<body class="gradient-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between">
 
-    <!-- TOP AUTHENTICATION HEADER BAR -->
-    <div class="auth-bar">
-        <div class="auth-status-info" id="authStatusText">
-            Account: <strong>Guest (Device Local)</strong>
+  <!-- Header -->
+  <header class="border-b border-slate-700/50 p-6 glass-card sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid font-bold text-3xl fa-chart-line gold-accent"></i>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Dr. Jackson Operational Diagnostic</h1>
+          <p class="text-xs text-slate-400">Enterprise Operations, SOPs & Technical RFP Suite</p>
+        </div>
+      </div>
+
+      <!-- Account Auth Bar & Membership Status Badge -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div id="auth-header-bar" class="bg-slate-900/80 border border-slate-700 px-3 py-2 rounded-lg text-xs flex items-center gap-2">
+          <span class="text-slate-400" id="user-account-label">Account: <strong>Guest (Device Local)</strong></span>
+          <button id="auth-btn-modal" onclick="openAuthModal()" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-2.5 py-1 rounded transition">
+            🔑 Log In / Sign Up
+          </button>
+          <button id="auth-btn-logout" onclick="handleLogout()" class="hidden ml-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/50 font-bold px-2 py-1 rounded transition">
+            Log Out
+          </button>
+        </div>
+
+        <div id="membership-status" class="bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-lg text-xs flex items-center gap-3">
+          <span class="inline-block w-2 h-2 rounded-full bg-slate-500" id="status-indicator"></span>
+          <div>
+            <span class="font-bold block" id="membership-tier-label">Tier: Non-Member</span>
+            <span class="text-slate-400" id="credit-count-label">SOPs: 0 | RFPs: 0</span>
+          </div>
+          <button onclick="openMembershipModal()" class="ml-2 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-2 py-1 rounded transition">
+            Unlock Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6 space-y-10 w-full flex-grow">
+
+    <!-- Admin Owner Banner -->
+    <div id="adminBanner" class="hidden bg-emerald-500/15 border border-emerald-500 text-emerald-400 p-3 rounded-xl text-center text-xs font-bold">
+      👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED ENTERPRISE ACCESS UNLOCKED
+    </div>
+
+    <!-- Pricing Summary Banner -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">A La Carte</span>
+          <h3 class="text-xl font-bold mt-1">Single Deliverable</h3>
+          <p class="text-3xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ document</span></p>
+          <p class="text-xs text-slate-300 mt-2">Pay per generated 10-Point Audit, Custom SOP, or Technical RFP.</p>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Pro Consultant</span>
+          <h3 class="text-xl font-bold mt-1">Standard Plan</h3>
+          <p class="text-3xl font-black mt-2 text-white">$50 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>10 SOPs + 10 RFPs</strong> per month (Save over $2,800/mo).</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
+          Activate $50 Plan
+        </button>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Enterprise</span>
+          <h3 class="text-xl font-bold mt-1">Volume Suite</h3>
+          <p class="text-3xl font-black mt-2 text-white">$100 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>20 SOPs + 20 RFPs</strong> per month for corporate scale.</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
+          Activate $100 Plan
+        </button>
+      </div>
+    </section>
+
+    <!-- Operational Modules Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Module 1: SOP Generator -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-file-contract mr-1"></i> Module A
+            </span>
+            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+          </div>
+          <h2 class="text-2xl font-bold">Standard Operating Procedure (SOP) Builder</h2>
+          <p class="text-sm text-slate-300">Generate visual, step-by-step operational workflows complete with safety standard checkpoints and process timing controls.</p>
+          
+          <div class="space-y-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Process Title</label>
+              <input id="sop-title" type="text" placeholder="e.g., Inbound Inventory Staging & Audit" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Key Operational Steps (Brief Summary)</label>
+              <textarea id="sop-steps" rows="3" placeholder="1. Unload pallet. 2. Verify packing slip. 3. Scan into inventory..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <button onclick="handleGenerateDeliverable('SOP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock" id="sop-lock-icon"></i>
+            <span>Build Modern SOP ($150 / 1 Credit)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Module 2: RFP Generator -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-file-signature mr-1"></i> Module B
+            </span>
+            <span class="text-xs font-bold text-slate-400">$150 or Membership</span>
+          </div>
+          <h2 class="text-2xl font-bold">Technical RFP Specification Generator</h2>
+          <p class="text-sm text-slate-300">Draft professional Request for Proposals (RFP) specifying equipment, operational SLAs, and service provider bidding rules.</p>
+          
+          <div class="space-y-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Project / Contract Scope</label>
+              <input id="rfp-title" type="text" placeholder="e.g., Facility Security Guard Services Contract" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Required Deliverables / Vendor Requirements</label>
+              <textarea id="rfp-reqs" rows="3" placeholder="24/7 coverage, licensed supervisors, 99.5% uptime SLA, daily digital reports..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <button onclick="handleGenerateDeliverable('RFP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-lock" id="rfp-lock-icon"></i>
+            <span>Build Technical RFP ($150 / 1 Credit)</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Output Display Area -->
+    <section id="output-container" class="hidden glass-card p-6 rounded-2xl space-y-4 border border-amber-500/50">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 id="output-title" class="text-lg font-bold text-amber-400">Generated Document Output</h3>
+        <button onclick="window.print()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold rounded">
+          <i class="fa-solid fa-print mr-1"></i> Print / Save PDF
+        </button>
+      </div>
+      <div id="output-body" class="bg-slate-950 p-6 rounded-lg font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap"></div>
+    </section>
+
+  </main>
+
+  <!-- Membership Key Modal -->
+  <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold">Activate Access Key</h3>
+        <button onclick="closeMembershipModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Enter your client Access Key provided upon subscribing to the <strong>$50/mo</strong> or <strong>$100/mo</strong> membership plans.
+      </p>
+
+      <div class="space-y-3">
+        <input id="access-key-input" type="text" placeholder="Enter Access Key (e.g. DJ-MEMBER-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
+        <button onclick="validateAccessKey()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Apply Key & Unlock Credits
+        </button>
+      </div>
+
+      <div class="border-t border-slate-800 pt-4 text-center">
+        <p class="text-xs text-slate-400">Need a key? Contact Dr. Jackson Operations directly or pay per document ($150 flat fee).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-App Member Login & Sign Up Modal -->
+  <div id="auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-amber-500/50 space-y-5 relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="text-center">
+        <h3 class="text-xl font-bold text-amber-500"><i class="fa-solid fa-user-shield mr-2"></i>Client Portal Access</h3>
+        <p class="text-xs text-slate-400 mt-1">Log in or create an account to sync deliverables across all devices.</p>
+      </div>
+
+      <div class="flex border-b border-slate-700">
+        <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500">Log In</button>
+        <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-2 font-bold text-sm text-slate-400">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="handleAuthLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+          <input type="email" id="login-email" required placeholder="client@company.com" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
         <div>
-            <button class="btn-auth-action" id="authBtnModal" onclick="openAuthModal()">🔑 Log In / Sign Up</button>
-            <button class="btn-auth-logout" id="authBtnLogout" onclick="handleLogout()" style="display: none;">Log Out</button>
+          <label class="block text-xs text-slate-400 mb-1">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
-    </div>
-
-    <header>
-        <h1>Dr. Jackson Fitness Vault</h1>
-        <p class="subtitle">Complete Master Exercise Library, VIP Profile & Macro Dashboard</p>
-    </header>
-
-    <div class="admin-banner" id="adminBanner">
-        👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED ACCESS UNLOCKED
-    </div>
-
-    <!-- IN-APP LOGIN & SIGN UP MODAL -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeAuthModal()">✕</button>
-            <div class="modal-title">🔐 Vault Account Portal</div>
-            
-            <div class="modal-tabs">
-                <button class="modal-tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Log In</button>
-                <button class="modal-tab-btn" id="tabSignup" onclick="switchAuthTab('signup')">Create Account</button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <form id="formLogin" onsubmit="handleAuthLogin(event)">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-submit-auth">Log In to My Vault</button>
-            </form>
-
-            <!-- SIGN UP FORM -->
-            <form id="formSignup" onsubmit="handleAuthSignup(event)" style="display: none;">
-                <div class="form-group">
-                    <label>Full Name or Nickname</label>
-                    <input type="text" id="signupName" placeholder="e.g. Dr. Jackson" required>
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="signupEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Create Password</label>
-                    <input type="password" id="signupPassword" placeholder="Minimum 6 characters" required>
-                </div>
-                <button type="submit" class="btn-submit-auth">Create Account & Sync</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- VIP USER PROFILE & MONTHLY ANALYTICS DASHBOARD -->
-    <div class="profile-card">
-        <div class="profile-header-row">
-            <div class="profile-avatar" id="avatarInitial">J</div>
-            <div class="profile-info">
-                <input type="text" id="profileName" class="profile-name-input" value="Member Profile" onchange="saveProfileData()" placeholder="Click to Enter Name">
-                <p class="profile-subtitle">🔥 Monthly Fitness & Nutrition Dashboard</p>
-            </div>
-        </div>
-
-        <!-- MONTHLY STATS SUMMARY -->
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-lbl">Monthly Workouts</div>
-                <div class="stat-val" id="statMonthlyWorkouts">0 Logged</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-lbl">Volume Moved</div>
-                <div class="stat-val" id="statMonthlyVolume">0 lbs</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-lbl">Avg Daily Cal</div>
-                <div class="stat-val" id="statAvgCalories">0 kcal</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-lbl">Current Weight</div>
-                <div class="stat-val" id="statCurrentWeight">-- lbs</div>
-            </div>
-        </div>
-
-        <!-- INTERACTIVE WORKOUT ROUTINE BUILDER (VIP UNLOCKED) -->
-        <div class="dashboard-section">
-            <div class="section-title">
-                <span>📋 Custom Workout Routine Builder & Daily Planner</span>
-                <span style="font-size: 0.75rem; color: var(--accent);" id="routineVipStatus">🔒 VIP Feature</span>
-            </div>
-
-            <div id="routineLockedContent" class="vip-locked-notice">
-                🔒 Custom Workout Routine Builder is locked for Free users.<br>
-                <strong>Unlock VIP Access or login with Owner Passcode to build, edit, and save custom daily routines!</strong>
-            </div>
-
-            <div id="routineUnlockedContent" style="display: none;">
-                <div class="day-tabs">
-                    <button class="day-tab-btn active" onclick="selectDay('Monday', this)">Mon</button>
-                    <button class="day-tab-btn" onclick="selectDay('Tuesday', this)">Tue</button>
-                    <button class="day-tab-btn" onclick="selectDay('Wednesday', this)">Wed</button>
-                    <button class="day-tab-btn" onclick="selectDay('Thursday', this)">Thu</button>
-                    <button class="day-tab-btn" onclick="selectDay('Friday', this)">Fri</button>
-                    <button class="day-tab-btn" onclick="selectDay('Saturday', this)">Sat</button>
-                    <button class="day-tab-btn" onclick="selectDay('Sunday', this)">Sun</button>
-                </div>
-
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">Saved exercises for <strong id="selectedDayTitle" style="color:var(--primary);">Monday</strong> (Click ➕ on any exercise below to add it here):</p>
-
-                <div class="routine-list-box" id="routineDisplayBox">
-                    <div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for this day yet.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WEEKLY WEIGHT LOGGING SECTION -->
-        <div class="dashboard-section">
-            <div class="section-title">
-                <span>⚖️ Weight Tracking (Starting & Weekly Logs)</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;" id="weightChangeBadge">Total Change: 0 lbs</span>
-            </div>
-            <div class="weight-inputs-row">
-                <div class="weight-field">
-                    <label>Starting Weight (lbs)</label>
-                    <input type="number" id="startWeightInput" placeholder="e.g. 200" onchange="saveProfileData()">
-                </div>
-                <div class="weight-field">
-                    <label>Log Today's Weight</label>
-                    <input type="number" id="weeklyWeightInput" placeholder="e.g. 197">
-                </div>
-                <button class="btn-log-weight" onclick="addWeightEntry()">Log Weekly Weight</button>
-            </div>
-            <div class="weight-history-list" id="weightHistoryContainer">
-                <div class="weight-entry"><span>No weekly weight entries recorded yet.</span></div>
-            </div>
-        </div>
-
-        <!-- MACRONUTRIENT & CALORIE DASHBOARD -->
-        <div class="dashboard-section">
-            <div class="section-title">
-                <span>🥩 Daily Macronutrient & Calorie Breakdown</span>
-                <span style="font-size: 0.85rem; color: var(--accent);" id="macroTotalCalories">0 Total Calories</span>
-            </div>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">Log your protein, carbs, and healthy fats. The Vault automatically calculates calories & macro percentages.</p>
-            
-            <div class="macro-grid">
-                <div class="macro-card">
-                    <label style="color:#ef4444;">🥩 Protein (g)</label>
-                    <input type="number" id="macroProtein" class="macro-input" placeholder="0" oninput="calculateMacros()">
-                    <span style="font-size:0.7rem; color:var(--text-muted); display:block; margin-top:4px;" id="proteinCal">0 kcal</span>
-                </div>
-                <div class="macro-card">
-                    <label style="color:#3b82f6;">🍞 Carbs (g)</label>
-                    <input type="number" id="macroCarbs" class="macro-input" placeholder="0" oninput="calculateMacros()">
-                    <span style="font-size:0.7rem; color:var(--text-muted); display:block; margin-top:4px;" id="carbsCal">0 kcal</span>
-                </div>
-                <div class="macro-card">
-                    <label style="color:#f59e0b;">🥑 Healthy Fats (g)</label>
-                    <input type="number" id="macroFats" class="macro-input" placeholder="0" oninput="calculateMacros()">
-                    <span style="font-size:0.7rem; color:var(--text-muted); display:block; margin-top:4px;" id="fatsCal">0 kcal</span>
-                </div>
-            </div>
-
-            <div class="macro-bar-container">
-                <div id="barP" class="macro-bar-p"></div>
-                <div id="barC" class="macro-bar-c"></div>
-                <div id="barF" class="macro-bar-f"></div>
-            </div>
-            <div class="macro-ratio-legend">
-                <span style="color:#ef4444;" id="ratioP">Protein: 0%</span>
-                <span style="color:#3b82f6;" id="ratioC">Carbs: 0%</span>
-                <span style="color:#f59e0b;" id="ratioF">Fats: 0%</span>
-            </div>
-            <div style="margin-top: 10px; text-align: right;">
-                <a href="https://www.google.com/search?q=food+calorie+calculator" target="_blank" class="visual-btn">🔍 Look Up Food Calories & Macros ↗</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search any exercise, muscle, or movement..." onkeyup="filterExercises()">
-    </div>
-
-    <!-- CHEST VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🏋️ Chest Vault (Presses, Flyes & Pullovers)</span>
-            <span class="icon">▼</span>
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Log In & Sync Account
         </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="flat barbell bench press chest barbell gym">
-                <div class="exercise-title-row"><span class="exercise-name">Flat Barbell Bench Press</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Mid Chest, Triceps & Front Delts.</p>
-                <p class="form-cue">✓ Cue: Retract scapula; drive feet firmly into floor.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Flat Barbell Bench Press', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Flat+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+      </form>
 
-            <div class="exercise-item" data-search="incline barbell bench press chest barbell gym">
-                <div class="exercise-title-row"><span class="exercise-name">Incline Barbell Bench Press (30°)</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Clavicular Head (Upper Chest).</p>
-                <p class="form-cue">✓ Cue: Lower bar to upper chest / collarbone level.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Incline Barbell Bench Press', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Incline+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
-
-            <div class="exercise-item" data-search="decline barbell bench press chest barbell gym">
-                <div class="exercise-title-row"><span class="exercise-name">Decline Barbell Bench Press</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Lower Sternum (Lower Chest).</p>
-                <p class="form-cue">✓ Cue: Keep shoulders tucked back throughout movement.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Decline Barbell Bench Press', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Decline+Barbell+Bench+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
-
-            <div class="exercise-item" data-search="flat dumbbell chest press gym">
-                <div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Mid Pectorals & Stability.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Chest Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Flat Dumbbell Chest Press', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Flat+Dumbbell+Chest+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-
-            <div class="exercise-item" data-search="incline dumbbell press upper chest gym">
-                <div class="exercise-title-row"><span class="exercise-name">Incline Dumbbell Press (45°)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Upper Chest Clavicular Head.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Incline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Incline Dumbbell Press', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Incline+Dumbbell+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-
-            <div class="exercise-item" data-search="decline dumbbell chest press gym">
-                <div class="exercise-title-row"><span class="exercise-name">Decline Dumbbell Chest Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Lower Pec Fibers.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Decline Dumbbell Press')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Decline Dumbbell Press', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Decline+Dumbbell+Press+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-
-            <div class="exercise-item" data-search="flat dumbbell chest flyes stretch pecs gym">
-                <div class="exercise-title-row"><span class="exercise-name">Flat Dumbbell Chest Flyes</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Pec Isolation & Stretch.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Flat Dumbbell Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Flat Dumbbell Flyes', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Flat+Dumbbell+Flyes+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-
-            <div class="exercise-item" data-search="standing cable chest flyes crossover middle pecs gym">
-                <div class="exercise-title-row"><span class="exercise-name">Standing Cable Chest Flyes (Mid-Pulley)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Cable / Gym • <strong>Target:</strong> Constant Squeeze Pec Peak.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Cable Chest Flyes')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Cable Chest Flyes', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Standing+Cable+Chest+Flyes+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
+      <!-- SIGN UP FORM -->
+      <form id="form-signup" onsubmit="handleAuthSignup(event)" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Full Name / Organization</label>
+          <input type="text" id="signup-name" required placeholder="e.g., Enterprise Logistics Director" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
-    </div>
-
-    <!-- ARMS VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>💪 Arms Vault (Biceps, Triceps & Forearms)</span>
-            <span class="icon">▼</span>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+          <input type="email" id="signup-email" required placeholder="client@company.com" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Create Password</label>
+          <input type="password" id="signup-password" required placeholder="Minimum 6 characters" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Create Account & Sync
         </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="barbell biceps curl arms gym">
-                <div class="exercise-title-row"><span class="exercise-name">Standing Barbell Biceps Curl</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Biceps Brachii Mass.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Standing Barbell Biceps Curl', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Standing+Barbell+Biceps+Curl+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
-
-            <div class="exercise-item" data-search="triceps cable rope pushdown arms gym">
-                <div class="exercise-title-row"><span class="exercise-name">Triceps Cable Rope Pushdown</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Cable / Gym • <strong>Target:</strong> Lateral & Medial Triceps Heads.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Triceps Cable Rope Pushdown', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Triceps+Cable+Rope+Pushdown+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
-
-            <div class="exercise-item" data-search="dumbbell hammer curl brachialis forearms arms gym">
-                <div class="exercise-title-row"><span class="exercise-name">Alternating Dumbbell Hammer Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Dumbbell / Gym • <strong>Target:</strong> Brachialis & Forearm Brachioradialis.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Hammer Curls')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Alternating Dumbbell Hammer Curl', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Dumbbell+Hammer+Curl+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-
-            <div class="exercise-item" data-search="ez bar preacher curl peak isolation gym">
-                <div class="exercise-title-row"><span class="exercise-name">EZ-Bar Preacher Curl</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Short Head Biceps Isolation.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Preacher Curl')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('EZ-Bar Preacher Curl', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=EZ+Bar+Preacher+Curl+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
+      </form>
     </div>
+  </div>
 
-    <!-- LEGS VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🦵 Leg Day Vault (Quads, Hamstrings, Glutes & Calves)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="barbell back squat quads glutes legs gym">
-                <div class="exercise-title-row"><span class="exercise-name">Barbell High-Bar Back Squat</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Quadriceps & Glute Mass.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Barbell High-Bar Back Squat', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Barbell+Back+Squat+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+  <footer class="border-t border-slate-800 p-6 text-center text-xs text-slate-500 space-y-2">
+    <p>&copy; 2026 Dr. Jackson Operational Diagnostic Suite. All Rights Reserved.</p>
+    <p><button onclick="enterAdminPasscode()" class="text-amber-500 underline font-bold cursor-pointer">⚙️ Owner / VIP Passcode Login</button></p>
+  </footer>
 
-            <div class="exercise-item" data-search="romanian deadlift rdl hamstrings glutes legs gym">
-                <div class="exercise-title-row"><span class="exercise-name">Barbell Romanian Deadlift (RDL)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Hamstring Stretch & Posterior Chain.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Romanian Deadlift')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Barbell Romanian Deadlift', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Barbell+Romanian+Deadlift+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
+  <!-- Core Logic Engine -->
+  <script>
+    const SECRET_ADMIN_CODE = "DOCTOR2026";
+    let activeUserEmail = localStorage.getItem('dj_diag_active_user') || null;
 
-            <div class="exercise-item" data-search="leg press machine quads legs gym">
-                <div class="exercise-title-row"><span class="exercise-name">45-Degree Machine Leg Press</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Machine / Gym • <strong>Target:</strong> Quad Overload & VMO Isolation.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Leg Press Machine')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('45-Degree Machine Leg Press', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Leg+Press+Machine+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    // System State
+    let userCredits = {
+      isMember: false,
+      tierName: "Non-Member",
+      sopRemaining: 0,
+      rfpRemaining: 0
+    };
 
-    <!-- BACK & SHOULDERS VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🎯 Back & Shoulders Vault (Lats, Traps & Delts)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="wide grip lat pulldown back lats gym">
-                <div class="exercise-title-row"><span class="exercise-name">Wide-Grip Lat Pulldown</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Cable / Gym • <strong>Target:</strong> Latissimus Dorsi (V-Taper).</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Wide-Grip Lat Pulldown', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Wide+Grip+Lat+Pulldown+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+    // Preset Access Keys
+    const ACCESS_KEYS = {
+      "DJ-MEMBER-50": { tier: "Standard ($50/mo)", sop: 10, rfp: 10 },
+      "DJ-MEMBER-100": { tier: "Enterprise ($100/mo)", sop: 20, rfp: 20 }
+    };
 
-            <div class="exercise-item" data-search="bent over barbell row back lats gym">
-                <div class="exercise-title-row"><span class="exercise-name">Bent-Over Barbell Row</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Barbell / Gym • <strong>Target:</strong> Mid-Back Thickness & Rhomboids.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Barbell Row')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Bent-Over Barbell Row', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Bent+Over+Barbell+Row+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    function initSystem() {
+      initUserSession();
+    }
 
-    <!-- HOME & BODYWEIGHT VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🏠 Home & Bodyweight Vault</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="tempo pushups chest home bodyweight">
-                <div class="exercise-title-row"><span class="exercise-name">3-Second Eccentric Push-Up</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Calisthenics • <strong>Target:</strong> Chest & Core Stability.</p>
-                <div class="volume-tracker-card">
-                    <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                    <div class="tracker-row">
-                        <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                        <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                    </div>
-                    <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                </div>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('3-Second Eccentric Push-Up', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Eccentric+Push+Up+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+    // USER AUTHENTICATION & SESSION SYSTEM
+    function openAuthModal() {
+      document.getElementById('auth-modal').classList.remove('hidden');
+      document.getElementById('auth-modal').classList.add('flex');
+    }
 
-            <div class="exercise-item" data-search="decline pushups feet elevated upper chest home floor">
-                <div class="exercise-title-row"><span class="exercise-name">Decline Push-Up (Feet Elevated)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Calisthenics • <strong>Target:</strong> Upper Chest Bodyweight Focus.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Decline Push-Up')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <div class="volume-tracker-card">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">LOG SET & VOLUME</label>
-                        <div class="tracker-row">
-                            <input type="number" class="tracker-input set-in" placeholder="Sets" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input rep-in" placeholder="Reps" oninput="calcVolume(this)">
-                            <input type="number" class="tracker-input lbs-in" placeholder="Lbs" oninput="calcVolume(this)">
-                        </div>
-                        <div class="volume-badge vol-out">Total Volume: 0 lbs</div>
-                    </div>
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Decline Push-Up', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Decline+Push+Up+form+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    function closeAuthModal() {
+      document.getElementById('auth-modal').classList.add('hidden');
+      document.getElementById('auth-modal').classList.remove('flex');
+    }
 
-    <!-- YOGA VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🧘 Yoga & Mobility Vault (30+ Poses)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="downward facing dog adho mukha yoga stretch mobility flexibility">
-                <div class="exercise-title-row"><span class="exercise-name">Downward-Facing Dog (Adho Mukha)</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Inversion • <strong>Target:</strong> Hamstrings, Spine & Shoulders.</p>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Downward-Facing Dog', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=Downward+Facing+Dog+yoga+pose+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500";
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2 font-bold text-sm text-slate-400";
+        document.getElementById('form-login').classList.remove('hidden');
+        document.getElementById('form-signup').classList.add('hidden');
+      } else {
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500";
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 font-bold text-sm text-slate-400";
+        document.getElementById('form-signup').classList.remove('hidden');
+        document.getElementById('form-login').classList.add('hidden');
+      }
+    }
 
-            <div class="exercise-item" data-search="childs pose balasana recovery yoga">
-                <div class="exercise-title-row"><span class="exercise-name">Child’s Pose (Balasana)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Recovery • <strong>Target:</strong> Lower Back & Hip Decompression.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Child’s Pose')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Child’s Pose', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Childs+Pose+yoga+pose+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    function handleAuthSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim().toLowerCase();
+      const password = document.getElementById('signup-password').value;
 
-    <!-- PILATES VAULT -->
-    <div class="category-folder">
-        <button class="folder-header" onclick="toggleFolder(this)">
-            <span>🤸 Pilates & Core Vault (30+ Mat Movements)</span>
-            <span class="icon">▼</span>
-        </button>
-        <div class="folder-content">
-            <div class="exercise-item" data-search="pilates hundred core stamina mat">
-                <div class="exercise-title-row"><span class="exercise-name">The Classical Pilates Hundred</span><span class="tag-free">Free Sample</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Core Endurance • <strong>Target:</strong> Transverse Abdominis.</p>
-                <button class="btn-add-to-routine-direct" onclick="quickAddExercise('The Pilates Hundred', this)">➕ Add to Daily Routine</button>
-                <a href="https://www.google.com/search?tbm=isch&q=The+Pilates+Hundred+exercise+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-            </div>
+      if (!email || !password) return;
 
-            <div class="exercise-item" data-search="criss cross obliques core pilates">
-                <div class="exercise-title-row"><span class="exercise-name">Pilates Criss-Cross (Oblique Rotations)</span><span class="tag-lock lock-badge">Vault Locked 🔒</span></div>
-                <p class="exercise-desc"><strong>Type:</strong> Mat Movement • <strong>Target:</strong> Internal & External Obliques.</p>
-                <div class="locked-container">
-                    <button class="visual-btn-locked" onclick="promptUnlock('Pilates Criss-Cross')">🔒 Unlock Log Tracker & Form Guide with Membership</button>
-                </div>
-                <div class="unlocked-container">
-                    <button class="btn-add-to-routine-direct" onclick="quickAddExercise('Pilates Criss-Cross', this)">➕ Add to Daily Routine</button>
-                    <a href="https://www.google.com/search?tbm=isch&q=Pilates+Criss+Cross+exercise+diagram" target="_blank" class="visual-btn">🔍 Form Guide ↗</a>
-                </div>
-            </div>
-        </div>
-    </div>
+      let usersDB = JSON.parse(localStorage.getItem('dj_diag_users_db') || '{}');
+      if (usersDB[email]) {
+        alert("An account with this email already exists! Please log in.");
+        return;
+      }
 
-    <!-- MEMBERSHIP PRICING SECTION -->
-    <div class="membership-section" id="pricing">
-        <h2>Unlock Full Vault Access</h2>
-        <p style="color: var(--text-muted); font-size:0.9rem;">Get instant access to all movements, log trackers & custom routine builder via PayPal.</p>
+      usersDB[email] = {
+        name: name,
+        password: password,
+        credits: { isMember: false, tierName: "Non-Member", sopRemaining: 0, rfpRemaining: 0 }
+      };
 
-        <div class="price-options">
-            <div class="price-card">
-                <span>Monthly Pass</span>
-                <div class="price-amount">$3.99<span style="font-size:0.8rem; font-weight:normal;">/mo</span></div>
-                <a href="https://www.paypal.com/ncp/payment/FVD45CJ8653US" class="paypal-btn" target="_blank">Pay with PayPal</a>
-            </div>
+      localStorage.setItem('dj_diag_users_db', JSON.stringify(usersDB));
+      localStorage.setItem('dj_diag_active_user', email);
 
-            <div class="price-card featured">
-                <span class="tag-free">BEST VALUE</span>
-                <div style="margin-top:4px;">Annual VIP</div>
-                <div class="price-amount">$20.00<span style="font-size:0.8rem; font-weight:normal;">/yr</span></div>
-                <a href="https://www.paypal.com/ncp/payment/S5P6A2VPNZPSS" class="paypal-btn" target="_blank">Pay with PayPal</a>
-            </div>
+      alert(`🎉 Account created successfully! Welcome, ${name}.`);
+      closeAuthModal();
+      initUserSession();
+    }
 
-            <div class="price-card">
-                <span>Add-A-Friend Pass</span>
-                <div class="price-amount">$3.99<span style="font-size:0.8rem; font-weight:normal;">/mo</span></div>
-                <a href="https://www.paypal.com/ncp/payment/FVD45CJ8653US" class="paypal-btn" target="_blank">Add Partner Pass</a>
-            </div>
+    function handleAuthLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
 
-            <div class="price-card">
-                <span>Lifetime Founder</span>
-                <div class="price-amount">$80.00</div>
-                <a href="https://www.paypal.com/ncp/payment/PA59LQGPAVNXY" class="paypal-btn" target="_blank">Pay with PayPal</a>
-            </div>
-        </div>
-    </div>
+      let usersDB = JSON.parse(localStorage.getItem('dj_diag_users_db') || '{}');
+      if (!usersDB[email] || usersDB[email].password !== password) {
+        alert("❌ Invalid email or password. Please try again.");
+        return;
+      }
 
-    <footer>
-        <p>© 2026 Dr. Jackson Fitness Vault. All rights reserved.</p>
-        <p style="margin-top: 6px;"><span class="admin-link" onclick="enterAdminPasscode()">⚙️ Owner / VIP Passcode Login</span></p>
-    </footer>
+      localStorage.setItem('dj_diag_active_user', email);
+      alert(`🎉 Logged in as ${usersDB[email].name || email}`);
+      closeAuthModal();
+      initUserSession();
+    }
 
-    <script>
-        const SECRET_ADMIN_CODE = "DOCTOR2026";
-        let activeDay = "Monday";
-        let activeUserEmail = localStorage.getItem('dr_jackson_active_user') || null;
+    function handleLogout() {
+      localStorage.removeItem('dj_diag_active_user');
+      localStorage.removeItem('dj_diag_vip_unlocked');
+      alert("Logged out successfully.");
+      location.reload();
+    }
 
-        let userProfile = {
-            name: "Member Profile",
-            startWeight: "",
-            weightHistory: [],
-            totalLoggedVolume: 0,
-            workoutCount: 0,
-            isVip: false,
-            routines: {
-                Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []
-            }
+    function initUserSession() {
+      activeUserEmail = localStorage.getItem('dj_diag_active_user');
+      const accountLbl = document.getElementById('user-account-label');
+      const btnModal = document.getElementById('auth-btn-modal');
+      const btnLogout = document.getElementById('auth-btn-logout');
+
+      if (activeUserEmail) {
+        let usersDB = JSON.parse(localStorage.getItem('dj_diag_users_db') || '{}');
+        if (usersDB[activeUserEmail]) {
+          userCredits = usersDB[activeUserEmail].credits || userCredits;
+        }
+        accountLbl.innerHTML = `Account: <strong>${activeUserEmail}</strong>`;
+        btnModal.classList.add('hidden');
+        btnLogout.classList.remove('hidden');
+      } else {
+        const saved = localStorage.getItem('dj_user_credits');
+        if (saved) userCredits = JSON.parse(saved);
+        accountLbl.innerHTML = `Account: <strong>Guest (Device Local)</strong>`;
+        btnModal.classList.remove('hidden');
+        btnLogout.classList.add('hidden');
+      }
+
+      checkVIPStatus();
+      updateUI();
+    }
+
+    function enterAdminPasscode() {
+      const code = prompt("Enter Owner / VIP Admin Passcode:");
+      if (code === SECRET_ADMIN_CODE) {
+        localStorage.setItem('dj_diag_vip_unlocked', 'true');
+        userCredits = {
+          isMember: true,
+          tierName: "Owner VIP Unlimited",
+          sopRemaining: 999,
+          rfpRemaining: 999
         };
+        saveCredits();
+        alert("🎉 Success! Owner VIP Enterprise Access Unlocked.");
+        checkVIPStatus();
+        updateUI();
+      } else if (code !== null) {
+        alert("❌ Invalid Passcode.");
+      }
+    }
 
-        window.onload = function() {
-            initUserSession();
-            calculateMacros();
+    function checkVIPStatus() {
+      const isVIP = localStorage.getItem('dj_diag_vip_unlocked') === 'true';
+      if (isVIP) {
+        document.getElementById('adminBanner').classList.remove('hidden');
+      }
+    }
+
+    function saveCredits() {
+      if (activeUserEmail) {
+        let usersDB = JSON.parse(localStorage.getItem('dj_diag_users_db') || '{}');
+        if (!usersDB[activeUserEmail]) usersDB[activeUserEmail] = {};
+        usersDB[activeUserEmail].credits = userCredits;
+        localStorage.setItem('dj_diag_users_db', JSON.stringify(usersDB));
+      } else {
+        localStorage.setItem('dj_user_credits', JSON.stringify(userCredits));
+      }
+    }
+
+    function updateUI() {
+      const statusInd = document.getElementById('status-indicator');
+      const tierLbl = document.getElementById('membership-tier-label');
+      const creditLbl = document.getElementById('credit-count-label');
+
+      if (userCredits.isMember && (userCredits.sopRemaining > 0 || userCredits.rfpRemaining > 0)) {
+        statusInd.className = "inline-block w-2 h-2 rounded-full bg-emerald-500";
+        tierLbl.textContent = `Tier: ${userCredits.tierName}`;
+        creditLbl.textContent = `SOPs: ${userCredits.sopRemaining} | RFPs: ${userCredits.rfpRemaining}`;
+      } else {
+        statusInd.className = "inline-block w-2 h-2 rounded-full bg-slate-500";
+        tierLbl.textContent = "Tier: Non-Member";
+        creditLbl.textContent = "SOPs: 0 | RFPs: 0";
+      }
+    }
+
+    function openMembershipModal() {
+      document.getElementById('membership-modal').classList.remove('hidden');
+      document.getElementById('membership-modal').classList.add('flex');
+    }
+
+    function closeMembershipModal() {
+      document.getElementById('membership-modal').classList.add('hidden');
+      document.getElementById('membership-modal').classList.remove('flex');
+    }
+
+    function validateAccessKey() {
+      const input = document.getElementById('access-key-input').value.trim().toUpperCase();
+      if (ACCESS_KEYS[input]) {
+        const config = ACCESS_KEYS[input];
+        userCredits = {
+          isMember: true,
+          tierName: config.tier,
+          sopRemaining: config.sop,
+          rfpRemaining: config.rfp
         };
+        saveCredits();
+        updateUI();
+        closeMembershipModal();
+        alert(`Access Key Accepted! You have activated the ${config.tier} plan (${config.sop} SOPs and ${config.rfp} RFPs).`);
+      } else {
+        alert('Invalid Access Key. Please double check your code or complete $150 single-document checkout.');
+      }
+    }
 
-        // AUTHENTICATION MODAL LOGIC
-        function openAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
+    function handleGenerateDeliverable(type) {
+      if (type === 'SOP') {
+        const title = document.getElementById('sop-title').value.trim();
+        const steps = document.getElementById('sop-steps').value.trim();
+
+        if (!title || !steps) {
+          alert('Please fill out the SOP title and steps before building.');
+          return;
         }
 
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
+        if (userCredits.sopRemaining > 0) {
+          userCredits.sopRemaining -= 1;
+          saveCredits();
+          updateUI();
+          renderSOP(title, steps);
+        } else {
+          promptSinglePurchase('Standard Operating Procedure (SOP)', 150, () => renderSOP(title, steps));
+        }
+      } else if (type === 'RFP') {
+        const title = document.getElementById('rfp-title').value.trim();
+        const reqs = document.getElementById('rfp-reqs').value.trim();
+
+        if (!title || !reqs) {
+          alert('Please fill out the RFP scope and vendor requirements before building.');
+          return;
         }
 
-        function switchAuthTab(tab) {
-            if (tab === 'login') {
-                document.getElementById('tabLogin').classList.add('active');
-                document.getElementById('tabSignup').classList.remove('active');
-                document.getElementById('formLogin').style.display = 'block';
-                document.getElementById('formSignup').style.display = 'none';
-            } else {
-                document.getElementById('tabSignup').classList.add('active');
-                document.getElementById('tabLogin').classList.remove('active');
-                document.getElementById('formSignup').style.display = 'block';
-                document.getElementById('formLogin').style.display = 'none';
-            }
+        if (userCredits.rfpRemaining > 0) {
+          userCredits.rfpRemaining -= 1;
+          saveCredits();
+          updateUI();
+          renderRFP(title, reqs);
+        } else {
+          promptSinglePurchase('Technical RFP Specification', 150, () => renderRFP(title, reqs));
         }
+      }
+    }
 
-        function handleAuthSignup(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
-            const password = document.getElementById('signupPassword').value;
+    function promptSinglePurchase(docType, price, onSuccess) {
+      const confirmPay = confirm(`This single ${docType} deliverable requires payment of $${price}.\n\nClick "OK" to simulate single-document payment approval and generate your file.`);
+      if (confirmPay) {
+        onSuccess();
+      }
+    }
 
-            if (!email || !password) return;
+    function renderSOP(title, steps) {
+      const outputBox = document.getElementById('output-container');
+      const outputTitle = document.getElementById('output-title');
+      const outputBody = document.getElementById('output-body');
 
-            let usersDB = JSON.parse(localStorage.getItem('dr_jackson_users_db') || '{}');
-            if (usersDB[email]) {
-                alert("An account with this email already exists! Please log in.");
-                return;
-            }
+      outputTitle.textContent = `Generated Standard Operating Procedure: ${title}`;
+      outputBody.textContent = `================================================================================
+DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
+STANDARD OPERATING PROCEDURE (SOP) SPECIFICATION
+================================================================================
+DOCUMENT TITLE: ${title.toUpperCase()}
+DATE CREATED:   ${new Date().toLocaleDateString()}
+AUTHOR:         Dr. Jackson Operational Health Engine
+--------------------------------------------------------------------------------
 
-            usersDB[email] = {
-                name: name,
-                password: password,
-                startWeight: "",
-                weightHistory: [],
-                totalLoggedVolume: 0,
-                workoutCount: 0,
-                isVip: false,
-                routines: { Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: [] }
-            };
+1. PURPOSE & SCOPE
+   This Standard Operating Procedure defines the mandatory operational protocol
+   and quality metrics for "${title}".
 
-            localStorage.setItem('dr_jackson_users_db', JSON.stringify(usersDB));
-            localStorage.setItem('dr_jackson_active_user', email);
-            
-            alert(`🎉 Account created successfully! Welcome, ${name}.`);
-            closeAuthModal();
-            initUserSession();
-        }
+2. OPERATIONAL STEPS & STAGING
+${steps.split('\n').map((step, idx) => `   [Step ${idx + 1}] ${step}`).join('\n')}
 
-        function handleAuthLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const password = document.getElementById('loginPassword').value;
+3. SAFETY & QUALITY CONTROL AUDIT
+   - Compliance Threshold: 100% adherence to staging parameters.
+   - Escalation Protocol: Notify Shift Area Manager immediately upon deviation.
 
-            let usersDB = JSON.parse(localStorage.getItem('dr_jackson_users_db') || '{}');
-            if (!usersDB[email] || usersDB[email].password !== password) {
-                alert("❌ Invalid email or password. Please try again.");
-                return;
-            }
+================================================================================
+END OF SOP SPECIFICATION
+================================================================================`;
 
-            localStorage.setItem('dr_jackson_active_user', email);
-            alert(`🎉 Logged in as ${usersDB[email].name || email}`);
-            closeAuthModal();
-            initUserSession();
-        }
+      outputBox.classList.remove('hidden');
+      outputBox.scrollIntoView({ behavior: 'smooth' });
+    }
 
-        function handleLogout() {
-            localStorage.removeItem('dr_jackson_active_user');
-            localStorage.removeItem('dr_jackson_vip_unlocked');
-            alert("Logged out successfully.");
-            location.reload();
-        }
+    function renderRFP(title, reqs) {
+      const outputBox = document.getElementById('output-container');
+      const outputTitle = document.getElementById('output-title');
+      const outputBody = document.getElementById('output-body');
 
-        function initUserSession() {
-            activeUserEmail = localStorage.getItem('dr_jackson_active_user');
-            const authStatusText = document.getElementById('authStatusText');
-            const authBtnModal = document.getElementById('authBtnModal');
-            const authBtnLogout = document.getElementById('authBtnLogout');
+      outputTitle.textContent = `Generated Technical RFP: ${title}`;
+      outputBody.textContent = `================================================================================
+DR. JACKSON OPERATIONAL HEALTH DIAGNOSTIC
+TECHNICAL REQUEST FOR PROPOSAL (RFP) SPECIFICATION
+================================================================================
+PROJECT SCOPE: ${title.toUpperCase()}
+DATE ISSUED:   ${new Date().toLocaleDateString()}
+AUTHOR:        Dr. Jackson Operations & Logistics Management
+--------------------------------------------------------------------------------
 
-            if (activeUserEmail) {
-                let usersDB = JSON.parse(localStorage.getItem('dr_jackson_users_db') || '{}');
-                if (usersDB[activeUserEmail]) {
-                    userProfile = usersDB[activeUserEmail];
-                }
-                authStatusText.innerHTML = `Account: <strong>${activeUserEmail}</strong> (${userProfile.isVip ? 'VIP Member 👑' : 'Free Member'})`;
-                authBtnModal.style.display = 'none';
-                authBtnLogout.style.display = 'inline-block';
-            } else {
-                loadProfileData(); // Guest device storage
-                authStatusText.innerHTML = `Account: <strong>Guest (Device Local)</strong>`;
-                authBtnModal.style.display = 'inline-block';
-                authBtnLogout.style.display = 'none';
-            }
+1. EXECUTIVE OVERVIEW
+   Dr. Jackson Operational Health Diagnostic invites qualified vendors to submit
+   proposals for providing high-efficiency execution under "${title}".
 
-            checkVIPStatus();
-        }
+2. VENDOR REQUIREMENTS & CONTRACT SLAS
+${reqs.split('\n').map((req, idx) => `   [SLA ${idx + 1}] ${req}`).join('\n')}
 
-        function enterAdminPasscode() {
-            const code = prompt("Enter Owner / VIP Admin Passcode:");
-            if (code === SECRET_ADMIN_CODE) {
-                localStorage.setItem('dr_jackson_vip_unlocked', 'true');
-                userProfile.isVip = true;
-                saveProfileData();
-                alert("🎉 Success! Owner VIP Access Unlocked.");
-                checkVIPStatus();
-            } else if (code !== null) {
-                alert("❌ Invalid Passcode.");
-            }
-        }
+3. PROPOSAL SUBMISSION RULES
+   - Bids must include transparent unit pricing and escalation schedules.
+   - Submissions must demonstrate compliance with enterprise operational standards.
 
-        function checkVIPStatus() {
-            const isVIP = (localStorage.getItem('dr_jackson_vip_unlocked') === 'true') || userProfile.isVip;
-            if (isVIP) {
-                document.getElementById('adminBanner').style.display = 'block';
-                document.getElementById('routineVipStatus').innerText = '✅ VIP Unlocked';
-                document.getElementById('routineLockedContent').style.display = 'none';
-                document.getElementById('routineUnlockedContent').style.display = 'block';
-                
-                const lockedBoxes = document.querySelectorAll('.locked-container');
-                lockedBoxes.forEach(box => box.style.display = 'none');
+================================================================================
+END OF TECHNICAL RFP SPECIFICATION
+================================================================================`;
 
-                const unlockedBoxes = document.querySelectorAll('.unlocked-container');
-                unlockedBoxes.forEach(box => box.style.display = 'block');
+      outputBox.classList.remove('hidden');
+      outputBox.scrollIntoView({ behavior: 'smooth' });
+    }
 
-                const lockBadges = document.querySelectorAll('.lock-badge');
-                lockBadges.forEach(badge => {
-                    badge.innerText = "VIP Unlocked ✅";
-                    badge.style.background = "rgba(34, 197, 94, 0.2)";
-                    badge.style.color = "var(--accent)";
-                });
-
-                renderRoutineList();
-            }
-        }
-
-        function selectDay(dayName, btnElem) {
-            activeDay = dayName;
-            document.getElementById('selectedDayTitle').innerText = dayName;
-            
-            const tabs = document.querySelectorAll('.day-tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
-            btnElem.classList.add('active');
-
-            renderRoutineList();
-        }
-
-        function quickAddExercise(exName, btnElem) {
-            const isVIP = (localStorage.getItem('dr_jackson_vip_unlocked') === 'true') || userProfile.isVip;
-            if (!isVIP) {
-                promptUnlock(exName);
-                return;
-            }
-
-            const targetDay = prompt(`Which day do you want to add "${exName}" to?\n(Type: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday)`, activeDay);
-            if (!targetDay) return;
-
-            const formattedDay = targetDay.trim().charAt(0).toUpperCase() + targetDay.trim().slice(1).toLowerCase();
-            
-            if (!userProfile.routines) userProfile.routines = { Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: [] };
-            if (!userProfile.routines[formattedDay]) {
-                alert("Please enter a valid day of the week (e.g., Monday).");
-                return;
-            }
-
-            const card = btnElem.closest('.exercise-item');
-            const sets = card ? (parseFloat(card.querySelector('.set-in')?.value) || 3) : 3;
-            const reps = card ? (parseFloat(card.querySelector('.rep-in')?.value) || 10) : 10;
-            const lbs = card ? (parseFloat(card.querySelector('.lbs-in')?.value) || 100) : 100;
-
-            userProfile.routines[formattedDay].push({ name: exName, sets, reps, lbs });
-            saveProfileData();
-            
-            alert(`✅ Added "${exName}" (${sets} sets × ${reps} reps @ ${lbs} lbs) to your ${formattedDay} routine!`);
-            renderRoutineList();
-        }
-
-        function editRoutineItem(index) {
-            const item = userProfile.routines[activeDay][index];
-            const newSets = prompt(`Edit Sets for ${item.name}:`, item.sets);
-            if (newSets === null) return;
-            const newReps = prompt(`Edit Reps for ${item.name}:`, item.reps);
-            if (newReps === null) return;
-            const newLbs = prompt(`Edit Weight (lbs) for ${item.name}:`, item.lbs);
-            if (newLbs === null) return;
-
-            item.sets = parseFloat(newSets) || item.sets;
-            item.reps = parseFloat(newReps) || item.reps;
-            item.lbs = parseFloat(newLbs) || item.lbs;
-
-            saveProfileData();
-            renderRoutineList();
-        }
-
-        function deleteRoutineItem(index) {
-            const item = userProfile.routines[activeDay][index];
-            if (confirm(`Are you sure you want to remove "${item.name}" from your ${activeDay} routine?`)) {
-                userProfile.routines[activeDay].splice(index, 1);
-                saveProfileData();
-                renderRoutineList();
-            }
-        }
-
-        function completeWorkoutItem(index) {
-            const item = userProfile.routines[activeDay][index];
-            const vol = item.sets * item.reps * item.lbs;
-
-            userProfile.totalLoggedVolume = (userProfile.totalLoggedVolume || 0) + vol;
-            userProfile.workoutCount = (userProfile.workoutCount || 0) + 1;
-            
-            saveProfileData();
-            alert(`🎉 Workout Completed! +${vol.toLocaleString()} lbs added to your monthly volume stats!`);
-        }
-
-        function renderRoutineList() {
-            const displayBox = document.getElementById('routineDisplayBox');
-            const dayItems = userProfile.routines && userProfile.routines[activeDay] ? userProfile.routines[activeDay] : [];
-
-            if (dayItems.length === 0) {
-                displayBox.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No exercises added for ' + activeDay + ' yet. Click ➕ on any exercise below to add it!</div>';
-                return;
-            }
-
-            let html = "";
-            dayItems.forEach((item, idx) => {
-                const vol = item.sets * item.reps * item.lbs;
-                html += `
-                    <div class="routine-item-card">
-                        <div class="routine-item-info">
-                            <strong>${item.name}</strong><br>
-                            <span style="color:var(--text-muted); font-size:0.78rem;">${item.sets} Sets × ${item.reps} Reps @ ${item.lbs} lbs (${vol.toLocaleString()} lbs Vol)</span>
-                        </div>
-                        <div class="routine-actions">
-                            <button class="btn-action-routine complete" onclick="completeWorkoutItem(${idx})">✓ Log</button>
-                            <button class="btn-action-routine edit" onclick="editRoutineItem(${idx})">✏️ Edit</button>
-                            <button class="btn-action-routine delete" onclick="deleteRoutineItem(${idx})">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            });
-            displayBox.innerHTML = html;
-        }
-
-        function loadProfileData() {
-            const saved = localStorage.getItem('dr_jackson_vault_profile');
-            if (saved) {
-                userProfile = JSON.parse(saved);
-                document.getElementById('profileName').value = userProfile.name || "Member Profile";
-                document.getElementById('startWeightInput').value = userProfile.startWeight || "";
-                document.getElementById('avatarInitial').innerText = (userProfile.name && userProfile.name.length > 0) ? userProfile.name.charAt(0).toUpperCase() : "J";
-            }
-            updateProfileDashboard();
-        }
-
-        function saveProfileData() {
-            userProfile.name = document.getElementById('profileName').value;
-            userProfile.startWeight = document.getElementById('startWeightInput').value;
-            document.getElementById('avatarInitial').innerText = (userProfile.name && userProfile.name.length > 0) ? userProfile.name.charAt(0).toUpperCase() : "J";
-
-            if (activeUserEmail) {
-                let usersDB = JSON.parse(localStorage.getItem('dr_jackson_users_db') || '{}');
-                usersDB[activeUserEmail] = userProfile;
-                localStorage.setItem('dr_jackson_users_db', JSON.stringify(usersDB));
-            } else {
-                localStorage.setItem('dr_jackson_vault_profile', JSON.stringify(userProfile));
-            }
-
-            updateProfileDashboard();
-        }
-
-        function addWeightEntry() {
-            const weightInput = document.getElementById('weeklyWeightInput');
-            const val = parseFloat(weightInput.value);
-            if (!val) {
-                alert("Please enter a valid weight number.");
-                return;
-            }
-
-            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            if (!userProfile.weightHistory) userProfile.weightHistory = [];
-            userProfile.weightHistory.unshift({ date: today, weight: val });
-            weightInput.value = "";
-            saveProfileData();
-        }
-
-        function updateProfileDashboard() {
-            const historyContainer = document.getElementById('weightHistoryContainer');
-            if (!userProfile.weightHistory || userProfile.weightHistory.length === 0) {
-                historyContainer.innerHTML = '<div class="weight-entry"><span>No weekly weight entries recorded yet.</span></div>';
-            } else {
-                let html = "";
-                userProfile.weightHistory.forEach((entry) => {
-                    html += `<div class="weight-entry"><span>Date: ${entry.date}</span><span style="font-weight:bold; color:var(--text-main);">${entry.weight} lbs</span></div>`;
-                });
-                historyContainer.innerHTML = html;
-            }
-
-            const currentWeight = (userProfile.weightHistory && userProfile.weightHistory.length > 0) ? userProfile.weightHistory[0].weight : (userProfile.startWeight || "--");
-            document.getElementById('statCurrentWeight').innerText = currentWeight !== "--" ? currentWeight + " lbs" : "--";
-
-            const startW = parseFloat(userProfile.startWeight) || 0;
-            const currentW = parseFloat(currentWeight) || 0;
-            if (startW > 0 && currentW > 0) {
-                const diff = (currentW - startW).toFixed(1);
-                const sign = diff > 0 ? "+" : "";
-                document.getElementById('weightChangeBadge').innerText = `Total Change: ${sign}${diff} lbs`;
-            } else {
-                document.getElementById('weightChangeBadge').innerText = "Total Change: 0 lbs";
-            }
-
-            document.getElementById('statMonthlyWorkouts').innerText = (userProfile.workoutCount || 0) + " Logged";
-            document.getElementById('statMonthlyVolume').innerText = (userProfile.totalLoggedVolume || 0).toLocaleString() + " lbs";
-        }
-
-        function calculateMacros() {
-            const pGrams = parseFloat(document.getElementById('macroProtein').value) || 0;
-            const cGrams = parseFloat(document.getElementById('macroCarbs').value) || 0;
-            const fGrams = parseFloat(document.getElementById('macroFats').value) || 0;
-
-            const pCal = pGrams * 4;
-            const cCal = cGrams * 4;
-            const fCal = fGrams * 9;
-            const totalCal = pCal + cCal + fCal;
-
-            document.getElementById('proteinCal').innerText = pCal + " kcal";
-            document.getElementById('carbsCal').innerText = cCal + " kcal";
-            document.getElementById('fatsCal').innerText = fCal + " kcal";
-            document.getElementById('macroTotalCalories').innerText = totalCal.toLocaleString() + " Total Calories";
-            document.getElementById('statAvgCalories').innerText = totalCal > 0 ? totalCal.toLocaleString() + " kcal" : "0 kcal";
-
-            if (totalCal > 0) {
-                const pPct = Math.round((pCal / totalCal) * 100);
-                const cPct = Math.round((cCal / totalCal) * 100);
-                const fPct = Math.round((fCal / totalCal) * 100);
-
-                document.getElementById('barP').style.width = pPct + "%";
-                document.getElementById('barC').style.width = cPct + "%";
-                document.getElementById('barF').style.width = fPct + "%";
-
-                document.getElementById('ratioP').innerText = "Protein: " + pPct + "%";
-                document.getElementById('ratioC').innerText = "Carbs: " + cPct + "%";
-                document.getElementById('ratioF').innerText = "Fats: " + fPct + "%";
-            } else {
-                document.getElementById('barP').style.width = "0%";
-                document.getElementById('barC').style.width = "0%";
-                document.getElementById('barF').style.width = "0%";
-
-                document.getElementById('ratioP').innerText = "Protein: 0%";
-                document.getElementById('ratioC').innerText = "Carbs: 0%";
-                document.getElementById('ratioF').innerText = "Fats: 0%";
-            }
-        }
-
-        function calcVolume(inputElem) {
-            const card = inputElem.closest('.volume-tracker-card');
-            const sets = parseFloat(card.querySelector('.set-in').value) || 0;
-            const reps = parseFloat(card.querySelector('.rep-in').value) || 0;
-            const lbs = parseFloat(card.querySelector('.lbs-in').value) || 0;
-            const total = sets * reps * lbs;
-            card.querySelector('.vol-out').innerText = "Total Volume: " + total.toLocaleString() + " lbs";
-
-            if (total > 0) {
-                userProfile.totalLoggedVolume = (userProfile.totalLoggedVolume || 0) + total;
-                userProfile.workoutCount = (userProfile.workoutCount || 0) + 1;
-                saveProfileData();
-            }
-        }
-
-        function toggleFolder(button) {
-            button.classList.toggle("active");
-            const content = button.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
-        }
-
-        function promptUnlock(name) {
-            if ((localStorage.getItem('dr_jackson_vip_unlocked') === 'true') || userProfile.isVip) return;
-            alert("🔒 " + name + " is locked! Scroll down to unlock full Vault access.");
-            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function filterExercises() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const folders = document.querySelectorAll('.category-folder');
-
-            folders.forEach(folder => {
-                const items = folder.querySelectorAll('.exercise-item');
-                let hasMatch = false;
-
-                items.forEach(item => {
-                    const text = item.getAttribute('data-search').toLowerCase();
-                    if (text.includes(query) || query === '') {
-                        item.style.display = 'block';
-                        hasMatch = true;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-                const content = folder.querySelector('.folder-content');
-                const header = folder.querySelector('.folder-header');
-                if (query !== '') {
-                    if (hasMatch) {
-                        folder.style.display = 'block';
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        header.classList.add('active');
-                    } else {
-                        folder.style.display = 'none';
-                    }
-                } else {
-                    folder.style.display = 'block';
-                    content.style.maxHeight = null;
-                    header.classList.remove('active');
-                }
-            });
-        }
-    </script>
+    // Initialize on load
+    window.onload = initSystem;
+  </script>
 </body>
 </html>
