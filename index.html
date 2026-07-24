@@ -46,7 +46,7 @@
             <span class="text-slate-400" id="credit-count-label">SOPs: 0 | RFPs: 0</span>
           </div>
           <button onclick="openMembershipModal()" class="ml-2 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-2 py-1 rounded transition">
-            Unlock Key
+            Activate Email Code
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@
 
     <!-- Admin Owner Banner -->
     <div id="adminBanner" class="hidden bg-emerald-500/15 border border-emerald-500 text-emerald-400 p-3 rounded-xl text-center text-xs font-bold">
-      👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED ENTERPRISE ACCESS UNLOCKED
+      👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED ACCESS REMEMBERED
     </div>
 
     <!-- Pricing Summary Banner -->
@@ -79,7 +79,7 @@
           <p class="text-xs text-slate-300 mt-2">Includes <strong>10 SOPs + 10 RFPs</strong> per month (Save over $2,800/mo).</p>
         </div>
         <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
-          Activate $50 Plan
+          Enter Email Activation Code
         </button>
       </div>
 
@@ -91,7 +91,7 @@
           <p class="text-xs text-slate-300 mt-2">Includes <strong>20 SOPs + 20 RFPs</strong> per month for corporate scale.</p>
         </div>
         <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
-          Activate $100 Plan
+          Enter Email Activation Code
         </button>
       </div>
     </section>
@@ -125,7 +125,7 @@
 
         <div class="mt-6">
           <button onclick="handleGenerateDeliverable('SOP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
-            <i class="fa-solid fa-lock" id="sop-lock-icon"></i>
+            <i class="fa-solid fa-bolt" id="sop-lock-icon"></i>
             <span>Build Modern SOP ($150 / 1 Credit)</span>
           </button>
         </div>
@@ -157,7 +157,7 @@
 
         <div class="mt-6">
           <button onclick="handleGenerateDeliverable('RFP')" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg shadow-lg transition flex justify-center items-center gap-2">
-            <i class="fa-solid fa-lock" id="rfp-lock-icon"></i>
+            <i class="fa-solid fa-bolt" id="rfp-lock-icon"></i>
             <span>Build Technical RFP ($150 / 1 Credit)</span>
           </button>
         </div>
@@ -178,27 +178,27 @@
 
   </main>
 
-  <!-- Membership Key Modal -->
+  <!-- Simplified Activation Code Modal -->
   <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
     <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
       <div class="flex justify-between items-center">
-        <h3 class="text-xl font-bold">Activate Access Key</h3>
+        <h3 class="text-xl font-bold text-amber-500">Activate Plan with Email Code</h3>
         <button onclick="closeMembershipModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
       <p class="text-xs text-slate-300 leading-relaxed">
-        Enter your client Access Key provided upon subscribing to the <strong>$50/mo</strong> or <strong>$100/mo</strong> membership plans.
+        Enter the activation code sent to your email after subscribing ($50/mo or $100/mo). Once entered, your account will <strong>permanently remember your plan across all devices</strong>.
       </p>
 
       <div class="space-y-3">
-        <input id="access-key-input" type="text" placeholder="Enter Access Key (e.g. DJ-MEMBER-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
+        <input id="access-key-input" type="text" placeholder="Enter Activation Code (e.g. DJ-MEMBER-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
         <button onclick="validateAccessKey()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
-          Apply Key & Unlock Credits
+          Activate & Bind to Account
         </button>
       </div>
 
       <div class="border-t border-slate-800 pt-4 text-center">
-        <p class="text-xs text-slate-400">Need a key? Contact Dr. Jackson Operations directly or pay per document ($150 flat fee).</p>
+        <p class="text-xs text-slate-400">Need a code? Contact Dr. Jackson Operations or order single document ($150 fee).</p>
       </div>
     </div>
   </div>
@@ -208,8 +208,8 @@
     <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-amber-500/50 space-y-5 relative">
       <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <div class="text-center">
-        <h3 class="text-xl font-bold text-amber-500"><i class="fa-solid fa-user-shield mr-2"></i>Client Portal Access</h3>
-        <p class="text-xs text-slate-400 mt-1">Log in or create an account to sync deliverables across all devices.</p>
+        <h3 class="text-xl font-bold text-amber-500"><i class="fa-solid fa-user-shield mr-2"></i>Client Portal Login</h3>
+        <p class="text-xs text-slate-400 mt-1">Sign in with your email to sync your membership & documents across devices.</p>
       </div>
 
       <div class="flex border-b border-slate-700">
@@ -228,7 +228,7 @@
           <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
         <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
-          Log In & Sync Account
+          Log In & Load Saved Plan
         </button>
       </form>
 
@@ -236,7 +236,7 @@
       <form id="form-signup" onsubmit="handleAuthSignup(event)" class="hidden space-y-4">
         <div>
           <label class="block text-xs text-slate-400 mb-1">Full Name / Organization</label>
-          <input type="text" id="signup-name" required placeholder="e.g., Enterprise Logistics Director" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="signup-name" required placeholder="e.g., Enterprise Operations Lead" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
         <div>
           <label class="block text-xs text-slate-400 mb-1">Email Address</label>
@@ -247,7 +247,7 @@
           <input type="password" id="signup-password" required placeholder="Minimum 6 characters" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
         <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
-          Create Account & Sync
+          Create Account & Start
         </button>
       </form>
     </div>
@@ -271,7 +271,7 @@
       rfpRemaining: 0
     };
 
-    // Preset Access Keys
+    // Preset Email Activation Codes
     const ACCESS_KEYS = {
       "DJ-MEMBER-50": { tier: "Standard ($50/mo)", sop: 10, rfp: 10 },
       "DJ-MEMBER-100": { tier: "Enterprise ($100/mo)", sop: 20, rfp: 20 }
@@ -364,17 +364,32 @@
       const btnModal = document.getElementById('auth-btn-modal');
       const btnLogout = document.getElementById('auth-btn-logout');
 
+      // Check persistent VIP status first
+      const isVIP = localStorage.getItem('dj_diag_vip_unlocked') === 'true';
+      if (isVIP) {
+        userCredits = {
+          isMember: true,
+          tierName: "Owner VIP Unlimited",
+          sopRemaining: 999,
+          rfpRemaining: 999
+        };
+      }
+
       if (activeUserEmail) {
         let usersDB = JSON.parse(localStorage.getItem('dj_diag_users_db') || '{}');
         if (usersDB[activeUserEmail]) {
-          userCredits = usersDB[activeUserEmail].credits || userCredits;
+          if (!isVIP) {
+            userCredits = usersDB[activeUserEmail].credits || userCredits;
+          }
         }
         accountLbl.innerHTML = `Account: <strong>${activeUserEmail}</strong>`;
         btnModal.classList.add('hidden');
         btnLogout.classList.remove('hidden');
       } else {
-        const saved = localStorage.getItem('dj_user_credits');
-        if (saved) userCredits = JSON.parse(saved);
+        if (!isVIP) {
+          const saved = localStorage.getItem('dj_user_credits');
+          if (saved) userCredits = JSON.parse(saved);
+        }
         accountLbl.innerHTML = `Account: <strong>Guest (Device Local)</strong>`;
         btnModal.classList.remove('hidden');
         btnLogout.classList.add('hidden');
@@ -387,6 +402,7 @@
     function enterAdminPasscode() {
       const code = prompt("Enter Owner / VIP Admin Passcode:");
       if (code === SECRET_ADMIN_CODE) {
+        // PERMANENT REMEMBER ME STORAGE
         localStorage.setItem('dj_diag_vip_unlocked', 'true');
         userCredits = {
           isMember: true,
@@ -395,7 +411,7 @@
           rfpRemaining: 999
         };
         saveCredits();
-        alert("🎉 Success! Owner VIP Enterprise Access Unlocked.");
+        alert("🎉 Success! Owner VIP Access Unlocked & Saved Permanently.");
         checkVIPStatus();
         updateUI();
       } else if (code !== null) {
@@ -460,9 +476,9 @@
         saveCredits();
         updateUI();
         closeMembershipModal();
-        alert(`Access Key Accepted! You have activated the ${config.tier} plan (${config.sop} SOPs and ${config.rfp} RFPs).`);
+        alert(`🎉 Activation Success! Key bound to your account. Activated: ${config.tier} (${config.sop} SOPs and ${config.rfp} RFPs).`);
       } else {
-        alert('Invalid Access Key. Please double check your code or complete $150 single-document checkout.');
+        alert('Invalid Activation Code. Please check the code sent to your email.');
       }
     }
 
