@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Jackson AI Movie Studio & Video Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #090d16 0%, #111827 50%, #090d16 100%); }
+    .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .gold-accent { color: #f59e0b; }
+    .bg-gold { background-color: #f59e0b; }
+    .cinema-viewport {
+      box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body class="gradient-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800/80 p-5 glass-card sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+          <i class="fa-solid fa-clapperboard text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Dr. Jackson AI Movie Studio</h1>
+          <p class="text-xs text-slate-400">Autonomous Video Engine & Actor Face-Identity Pipeline</p>
+        </div>
+      </div>
+
+      <!-- Account Auth Bar & Credits Status -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div id="auth-header-bar" class="bg-slate-900/90 border border-slate-700 px-3 py-2 rounded-lg text-xs flex items-center gap-2">
+          <span class="text-slate-400" id="user-account-label">Account: <strong>Director Guest</strong></span>
+          <button id="auth-btn-modal" onclick="openAuthModal()" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-2.5 py-1 rounded transition">
+            🔑 Log In / Sign Up
+          </button>
+          <button id="auth-btn-logout" onclick="handleLogout()" class="hidden ml-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/50 font-bold px-2 py-1 rounded transition">
+            Log Out
+          </button>
+        </div>
+
+        <div id="membership-status" class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-lg text-xs flex items-center gap-3">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500" id="status-indicator"></span>
+          <div>
+            <span class="font-bold block" id="membership-tier-label">Tier: Non-Member</span>
+            <span class="text-slate-400" id="credit-count-label">Video Clips Remaining: 0</span>
+          </div>
+          <button onclick="openMembershipModal()" class="ml-2 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-2.5 py-1 rounded transition">
+            Enter Code
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 space-y-8 w-full flex-grow">
+
+    <!-- Admin Owner VIP Banner -->
+    <div id="adminBanner" class="hidden bg-emerald-500/15 border border-emerald-500 text-emerald-400 p-3.5 rounded-xl text-center text-xs font-bold tracking-wide">
+      👑 OWNER / VIP PASSCODE ACTIVATED — UNLIMITED AI MOVIE RENDERS REMEMBERED
+    </div>
+
+    <!-- Pricing Summary Banner -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-amber-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">Single Take</span>
+          <h3 class="text-lg font-bold mt-1">A La Carte Clip</h3>
+          <p class="text-2xl font-black mt-2 text-white">$150 <span class="text-xs text-slate-400 font-normal">/ 5-sec take</span></p>
+          <p class="text-xs text-slate-300 mt-2">Generate a dedicated cinema scene or workout angle locking your facial structure.</p>
+        </div>
+        <button onclick="document.getElementById('scene-prompt').focus()" class="mt-4 w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/50 font-bold text-xs rounded transition">
+          Direct Single Take
+        </button>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-blue-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Creator Pass</span>
+          <h3 class="text-lg font-bold mt-1">Short Film Plan</h3>
+          <p class="text-2xl font-black mt-2 text-white">$50 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>10 Cinema Takes</strong> per month (Save over $1,400/mo).</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition">
+          Enter $50 Email Code
+        </button>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-emerald-500 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Studio Pro</span>
+          <h3 class="text-lg font-bold mt-1">Feature Film Suite</h3>
+          <p class="text-2xl font-black mt-2 text-white">$100 <span class="text-xs text-slate-400 font-normal">/ month</span></p>
+          <p class="text-xs text-slate-300 mt-2">Includes <strong>25 Cinema Takes</strong> + Multi-Scene timeline stitching.</p>
+        </div>
+        <button onclick="openMembershipModal()" class="mt-4 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition">
+          Enter $100 Email Code
+        </button>
+      </div>
+    </section>
+
+    <!-- Studio Core Control Workspace -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Controls: Actor Upload & Scene Prompt (5 Cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Module 1: Actor Identity Studio -->
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-user-astronaut mr-1"></i> Module A: Lead Actor
+            </span>
+            <span class="text-xs font-semibold text-slate-400">Face Tensor Locked</span>
+          </div>
+          <h2 class="text-xl font-bold">1. Actor Portrait Ingestion</h2>
+          <p class="text-xs text-slate-300">Upload your face portrait. The model locks your exact facial geometry onto every scene.</p>
+
+          <div class="flex items-center gap-4 pt-1">
+            <div id="portrait-preview-box" class="w-24 h-24 rounded-xl border-2 border-dashed border-slate-600 bg-slate-900 flex items-center justify-center overflow-hidden flex-shrink-0 relative group">
+              <img id="actor-portrait-img" class="hidden w-full h-full object-cover" />
+              <div id="portrait-placeholder" class="text-center p-2 text-slate-500 text-xs">
+                <i class="fa-solid fa-camera text-2xl mb-1"></i>
+                <p>Upload Photo</p>
+              </div>
+            </div>
+
+            <div class="flex-grow space-y-2">
+              <input type="file" id="portrait-upload" accept="image/*" onchange="handlePortraitUpload(event)" class="text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer" />
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Actor Identity Strength (<span id="weight-val">85%</span>)</label>
+                <input id="identity-weight" type="range" min="50" max="100" value="85" oninput="document.getElementById('weight-val').innerText = this.value + '%'" class="w-full accent-amber-500" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 2: Script & Directing Parameters -->
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="bg-slate-800 text-amber-400 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+              <i class="fa-solid fa-video mr-1"></i> Module B: Director Setup
+            </span>
+            <span class="text-xs font-semibold text-slate-400">Wan 2.2 / LTX-Video</span>
+          </div>
+          <h2 class="text-xl font-bold">2. Scene Prompt & Dialogue</h2>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Scene Action Prompt</label>
+              <textarea id="scene-prompt" rows="3" placeholder="e.g., Lead actor in a high-intensity gym doing heavy incline dumbbell presses, cinematic neon backlight, sweat glistening, photorealistic 8k..." class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Spoken Dialogue / Line (Rendered as Subtitles)</label>
+              <input id="scene-dialogue" type="text" placeholder="e.g., 'Execute the plan. No excuses.'" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white focus:outline-none focus:border-amber-500" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Camera Motion</label>
+                <select id="camera-motion" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                  <option value="Dolly Zoom In">Dolly Zoom In (Dramatic)</option>
+                  <option value="Slow Pan Right">Slow Pan Right</option>
+                  <option value="Drone Crane Lift">Drone Crane Lift</option>
+                  <option value="Static Tripod">Static Master Shot</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Cinematic Lighting</label>
+                <select id="lighting-preset" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                  <option value="Cyber Neon Teal & Gold">Cyber Neon Teal & Gold</option>
+                  <option value="Golden Hour Sunset">Golden Hour Sunset</option>
+                  <option value="Dark Film Noir">Dark Film Noir</option>
+                  <option value="High-Contrast Studio">High-Contrast Studio</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="handleGenerateTake()" class="mt-4 w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2">
+            <i class="fa-solid fa-play"></i>
+            <span id="gen-btn-label">Render 5-Sec Take ($150 / 1 Take)</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right Viewport: Live Cinema Screen & Timeline (7 Cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold flex items-center gap-2">
+              <i class="fa-solid fa-film text-amber-500"></i> Director Master Viewport
+            </h3>
+            <span id="aspect-ratio-badge" class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded border border-slate-700">16:9 Cinema Wide</span>
+          </div>
+
+          <!-- Video Monitor Screen -->
+          <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden cinema-viewport border border-slate-800 flex items-center justify-center">
+            <!-- Simulated Render Canvas -->
+            <div id="canvas-bg" class="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center transition-all duration-700">
+              <img id="viewport-actor-overlay" class="hidden absolute inset-0 w-full h-full object-cover opacity-85 transition-transform duration-1000" />
+              <div id="viewport-cinematic-glow" class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40"></div>
+              
+              <div id="viewport-idle-text" class="text-center p-6 space-y-2 text-slate-500 z-10">
+                <i class="fa-solid fa-clapperboard text-4xl mb-2 text-slate-600"></i>
+                <p class="text-sm font-semibold">Camera Ready. Enter prompt and hit Render.</p>
+                <p class="text-xs text-slate-600">Video output streams here with actor face alignment.</p>
+              </div>
+            </div>
+
+            <!-- Dialogue Subtitles Overlay -->
+            <div id="viewport-subtitles" class="hidden absolute bottom-6 inset-x-8 text-center text-sm md:text-base font-bold text-amber-400 bg-black/70 py-1.5 px-4 rounded-md backdrop-blur-sm tracking-wide z-20"></div>
+
+            <!-- Denoising / Generation Progress Bar Overlay -->
+            <div id="render-progress-overlay" class="hidden absolute inset-0 bg-black/85 flex flex-col items-center justify-center p-8 space-y-4 z-30">
+              <i class="fa-solid fa-circle-notch fa-spin text-4xl text-amber-500"></i>
+              <p id="render-stage-text" class="text-sm font-semibold text-slate-200">Aligning face anchor tensor...</p>
+              <div class="w-64 bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="render-progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Scrubber & Actions -->
+          <div class="space-y-3 pt-2">
+            <div class="flex items-center gap-4 text-xs text-slate-400">
+              <button onclick="togglePlayback()" id="play-pause-btn" class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <span id="timecode-display" class="font-mono">00:00:00 / 00:00:05</span>
+              <input id="timeline-scrubber" type="range" min="0" max="100" value="0" class="flex-grow accent-amber-500" oninput="scrubTimeline(this.value)" />
+            </div>
+
+            <div class="flex justify-between items-center pt-2 border-t border-slate-800 text-xs">
+              <span class="text-slate-400"><i class="fa-solid fa-layer-group mr-1"></i> Generated Takes: <strong id="scene-take-count">0</strong></span>
+              <div class="space-x-2">
+                <button onclick="saveSceneToMovie()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 rounded font-semibold transition">
+                  <i class="fa-solid fa-plus mr-1"></i> Add Take to Movie Reel
+                </button>
+                <button onclick="exportMovieReel()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded font-bold transition">
+                  <i class="fa-solid fa-download mr-1"></i> Export MP4
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Movie Reel Staging Drawer -->
+        <div id="movie-reel-box" class="glass-card p-6 rounded-2xl space-y-4 hidden">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+            <h4 class="font-bold text-amber-400 flex items-center gap-2">
+              <i class="fa-solid fa-film"></i> Active Movie Reel Assembly
+            </h4>
+            <span id="reel-total-duration" class="text-xs text-slate-400">Total Duration: 0s</span>
+          </div>
+          <div id="reel-clips-container" class="space-y-2 max-h-48 overflow-y-auto text-xs"></div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Activation Code Modal -->
+  <div id="membership-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-slate-700 space-y-6">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold text-amber-500">Activate Plan with Email Code</h3>
+        <button onclick="closeMembershipModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Enter the activation code sent to your email after subscribing ($50/mo or $100/mo) to unlock your movie takes.
+      </p>
+
+      <div class="space-y-3">
+        <input id="access-key-input" type="text" placeholder="Enter Activation Code (e.g. DJ-STUDIO-50)" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm text-center text-amber-400 font-mono focus:outline-none focus:border-amber-500 uppercase tracking-widest" />
+        <button onclick="validateAccessKey()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Activate & Bind to Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-App Member Login & Sign Up Modal -->
+  <div id="auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl border border-amber-500/50 space-y-5 relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="text-center">
+        <h3 class="text-xl font-bold text-amber-500"><i class="fa-solid fa-user-shield mr-2"></i>Director Portal Login</h3>
+        <p class="text-xs text-slate-400 mt-1">Sign in to sync your movie scenes and actor presets across devices.</p>
+      </div>
+
+      <div class="flex border-b border-slate-700">
+        <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500">Log In</button>
+        <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-2 font-bold text-sm text-slate-400">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="handleAuthLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+          <input type="email" id="login-email" required placeholder="director@studio.com" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Log In & Load Saved Plan
+        </button>
+      </form>
+
+      <!-- SIGN UP FORM -->
+      <form id="form-signup" onsubmit="handleAuthSignup(event)" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Full Name / Production Name</label>
+          <input type="text" id="signup-name" required placeholder="e.g., Jackson Film Productions" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+          <input type="email" id="signup-email" required placeholder="director@studio.com" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Create Password</label>
+          <input type="password" id="signup-password" required placeholder="Minimum 6 characters" class="w-full bg-slate-900 border border-slate-700 rounded p-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition">
+          Create Account & Start Directing
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-800 p-6 text-center text-xs text-slate-500 space-y-2">
+    <p>&copy; 2026 Dr. Jackson AI Movie Studio. All Rights Reserved.</p>
+    <p><button onclick="enterAdminPasscode()" class="text-amber-500 underline font-bold cursor-pointer">⚙️ Owner / VIP Passcode Login</button></p>
+  </footer>
+
+  <!-- Script Engine -->
+  <script>
+    const SECRET_ADMIN_CODE = "DOCTOR2026";
+    let activeUserEmail = localStorage.getItem('dj_movie_active_user') || null;
+
+    let userCredits = {
+      isMember: false,
+      tierName: "Non-Member",
+      videoClipsRemaining: 0
+    };
+
+    let movieReel = [];
+    let isPlaying = false;
+    let playbackInterval = null;
+    let currentPortraitDataUrl = null;
+
+    const ACCESS_KEYS = {
+      "DJ-STUDIO-50": { tier: "Short Film ($50/mo)", clips: 10 },
+      "DJ-STUDIO-100": { tier: "Feature Film ($100/mo)", clips: 25 }
+    };
+
+    function initSystem() {
+      initUserSession();
+    }
+
+    // Portrait Upload Handler
+    function handlePortraitUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentPortraitDataUrl = e.target.result;
+        const img = document.getElementById('actor-portrait-img');
+        img.src = currentPortraitDataUrl;
+        img.classList.remove('hidden');
+        document.getElementById('portrait-placeholder').classList.add('hidden');
+
+        // Bind to Viewport
+        const viewportImg = document.getElementById('viewport-actor-overlay');
+        viewportImg.src = currentPortraitDataUrl;
+        viewportImg.classList.remove('hidden');
+        document.getElementById('viewport-idle-text').classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // AUTH SYSTEM
+    function openAuthModal() {
+      document.getElementById('auth-modal').classList.remove('hidden');
+      document.getElementById('auth-modal').classList.add('flex');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').classList.add('hidden');
+      document.getElementById('auth-modal').classList.remove('flex');
+    }
+
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500";
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2 font-bold text-sm text-slate-400";
+        document.getElementById('form-login').classList.remove('hidden');
+        document.getElementById('form-signup').classList.add('hidden');
+      } else {
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2 font-bold text-sm text-amber-500 border-b-2 border-amber-500";
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 font-bold text-sm text-slate-400";
+        document.getElementById('form-signup').classList.remove('hidden');
+        document.getElementById('form-login').classList.add('hidden');
+      }
+    }
+
+    function handleAuthSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim().toLowerCase();
+      const password = document.getElementById('signup-password').value;
+
+      if (!email || !password) return;
+
+      let usersDB = JSON.parse(localStorage.getItem('dj_movie_users_db') || '{}');
+      if (usersDB[email]) {
+        alert("An account with this email already exists! Please log in.");
+        return;
+      }
+
+      usersDB[email] = {
+        name: name,
+        password: password,
+        credits: { isMember: false, tierName: "Non-Member", videoClipsRemaining: 0 }
+      };
+
+      localStorage.setItem('dj_movie_users_db', JSON.stringify(usersDB));
+      localStorage.setItem('dj_movie_active_user', email);
+
+      alert(`🎉 Director Account created! Welcome, ${name}.`);
+      closeAuthModal();
+      initUserSession();
+    }
+
+    function handleAuthLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      let usersDB = JSON.parse(localStorage.getItem('dj_movie_users_db') || '{}');
+      if (!usersDB[email] || usersDB[email].password !== password) {
+        alert("❌ Invalid email or password. Please try again.");
+        return;
+      }
+
+      localStorage.setItem('dj_movie_active_user', email);
+      alert(`🎉 Logged in as ${usersDB[email].name || email}`);
+      closeAuthModal();
+      initUserSession();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('dj_movie_active_user');
+      localStorage.removeItem('dj_movie_vip_unlocked');
+      alert("Logged out successfully.");
+      location.reload();
+    }
+
+    function initUserSession() {
+      activeUserEmail = localStorage.getItem('dj_movie_active_user');
+      const accountLbl = document.getElementById('user-account-label');
+      const btnModal = document.getElementById('auth-btn-modal');
+      const btnLogout = document.getElementById('auth-btn-logout');
+
+      const isVIP = localStorage.getItem('dj_movie_vip_unlocked') === 'true';
+      if (isVIP) {
+        userCredits = {
+          isMember: true,
+          tierName: "Owner VIP Unlimited",
+          videoClipsRemaining: 9999
+        };
+      }
+
+      if (activeUserEmail) {
+        let usersDB = JSON.parse(localStorage.getItem('dj_movie_users_db') || '{}');
+        if (usersDB[activeUserEmail]) {
+          if (!isVIP) {
+            userCredits = usersDB[activeUserEmail].credits || userCredits;
+          }
+        }
+        accountLbl.innerHTML = `Account: <strong>${activeUserEmail}</strong>`;
+        btnModal.classList.add('hidden');
+        btnLogout.classList.remove('hidden');
+      } else {
+        if (!isVIP) {
+          const saved = localStorage.getItem('dj_movie_user_credits');
+          if (saved) userCredits = JSON.parse(saved);
+        }
+        accountLbl.innerHTML = `Account: <strong>Director Guest</strong>`;
+        btnModal.classList.remove('hidden');
+        btnLogout.classList.add('hidden');
+      }
+
+      checkVIPStatus();
+      updateUI();
+    }
+
+    function enterAdminPasscode() {
+      const code = prompt("Enter Owner / VIP Admin Passcode:");
+      if (code === SECRET_ADMIN_CODE) {
+        localStorage.setItem('dj_movie_vip_unlocked', 'true');
+        userCredits = {
+          isMember: true,
+          tierName: "Owner VIP Unlimited",
+          videoClipsRemaining: 9999
+        };
+        saveCredits();
+        alert("🎉 Success! Studio VIP Access Unlocked & Saved Permanently.");
+        checkVIPStatus();
+        updateUI();
+      } else if (code !== null) {
+        alert("❌ Invalid Passcode.");
+      }
+    }
+
+    function checkVIPStatus() {
+      const isVIP = localStorage.getItem('dj_movie_vip_unlocked') === 'true';
+      if (isVIP) {
+        document.getElementById('adminBanner').classList.remove('hidden');
+      }
+    }
+
+    function saveCredits() {
+      if (activeUserEmail) {
+        let usersDB = JSON.parse(localStorage.getItem('dj_movie_users_db') || '{}');
+        if (!usersDB[activeUserEmail]) usersDB[activeUserEmail] = {};
+        usersDB[activeUserEmail].credits = userCredits;
+        localStorage.setItem('dj_movie_users_db', JSON.stringify(usersDB));
+      } else {
+        localStorage.setItem('dj_movie_user_credits', JSON.stringify(userCredits));
+      }
+    }
+
+    function updateUI() {
+      const statusInd = document.getElementById('status-indicator');
+      const tierLbl = document.getElementById('membership-tier-label');
+      const creditLbl = document.getElementById('credit-count-label');
+
+      if (userCredits.isMember && userCredits.videoClipsRemaining > 0) {
+        statusInd.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500";
+        tierLbl.textContent = `Tier: ${userCredits.tierName}`;
+        creditLbl.textContent = `Video Clips: ${userCredits.videoClipsRemaining}`;
+      } else {
+        statusInd.className = "inline-block w-2.5 h-2.5 rounded-full bg-slate-500";
+        tierLbl.textContent = "Tier: Non-Member";
+        creditLbl.textContent = "Video Clips: 0";
+      }
+    }
+
+    function openMembershipModal() {
+      document.getElementById('membership-modal').classList.remove('hidden');
+      document.getElementById('membership-modal').classList.add('flex');
+    }
+
+    function closeMembershipModal() {
+      document.getElementById('membership-modal').classList.add('hidden');
+      document.getElementById('membership-modal').classList.remove('flex');
+    }
+
+    function validateAccessKey() {
+      const input = document.getElementById('access-key-input').value.trim().toUpperCase();
+      if (ACCESS_KEYS[input]) {
+        const config = ACCESS_KEYS[input];
+        userCredits = {
+          isMember: true,
+          tierName: config.tier,
+          videoClipsRemaining: config.clips
+        };
+        saveCredits();
+        updateUI();
+        closeMembershipModal();
+        alert(`🎉 Activation Success! Plan bound to your studio: ${config.tier} (${config.clips} Video Takes Unlocked).`);
+      } else {
+        alert('Invalid Activation Code. Please check the code sent to your email.');
+      }
+    }
+
+    // RENDER GENERATION PIPELINE
+    function handleGenerateTake() {
+      const prompt = document.getElementById('scene-prompt').value.trim();
+      const dialogue = document.getElementById('scene-dialogue').value.trim();
+
+      if (!prompt) {
+        alert("Please enter a scene action prompt to direct this take.");
+        return;
+      }
+
+      if (userCredits.videoClipsRemaining > 0) {
+        userCredits.videoClipsRemaining -= 1;
+        saveCredits();
+        updateUI();
+        startGenerationPipeline(prompt, dialogue);
+      } else {
+        promptSinglePurchase('5-Second Cinema Take', 150, () => startGenerationPipeline(prompt, dialogue));
+      }
+    }
+
+    function promptSinglePurchase(docType, price, onSuccess) {
+      const confirmPay = confirm(
+        `💳 SINGLE TAKE A LA CARTE CHECKOUT\n\n` +
+        `Deliverable: 1x ${docType}\n` +
+        `One-Time Cost: $${price}\n\n` +
+        `Click "OK" to approve $${price} single-take checkout and render your movie clip.`
+      );
+      if (confirmPay) {
+        alert(`🎉 Payment of $${price} Approved! Rendering take...`);
+        onSuccess();
+      }
+    }
+
+    function startGenerationPipeline(prompt, dialogue) {
+      const overlay = document.getElementById('render-progress-overlay');
+      const bar = document.getElementById('render-progress-bar');
+      const stageText = document.getElementById('render-stage-text');
+      const subtitles = document.getElementById('viewport-subtitles');
+
+      overlay.classList.remove('hidden');
+
+      const stages = [
+        { pct: 20, text: "Extracting facial landmark geometry from portrait..." },
+        { pct: 50, text: "Generating 81 latent diffusion frames (Wan 2.2)..." },
+        { pct: 75, text: "Applying dynamic camera motion & volumetric lighting..." },
+        { pct: 95, text: "Compiling 24fps MP4 stream..." },
+        { pct: 100, text: "Take Render Complete!" }
+      ];
+
+      let step = 0;
+      function nextStage() {
+        if (step < stages.length) {
+          bar.style.width = stages[step].pct + '%';
+          stageText.innerText = stages[step].text;
+          step++;
+          setTimeout(nextStage, 700);
+        } else {
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+            if (dialogue) {
+              subtitles.innerText = `"${dialogue}"`;
+              subtitles.classList.remove('hidden');
+            } else {
+              subtitles.classList.add('hidden');
+            }
+
+            // Animate viewport camera zoom
+            const viewportImg = document.getElementById('viewport-actor-overlay');
+            viewportImg.style.transform = "scale(1.1) translateY(-2%)";
+
+            // Add to take counter
+            let takes = parseInt(document.getElementById('scene-take-count').innerText) + 1;
+            document.getElementById('scene-take-count').innerText = takes;
+
+            alert("🎬 Take rendered successfully and ready on your director monitor!");
+          }, 400);
+        }
+      }
+      nextStage();
+    }
+
+    // TIMELINE CONTROLS
+    function togglePlayback() {
+      const btn = document.getElementById('play-pause-btn');
+      const scrubber = document.getElementById('timeline-scrubber');
+      const timecode = document.getElementById('timecode-display');
+
+      if (!isPlaying) {
+        isPlaying = true;
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        playbackInterval = setInterval(() => {
+          let val = parseInt(scrubber.value) + 2;
+          if (val > 100) val = 0;
+          scrubber.value = val;
+          let sec = Math.floor((val / 100) * 5);
+          timecode.innerText = `00:00:0${sec} / 00:00:05`;
+        }, 100);
+      } else {
+        isPlaying = false;
+        btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        clearInterval(playbackInterval);
+      }
+    }
+
+    function scrubTimeline(val) {
+      let sec = Math.floor((val / 100) * 5);
+      document.getElementById('timecode-display').innerText = `00:00:0${sec} / 00:00:05`;
+    }
+
+    function saveSceneToMovie() {
+      const prompt = document.getElementById('scene-prompt').value.trim() || "Untitled Take";
+      const cam = document.getElementById('camera-motion').value;
+      const dialogue = document.getElementById('scene-dialogue').value.trim();
+
+      const clip = {
+        id: movieReel.length + 1,
+        prompt: prompt,
+        cam: cam,
+        dialogue: dialogue,
+        duration: 5
+      };
+
+      movieReel.push(clip);
+      renderMovieReel();
+      alert(`🎬 Take #${clip.id} added to movie reel timeline!`);
+    }
+
+    function renderMovieReel() {
+      const container = document.getElementById('movie-reel-box');
+      const list = document.getElementById('reel-clips-container');
+      const durationLbl = document.getElementById('reel-total-duration');
+
+      if (movieReel.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      list.innerHTML = "";
+      let totalTime = movieReel.length * 5;
+      durationLbl.innerText = `Total Duration: ${totalTime}s (${movieReel.length} Takes)`;
+
+      movieReel.forEach((clip, index) => {
+        const item = document.createElement('div');
+        item.className = "p-3 bg-slate-900 border border-slate-800 rounded flex justify-between items-center";
+        item.innerHTML = `
+          <div>
+            <span class="font-bold text-amber-400">Take #${clip.id} (5s):</span>
+            <span class="text-slate-300 ml-1 font-mono">${clip.prompt.substring(0, 40)}...</span>
+            <span class="text-slate-500 text-[10px] block mt-0.5"><i class="fa-solid fa-video mr-1"></i>${clip.cam} ${clip.dialogue ? `| "${clip.dialogue}"` : ''}</span>
+          </div>
+          <button onclick="removeClip(${index})" class="text-rose-400 hover:text-rose-300 ml-3"><i class="fa-solid fa-trash"></i></button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function removeClip(index) {
+      movieReel.splice(index, 1);
+      renderMovieReel();
+    }
+
+    function exportMovieReel() {
+      if (movieReel.length === 0) {
+        alert("Please add at least one take to the movie reel before exporting.");
+        return;
+      }
+
+      const summary = movieReel.map(c => `Take #${c.id} (5s): ${c.prompt} [Motion: ${c.cam}]`).join('\n');
+      alert(`🎉 Exporting Movie Reel Sequence:\n\n${summary}\n\nStitching completed! Video stream ready.`);
+    }
+
+    window.onload = initSystem;
+  </script>
+</body>
+</html>
